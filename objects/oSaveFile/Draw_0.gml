@@ -1,0 +1,1 @@
+//kept empty to stop the sprite from drawing itself twice

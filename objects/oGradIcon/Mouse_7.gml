@@ -1,0 +1,1 @@
+instance_find(oField,0).grid[myPiece.row][myPiece.column].GraduatePawn(myPiece,myRank);

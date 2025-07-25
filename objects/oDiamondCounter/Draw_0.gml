@@ -1,0 +1,13 @@
+draw_self();
+if(pCounter)
+{
+	draw_sprite(sprYellowNumbers,(global.pDiamonds%10),x+110,y+40);
+	draw_sprite(sprYellowNumbers,(floor((global.pDiamonds%100)/10)),x+95,y+40);
+	draw_sprite(sprYellowNumbers,(floor((global.pDiamonds%1000)/100)),x+80,y+40);
+}
+else
+{
+	draw_sprite(sprYellowNumbers,(instance_find(oMatchManager,0).opDiamonds%10),x+110,y+40);
+	draw_sprite(sprYellowNumbers,(floor((instance_find(oMatchManager,0).opDiamonds%100)/10)),x+95,y+40);
+	draw_sprite(sprYellowNumbers,(floor((instance_find(oMatchManager,0).opDiamonds%1000)/100)),x+80,y+40);
+}

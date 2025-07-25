@@ -1,0 +1,1 @@
+if(myPiece!=undefined && !instance_exists(myPiece)){instance_destroy();}

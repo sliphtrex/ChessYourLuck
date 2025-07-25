@@ -1,0 +1,4 @@
+if(playerAb && CheckIfUsable())
+{
+	UseAbility();
+}

@@ -1,0 +1,1 @@
+if(CheckForIcons()) {image_index = 2;}
