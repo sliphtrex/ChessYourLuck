@@ -77,9 +77,9 @@ function TurnManager()
 	
 	//check if we have moveable pieces
 	var moveables=0;
-	for(var i=0; i<array_length(field.whitePieces);i++)
+	for(var i=0; i<array_length(field.blackPieces);i++)
 	{
-		if(field.whitePieces[i].hasMoved==false){moveables++;}
+		if(field.blackPieces[i].hasMoved==false){moveables++;}
 	}
 	//if there are moveable pieces we'll add the possibility to the list
 	if(moveables>0)
@@ -156,14 +156,14 @@ function PlayCard()
 	if(ourCard.suit==0||ourCard.suit==1
 		||(ourCard.suit=-1&&(ourCard.clubs>0||ourCard.hearts>0)))
 	{
-		//I forgot I had the field.whitePieces var at first and originally looped the
+		//I forgot I had the field.blackPieces var at first and originally looped the
 		//whole grid. This is currently superfluous, but can be used to further weigh
 		//things if, for example, a character has a preference of only upgrading kings
-		for(var i=0;i<array_length(field.whitePieces);i++)
+		for(var i=0;i<array_length(field.blackPieces);i++)
 		{
 			//add our pieces
-			if(upgradableTiles==undefined){upgradableTiles=[field.whitePieces[i].myTile];}
-			else{array_push(upgradableTiles,field.whitePieces[i].myTile);}
+			if(upgradableTiles==undefined){upgradableTiles=[field.blackPieces[i].myTile];}
+			else{array_push(upgradableTiles,field.blackPieces[i].myTile);}
 		}
 		
 		//set to a 3/4 chance of upgrading for testing purposes; will change later
@@ -222,12 +222,12 @@ function ChoosePieceToMove()
 {
 	//check how many moveable pieces we have
 	var moveables=undefined;
-	for(var i=0; i<array_length(field.whitePieces);i++)
+	for(var i=0; i<array_length(field.blackPieces);i++)
 	{
-		if(field.whitePieces[i].hasMoved==false)
+		if(field.blackPieces[i].hasMoved==false)
 		{
-			if(moveables==undefined){moveables[0] = field.whitePieces[i];}
-			else{array_push(moveables,field.whitePieces[i]);}
+			if(moveables==undefined){moveables[0] = field.blackPieces[i];}
+			else{array_push(moveables,field.blackPieces[i]);}
 		}
 	}
 	
@@ -397,37 +397,26 @@ function ChooseSpAbSpace()
 
 function MatchWin()
 {
-	NextMove = ClosingComments;
-	alarm[0]=waitTime;
-}
-
-function ClosingComments()
-{
-	matchOver=true;
-}
-
-function NothingMoreFromHere()
-{
-	return false;
+	global.playerDefeated=false;
+	with(instance_create_layer(x,y,"Text",oVoidTextBox))
+	{
+		Add_Text("Oh man... I lost.",1);
+		NextMove = EndMatch;
+	}
 }
 
 function MatchDefeat()
 {
-	NextMove = Restart;
-	alarm[0] = waitTime;
-	defeated = true;
-	matchOver= true;
-}
-
-function Restart()
-{
-	show_debug_message("We need to restart.");
+	global.playerDefeated=true;
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
-		Add_Text("You have fought valiantly weary traveller.",1,undefined,350);
-		Add_Text("Thanks for playing! But you did not win this match.",1,undefined,300);
-		Add_Text("Feel free to start again fresh if you'd like. Or simply let me know your thoughts in the comments.",1,undefined,200);
-		Add_Text("If you liked this, please consider checking out my other project Red's Righteous Auto.",1,undefined,200);
-		Add_Text("Whichever one gets the most engagement will likely be what I work on next.",1,undefined,200,NothingMoreFromHere);
+		Add_Text("Oh man... I won... cool.",1);
+		NextMove = EndMatch;
 	}
+}
+
+function EndMatch()
+{
+	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
+	trans.nextRoom = rRainyKnightsCafe;
 }

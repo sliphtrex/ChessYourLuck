@@ -94,6 +94,7 @@ function CombineCards()
 	
 		//create the card and establish its pip values
 		card = instance_create_layer(x,y,"Instances",oAmalgamCard);
+		audio_play_sound(sndCombineCards,1,false);
 		card.clubs = c1.clubs + c2.clubs;
 		card.hearts = c1.hearts + c2.hearts;
 		card.spades = c1.spades + c2.spades;

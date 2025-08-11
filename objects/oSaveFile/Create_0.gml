@@ -22,6 +22,7 @@ function Setup()
 {
 	saved = (file_exists("CYL"+string(myFile)+".sav"));
 	setup=true;
+	audio_play_sound(sndDrawCard,1,false);
 }
 
 function MoveOut()
@@ -29,4 +30,5 @@ function MoveOut()
 	setupFinished=false;
 	moveOut=true;
 	flipCard=true;
+	audio_play_sound(sndCardFlip,1,false);
 }

@@ -106,11 +106,28 @@ if(!setup)
 #endregion
 
 #region advancing text
-if(draw_char < text_length[page])
+if(curTimer==0)
 {
-	draw_char += text_speed;
-	draw_char = clamp(draw_char,0,text_length[page]);
+	if(draw_char < text_length[page])
+	{
+		draw_char += text_speed;
+		draw_char = clamp(draw_char,0,text_length[page]);
+		
+		var curChar = string_char_at(text[page],draw_char);
+	
+		if(curChar=="."||curChar==","||curChar=="?"||curChar=="!"||curChar=="-")
+			{curTimer = pauseTime;}
+		else
+			{if(!audio_is_playing(sndHumanoidDoot)){audio_play_sound(sndHumanoidDoot,1,false);}}
+	}
+	else{audio_stop_sound(sndHumanoidDoot);}
 }
+else
+{
+	curTimer--;
+	audio_stop_sound(sndHumanoidDoot);
+}
+
 #endregion
 
 var drawText = string_copy(text[page],1,draw_char);

@@ -22,7 +22,7 @@ with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	Add_Text("Welcome weary traveller.",1,undefined,575,375);
 	Add_Text("Be not alarmed.",1,undefined,650,375);
 	Add_Text("Although it may look like you're in the vastness of space.",1,undefined,300,375);
-	Add_Text("I assure you, you are within the confines of the Rainy Knight's Cafe.",1,undefined,250,375);
+	Add_Text("I assure you, you are within the confines of the Rainy Knight's Caf`.",1,undefined,250,375);
 	Add_Text("Here our guests play a rather unique chess variant.",1,undefined,250,375);
 	Add_Text("Would you like me to show you how?",1,undefined,400,375);
 	Add_Option("Yes",PlayTut);
@@ -218,11 +218,11 @@ function CreateSideBars()
 {
 	instance_find(oMatchManager,0).pBorderDepth = instance_create_layer(0,0,"UILayer",oVoidBorder).depth;
 	instance_find(oMatchManager,0).opBorderDepth = instance_create_layer(1400,0,"UILayer",oVoidBorder).depth
-	var pc = instance_create_layer(0,635,"UILayer",oDiamondCounter);
-	pc.depth = instance_find(oMatchManager,0).opBorderDepth-1;
-	var opc = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
-	opc.pCounter=false;
-	opc.depth = instance_find(oMatchManager,0).pBorderDepth-1;
+	global.pDiamondCounter = instance_create_layer(0,635,"UILayer",oDiamondCounter);
+	global.pDiamondCounter.depth = instance_find(oMatchManager,0).opBorderDepth-1;
+	global.opDiamondCounter = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
+	global.opDiamondCounter.pCounter=false;
+	global.opDiamondCounter.depth = instance_find(oMatchManager,0).pBorderDepth-1;
 	global.pSpade = instance_create_layer(100,100,"UILayer",oSpadeCounter);
 	global.pSpade.pSpades=true;
 	global.pSpade.depth = instance_find(oMatchManager,0).pBorderDepth-1;
@@ -535,6 +535,6 @@ function FinalWords()
 
 function EndTut()
 {
-	trans = instance_create_layer(0,0,"Text",oFadeTransition);
+	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
 	trans.nextRoom = rRainyKnightsCafe;
 }

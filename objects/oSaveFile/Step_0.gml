@@ -15,11 +15,18 @@ if(setup)
 			//1085 = offset from middle
 			x = lerp(start_x,1085,curSetupFrame/setupFrames);
 	}
-	if(curSetupFrame==setupFrames){curSetupFrame=0; setup=false; flipCard=true;}
+	if(curSetupFrame==setupFrames)
+	{
+		curSetupFrame=0;
+		setup=false;
+		flipCard=true;
+		audio_play_sound(sndCardFlip,1,false);
+	}
 }
 
 if(moveOut && !flipCard)
 {
+	if(curSetupFrame==0){audio_play_sound(sndDrawCard,1,false);}
 	curSetupFrame++;
 	switch(myFile)
 	{

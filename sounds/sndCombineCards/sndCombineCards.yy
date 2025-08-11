@@ -1,6 +1,6 @@
 {
   "$GMSound":"",
-  "%Name":"sfxHumanoidDoot",
+  "%Name":"sndCombineCards",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -9,17 +9,17 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.033015873,
-  "name":"sfxHumanoidDoot",
+  "duration":0.7940816,
+  "name":"sndCombineCards",
   "parent":{
-    "name":"Sounds",
-    "path":"folders/Sounds.yy",
+    "name":"Card Foley",
+    "path":"folders/Sounds/Card Foley.yy",
   },
   "preload":false,
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"sfxHumanoidDoot.wav",
+  "soundFile":"sndCombineCards.wav",
   "type":0,
   "volume":1.0,
 }

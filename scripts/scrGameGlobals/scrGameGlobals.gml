@@ -103,6 +103,9 @@ global.DogPlaythroughComplete=false;
 //who are we speaking to currently; should be set whenever we start a dialogue
 global.ConvoChar = undefined; //"Savannah";
 
+//will store if the last match ended in defeat or victory
+global.playerDefeated = false;
+
 //how many matches have we played against Anu
 global.AnuMatchNum=0;
 //What line are we at in the story

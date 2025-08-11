@@ -22,6 +22,8 @@ function SetupKing(BorW)
 {
 	myPiece = instance_create_layer(x,y,"ChessPieces",
 		(BorW) ? oKingB : oKingW);
+	audio_play_sound(sndPlacePiece,1,false);
+	
 	myPiece.Attack = 1;
 	myPiece.Health = 5;
 	myPiece.row = row;
@@ -37,6 +39,8 @@ function PlayPiece(_playerPiece)
 	if(_playerPiece){BorW = !BorW;}
 	
 	var ourHand = (_playerPiece) ? global.pHand : global.opHand;
+	
+	audio_play_sound(sndPlacePiece,1,false);
 	
 	switch(ourHand.cardSelected.pips)
 	{
@@ -70,7 +74,7 @@ function PlayPiece(_playerPiece)
 		myPiece.graduated=true;
 		break;
 	}
-		
+	
 	myPiece.Attack = clamp(ourHand.cardSelected.clubs,1,10);
 	myPiece.Health = clamp(ourHand.cardSelected.hearts,1,10);
 	myPiece.row = row; myPiece.column = column;
@@ -78,15 +82,15 @@ function PlayPiece(_playerPiece)
 	instance_find(oField,0).AddPiece(myPiece);
 	
 	if(ourHand.cardSelected.spades>0)
-	{
-		var ourSpade = (_playerPiece) ? global.pSpade : global.opSpade;
-		ourSpade.AddSpades(ourHand.cardSelected.spades);
+	{	
+		instance_find(oParticleManager,0).SpadeParticles(ourHand.cardSelected.spades,x,y,_playerPiece);
 	}
 	
 	if(ourHand.cardSelected.diamonds>0)
 	{
-		if(_playerPiece){global.pDiamonds += ourHand.cardSelected.diamonds;}
-		else{instance_find(oMatchManager,0).opDiamonds += ourHand.cardSelected.diamonds;}
+		instance_find(oParticleManager,0).DiamondParticles(ourHand.cardSelected.diamonds,x,y,_playerPiece);
+		//if(_playerPiece){global.pDiamonds += ourHand.cardSelected.diamonds;}
+		//else{instance_find(oMatchManager,0).opDiamonds += ourHand.cardSelected.diamonds;}
 	}
 	//destroy the associated card
 	ourHand.FindAndDestroy(ourHand.cardSelected);
@@ -145,6 +149,7 @@ function GraduatePawn(obj,rank)
 	
 	#region make the new piece
 	var BorW = (object_is_ancestor(obj.object_index,oChessPieceB));
+	audio_play_sound(sndUpgradePiece,1,false);
 	switch(rank)
 	{
 		case 0:

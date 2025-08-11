@@ -43,3 +43,7 @@ setup=false;
 
 //essentially saying "we are free to break the line here!"
 last_free_space = 0;
+
+//# of frames to pause typing
+pauseTime = 10;
+curTimer=0;

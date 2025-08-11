@@ -85,8 +85,8 @@ function Setup()
 	//setup player side border
 	pBorderDepth = instance_create_layer(0,0,"UILayer",oVoidBorder).depth;
 	//setup player diamond counter
-	var pc = instance_create_layer(0,635,"UILayer",oDiamondCounter);
-	pc.depth = pBorderDepth-1;
+	global.pDiamondCounter = instance_create_layer(0,635,"UILayer",oDiamondCounter);
+	global.pDiamondCounter.depth = pBorderDepth-1;
 	//setup player spade counter
 	global.pSpade = instance_create_layer(100,100,"UILayer",oSpadeCounter);
 	global.pSpade.pSpades=true;
@@ -127,9 +127,9 @@ function Setup()
 	//setup opponent's side border
 	opBorderDepth = instance_create_layer(1400,0,"UILayer",oVoidBorder).depth;
 	//setup opponent's diamond counter
-	var opc = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
-	opc.pCounter=false;
-	opc.depth = opBorderDepth-1;
+	global.opDiamondCounter = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
+	global.opDiamondCounter.pCounter=false;
+	global.opDiamondCounter.depth = opBorderDepth-1;
 	//setup opponent spade counter
 	global.opSpade = instance_create_layer(1500,800,"UILayer",oSpadeCounter);
 	global.opSpade.depth = opBorderDepth-1;

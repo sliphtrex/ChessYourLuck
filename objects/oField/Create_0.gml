@@ -586,6 +586,8 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 		
 		//we can no longer move this piece on this turn
 		grid[row][column].myPiece.hasMoved = true;
+		
+		audio_play_sound(sndMovePiece,1,false);
 	}
 	//otherwise we gotta fight
 	else
@@ -598,6 +600,8 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 		show_debug_message(string(grid[row][column].myPiece.object_index)+" has "
 			+string(newHealth)+" health. Pragma is: "
 			+ pragma);
+		
+		audio_play_sound(sndAttackPiece,1,false);
 		
 		//if they don't have health left destroy them and take their place
 		if(!grid[row][column].myPiece.pragma && newHealth<=0)
@@ -621,6 +625,8 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			
 			CheckForKings();
 			
+			audio_play_sound(sndMovePiece,1,false);
+			
 			//we can no longer move this piece on this turn
 			grid[row][column].myPiece.hasMoved = true;
 			show_debug_message("We attacked");
@@ -630,7 +636,6 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			grid[row][column].myPiece.Health = newHealth;
 			grid[rs][cs].myPiece.hasMoved = true;
 		}
-		
 	}
 	UnselectTiles();
 }
