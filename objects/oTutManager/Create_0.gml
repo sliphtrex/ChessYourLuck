@@ -34,7 +34,7 @@ function AreYouSure()
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
 		Add_Text("So you remember then?",1,undefined,550,375);
-		Add_Option("Yes",DefineForm);
+		Add_Option("Yes",FinalWords);
 		Add_Option("No",AsIThought);
 	}
 }
@@ -419,7 +419,7 @@ function SetupSpecialAbilities()
 		Add_Text("It's not ideal, but we must make due with what we are given.",1);
 		Add_Text("Move your 10 of Clubs to the position two right of the pawn.",1,undefined,undefined,undefined, CheckBishopCreated);
 		Add_Text("Now attack my only king and end the match.",1,undefined,undefined,undefined, CheckKingDown);
-		NextMove = DefineForm;
+		NextMove = FinalWords;
 	}
 }
 
@@ -468,59 +468,6 @@ function CheckKingDown()
 	{return true;} else {return false;}
 }
 
-function DefineForm()
-{
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Alright. Next order of business.",1);
-		Add_Text("Before you can proceed, you must define your form.",1,undefined,350,375);
-		NextMove = CharacterSelect;
-	}
-	//FinalWords();
-}
-
-function CharacterSelect()
-{
-	show_debug_message("in CharacterSelect");
-	charSelected=false;
-	
-	charIcons[0] = instance_create_layer(x,y,"UILayer",oCharIcon);
-	charIcons[0].icon = 0;
-	charIcons[0].Setup();
-	charIcons[1] = instance_create_layer(x,y,"UILayer",oCharIcon);
-	charIcons[1].icon = 1;
-	charIcons[1].Setup();
-	charIcons[2] = instance_create_layer(x,y,"UILayer",oCharIcon);
-	charIcons[2].icon = 2;
-	charIcons[2].Setup();
-	//if(global.DogPlaythroughComplete)
-	//{
-		charIcons[3] = instance_create_layer(x,y,"UILayer",oCharIcon);
-		charIcons[3].icon = 3;
-		charIcons[3].Setup();
-	//}
-	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Out of the following options, how would you most like to be perceived by others?",1,undefined,350,375,CharacterSelectedCheck());
-		NextMove = LastChance;
-	}
-}
-
-function CharacterSelectedCheck()
-{return instance_find(oTutManager,0).charSelected;}
-
-function LastChance()
-{
-	with(oCharIcon){instance_destroy();}
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Are you sure you're happy with your choice? This will impact how your story unfolds.",1);
-			Add_Option("Yes",FinalWords);
-			Add_Option("Not sure", CharacterSelect);
-	}
-}
-
 function FinalWords()
 {
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
@@ -529,12 +476,12 @@ function FinalWords()
 		Add_Text("There will be no checks nor mates here.",1,undefined,350,375);
 		Add_Text("Nor any warnings of potential misfortunes.",1,undefined,350,375);
 		Add_Text("Don't get careless.",1,undefined,575,375);
-		NextMove = EndTut;
+		NextMove = DefineForm;
 	}
 }
 
-function EndTut()
+function DefineForm()
 {
 	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
-	trans.nextRoom = rRainyKnightsCafe;
+	trans.nextRoom = rPlayerProfileSetup;
 }

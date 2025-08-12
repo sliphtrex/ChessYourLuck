@@ -33,7 +33,7 @@ function DefaultVoidTextBox()
 //and it will take care of the rest.
 function StartConvo()
 {
-	with(instance_create_layer(0,600,"Text",oRKCTextBox))
+	with(instance_create_layer(1920*global.curTable,780,"Text",oRKCTextBox))
 	{
 		CharacterText();
 	}

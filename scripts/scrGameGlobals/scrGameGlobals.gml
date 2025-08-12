@@ -103,8 +103,13 @@ global.DogPlaythroughComplete=false;
 //who are we speaking to currently; should be set whenever we start a dialogue
 global.ConvoChar = undefined; //"Savannah";
 
+//will mark our current table for when we come back to the cafe from the void
+// 0 = bar (for Anu only), 1-3 = tables 1-3
+global.curTable = undefined;
 //will store if the last match ended in defeat or victory
 global.playerDefeated = false;
+//triggered when we finish a match, reset when we change day parts
+global.postMatch=false;
 
 //how many matches have we played against Anu
 global.AnuMatchNum=0;

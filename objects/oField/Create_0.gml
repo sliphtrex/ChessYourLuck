@@ -623,8 +623,6 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			grid[row][column].myPiece.x = grid[row][column].x;
 			grid[row][column].myPiece.y = grid[row][column].y;
 			
-			CheckForKings();
-			
 			audio_play_sound(sndMovePiece,1,false);
 			
 			//we can no longer move this piece on this turn
@@ -803,12 +801,13 @@ function CheckForKings()
 		{
 			if(blackPieces[i].object_index==oKingB){kingCountB++;}
 		}
-		
+		show_debug_message("Checking for kings\nWhite King Count: "+string(kingCountW)
+			+"\nBlack King Count: "+string(kingCountB));
 		if((!instance_find(oMatchManager,0).pStart && kingCountW==0&&kingCountB>0)
 			||(instance_find(oMatchManager,0).pStart && kingCountB==0&&kingCountW>0))
-		{instance_find(oMatchManager,0).MatchWin();}
+		{instance_find(oMatchManager,0).MatchWin();show_debug_message("We won.");}
 		else if((instance_find(oMatchManager,0).pStart && kingCountW==0&&kingCountB>0)
 			||(!instance_find(oMatchManager,0).pStart && kingCountB==0&&kingCountW>0))
-		{instance_find(oMatchManager,0).MatchDefeat();}
+		{instance_find(oMatchManager,0).MatchDefeat();show_debug_message("we lost.");}
 	}
 }

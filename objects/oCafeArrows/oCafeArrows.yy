@@ -1,21 +1,18 @@
 {
   "$GMObject":"",
-  "%Name":"oTutManager",
+  "%Name":"oCafeArrows",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"oTutManager",
+  "name":"oCafeArrows",
   "overriddenProperties":[],
   "parent":{
-    "name":"Match Managers",
-    "path":"folders/Objects/Manager Objects/Match Managers.yy",
+    "name":"RKCobjects",
+    "path":"folders/Objects/RKCobjects.yy",
   },
-  "parentObjectId":{
-    "name":"oMatchManager",
-    "path":"objects/oMatchManager/oMatchManager.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,

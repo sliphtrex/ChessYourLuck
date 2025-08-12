@@ -9,8 +9,8 @@
   "name":"oParticleManager",
   "overriddenProperties":[],
   "parent":{
-    "name":"Manager Objects",
-    "path":"folders/Objects/Manager Objects.yy",
+    "name":"Match Managers",
+    "path":"folders/Objects/Manager Objects/Match Managers.yy",
   },
   "parentObjectId":null,
   "persistent":false,

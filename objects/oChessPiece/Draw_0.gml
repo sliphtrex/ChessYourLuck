@@ -15,6 +15,7 @@ if(Health<=0)
 		instance_find(oField,0).RemovePiece(id);
 		if(myTile.myPiece==id){myTile.myPiece = undefined;}
 		instance_destroy();
+		instance_find(oField,0).CheckForKings();
 	}
 }
 

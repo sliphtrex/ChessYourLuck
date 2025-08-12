@@ -57,6 +57,25 @@ function SelectedEditSpAbs()
 #endregion
 
 #region Savannah's Story
+
+function SavannahWin()
+{
+	with(instance_create_layer(global.curTable*1920,780,"Text",oRKCTextBox))
+	{
+			Add_Text("Heyo! That's just how the cookie crumbles sometimes.\nDon't worry. Be Happy.\n There's always tomorrow.");
+			NextMove = ChangeDayPart;
+	}
+}
+
+function SavannahLose()
+{
+	with(instance_create_layer(global.curTable*1920,780,"Text",oRKCTextBox))
+	{
+			Add_Text("Yo, what the heck! That's crazy!\nYou must have cheated.\nNo way you're that good.\nAlright, game recognizes game.");
+			NextMove = ChangeDayPart;
+	}
+}
+
 //This determines where we are in Savannah's story and generates the appropriate dialogue
 function SavannahText()
 {
@@ -114,4 +133,17 @@ function SavannahBadChoice()
 function PreviewPlayer()
 {
 	instance_create_layer(0,0,"UILayer",oMatchPreviewer);
+}
+
+function ChangeDayPart()
+{
+	if(!(global.DayPart==2 && global.DayNum==13))
+	{
+		global.postMatch = false;
+		global.DayPart++;
+		if(global.DayPart==3){global.DayPart=0; global.DayNum++;}
+	}
+	
+	curX = camera_get_view_x(view_camera[0]);
+	instance_create_layer(curX,0,"Text",oFadeTransition);
 }

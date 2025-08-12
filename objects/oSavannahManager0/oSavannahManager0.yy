@@ -9,8 +9,8 @@
   "name":"oSavannahManager0",
   "overriddenProperties":[],
   "parent":{
-    "name":"Manager Objects",
-    "path":"folders/Objects/Manager Objects.yy",
+    "name":"Savannah",
+    "path":"folders/Objects/Manager Objects/Match Managers/Savannah.yy",
   },
   "parentObjectId":{
     "name":"oMatchManager",

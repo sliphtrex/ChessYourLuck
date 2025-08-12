@@ -397,6 +397,7 @@ function ChooseSpAbSpace()
 
 function MatchWin()
 {
+	show_debug_message("made it to MatchWin.");
 	global.playerDefeated=false;
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
@@ -407,6 +408,7 @@ function MatchWin()
 
 function MatchDefeat()
 {
+	show_debug_message("made it to MatchDefeat.");
 	global.playerDefeated=true;
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
@@ -417,6 +419,7 @@ function MatchDefeat()
 
 function EndMatch()
 {
+	global.postMatch=true;
 	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
 	trans.nextRoom = rRainyKnightsCafe;
 }

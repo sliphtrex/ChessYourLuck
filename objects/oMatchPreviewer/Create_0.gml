@@ -47,7 +47,6 @@ function Savannah()
 
 function StartMatch()
 {
-	room_persistent = true;
 	room_goto(rVoid);
 }
 
