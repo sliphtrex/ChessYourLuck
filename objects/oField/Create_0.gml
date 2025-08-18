@@ -677,6 +677,10 @@ function ChangeTurns()
 	
 	if(instance_find(oMatchManager,0).pTurn)
 	{
+		if(global.pDeck.cardsLeft==0){instance_find(oMatchManager,0).MatchDefeat();}
+		
+		global.pDeck.firstDraw=true;
+		
 		//reset the AI's decision streak;
 		instance_find(oMatchManager,0).decisionsMade = 0;
 		
@@ -697,6 +701,7 @@ function ChangeTurns()
 	}
 	else
 	{
+		global.opDeck.firstDraw=true;
 		
 		if(!instance_find(oMatchManager,0).pStart)
 		{
@@ -712,9 +717,11 @@ function ChangeTurns()
 				blackPieces[i].hasMoved=false;
 			}
 		}
+		
+		if(global.opDeck.cardsLeft==0){instance_find(oMatchManager,0).MatchWin();}
 		//this function call sets up our whole opponents turn and won't give control
 		//back to the player until the AI is done
-		if(instance_find(oMatchManager,0).object_index!=oTutManager)
+		else if(instance_find(oMatchManager,0).object_index!=oTutManager)
 		{instance_find(oMatchManager,0).TurnManager();}
 	}
 }

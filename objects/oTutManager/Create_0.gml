@@ -1,8 +1,11 @@
 event_inherited();
 
-pDeckSort = [29,40,1,4,16,10,3,20,26,49,15,31,9,0,2,5,6,7,8,11,12,13,14,17,18,19,21,22,23,24,25,27,28,30,32,33,34,35,36,37,38,39,41,42,43,44,45,46,47,48,50,51];
+userDeck = [29,40,1,4,16,10,3,20,26,49,15,31,9,0,2,5,6,7,8,11];
+global.opCards=[50,14,27,18,4,5,6,7,8,9,10,11,12,13,1,15,16,17,3,19];
+
+pDeckSort = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
 pCardsPerTurn = [3,5,5,5,5,5,5,5,5,4];
-opDeckSort =[50,14,27,18,4,5,6,7,8,9,10,11,12,13,1,15,16,17,3,19,20,21,22,23,24,25,26,2,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,0,51];
+opDeckSort = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
 opCardsPerTurn = undefined;
 opDiamonds=0;
 charSelected=false;
@@ -67,7 +70,7 @@ function SetupTut()
 	//setup player Deck
 	global.pDeck = instance_create_layer(292,800,"CardObjects",oDeck);
 	global.pDeck.pDeck=true;
-	global.pDeck.DeckSetup();
+	global.pDeck.DeckSetup2();
 	//setup player's discard pile
 	global.pDiscard = instance_create_layer(1307,805,"CardObjects",oDiscardPile);
 	global.pDiscard.pDiscardPile = true;
@@ -76,7 +79,7 @@ function SetupTut()
 	global.opHand = instance_create_layer(800,20,"CardObjects",oHand);
 	//setup opponent's deck
 	global.opDeck = instance_create_layer(1307,100,"CardObjects",oDeck);
-	global.opDeck.DeckSetup();
+	global.opDeck.DeckSetup2();
 	//setup opponent's discard pile
 	global.opDiscard = instance_create_layer(292,95,"CardObjects",oDiscardPile);
 	
@@ -85,7 +88,8 @@ function SetupTut()
 	
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
-		Add_Text("You start with a single king each, and a hand of 5 cards.",1,undefined, undefined,400);
+		Add_Text("You start with a single king each, and a deck of at least 20 cards.",1,undefined, undefined,400);
+		Add_Text("Each player draws a hand of 5.",1,undefined, undefined,400);
 		Add_Text("These cards are your primary method of summoning more chess pieces.",1,undefined,undefined,600);
 		Add_Text("Let's try playing a card.",1,undefined,525,650);
 		Add_Text("Left click that 4 of Hearts.",1,undefined,500,650,CheckFourOfHeartsSelected);
@@ -240,6 +244,8 @@ function CreateSideBars()
 		Add_Text("Don't feel too bad. The player going first can't move their pieces on the first turn anyway.",1,undefined,200);
 		Add_Text("Each time you draw a card, that card is replaced with a joker.",1,undefined,200);
 		Add_Text("When you draw one, your turn is forfeit.",1,undefined,350);
+		Add_Text("The number on the deck signals how many original cards are left.",1,undefined,200,650);
+		Add_Text("You must draw at least one card each turn.",1,undefined,200,650);
 		NextMove = SetupAnuTurn;
 	}
 }
@@ -260,7 +266,8 @@ function SetupAnuTurn()
 	
 	with(instance_create_layer(x,y,"Text",oVoidTextBox))
 	{
-		Add_Text("You can also click the End Turn button if you're the cautious type.",1,undefined,200,650);
+		Add_Text("After that, you may click the End Turn button if you're the cautious type.",1,undefined,200,650);
+		Add_Text("Should you find your deck empty at the start of a turn, the game will end, with you the fool.",1,undefined,200,650);
 		Add_Text("...But for now it's my turn.",1,undefined,475);
 		Add_Text("Forgive me, I haven't introduced myself yet.",1,undefined,350);
 		Add_Text("My name is Anu.",1,undefined,650,375);

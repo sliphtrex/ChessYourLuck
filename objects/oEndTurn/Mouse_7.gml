@@ -1,1 +1,1 @@
-if(pTurn&&instance_find(oMatchManager,0).pTurn){instance_find(oField,0).ChangeTurns();}
+if(pTurn&&instance_find(oMatchManager,0).pTurn&&image_index==0){instance_find(oField,0).ChangeTurns();}

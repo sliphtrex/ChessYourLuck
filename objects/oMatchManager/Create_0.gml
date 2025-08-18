@@ -1,6 +1,8 @@
+//do we have a specific player deck for this match
+userDeck = global.PlayerCards;
 //used to specify a specific arrangement of cards;
 pDeckSort = undefined;
-opDeckSort=undefined;
+opDeckSort = undefined;
 //used to specify x cards can be drawn on turn n, where CardsPerTurn[n] = x
 pCardsPerTurn=undefined;
 opCardsPerTurn=undefined;
@@ -24,7 +26,7 @@ global.opSpade=undefined;
 //represents the opponents default deck, can be edited in the child
 //NOTE: global.PlayerCards is stored in scrGameGlobals because we'll track that
 //throughout the entire game.
-global.opCards=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
+global.opCards=[1,2,3,4,5,14,15,16,17,18,27,28,29,30,31,40,41,42,43,44];
 
 //the depth that the side bars are being drawn at
 pBorderDepth=undefined;
@@ -78,7 +80,7 @@ function Setup()
 	//setup player Deck
 	global.pDeck = instance_create_layer(292,800,"CardObjects",oDeck);
 	global.pDeck.pDeck=true;
-	global.pDeck.DeckSetup();
+	global.pDeck.DeckSetup2();
 	//setup player discard pile
 	global.pDiscard = instance_create_layer(1307,805,"CardObjects",oDiscardPile);
 	global.pDiscard.pDiscardPile = true;
@@ -121,7 +123,10 @@ function Setup()
 	global.opHand = instance_create_layer(800,20,"CardObjects",oHand);
 	//setup opponent's deck
 	global.opDeck = instance_create_layer(1307,100,"CardObjects",oDeck);
-	global.opDeck.DeckSetup();
+	
+	
+	
+	global.opDeck.DeckSetup2();
 	//setup opponent's discard pile
 	global.opDiscard = instance_create_layer(292,95,"CardObjects",oDiscardPile); 
 	//setup opponent's side border
@@ -149,10 +154,10 @@ function Setup()
 }
 
 //draws a card from the opponent's deck
-function DrawCard()
+function DrawCardFromDeck()
 {
 	var curTurn=pTurn;
-	global.opDeck.DrawCard();
+	global.opDeck.DrawCard2();
 	show_debug_message("The AI drew a card. Cards drawn: "+string(global.opDeck.cardsDrawn));
 	//if we draw a joker our pTurn should be different than our curTurn
 	//this will end the state machine

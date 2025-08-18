@@ -7,14 +7,132 @@
 *
 ***********************************************************************************/
 deckOrder[0] = 0;
+//are we using the default global.PlayerCards or a deck specific to this match
+usableDeck = global.PlayerCards;
+deckSize = 20;
 
 //used to specify x cards can be drawn on turn n, where CardsPerTurn[n] = x
-cardsPerTurn[0]=undefined;
+cardsPerTurn=undefined;
+cardDrawMax=10;
 pDeck=false;
 
 firstHand=0;
+firstDraw=true;
 curCard=0;
 cardsDrawn=0;
+cardsLeft=0;
+
+function DeckSetup2()
+{
+	//check that we don't have a specific deck of cards we want the player to use
+	if(instance_exists(oMatchManager) &&
+		pDeck && instance_find(oMatchManager,0).userDeck!=global.PlayerCards)
+	{usableDeck = instance_find(oMatchManager,0).userDeck;}
+	
+	deckSize = array_length((pDeck) ? usableDeck : global.opCards);
+	
+	if(pDeck) {x=292; y=800; sprite_index = sprBlueDeck;}
+	else {x=1307; y=100; sprite_index = sprRedDeck;}
+	
+	//check if the match manager has a set card order for us to use
+	if(instance_exists(oMatchManager) &&
+		((pDeck&&instance_find(oMatchManager,0).pDeckSort!=undefined)||
+		(!pDeck&&instance_find(oMatchManager,0).opDeckSort!=undefined)))
+	{
+		//using a ternary operator to set the correct deck based on pDeck
+		deckOrder = (pDeck) ? instance_find(oMatchManager,0).pDeckSort : instance_find(oMatchManager,0).opDeckSort;
+	}
+	//otherwise we set up the deck as normal
+	else
+	{
+		//keep track of previously chosen cards
+		cardsSelected[0] = 0;
+		
+		for(var c=0; c<deckSize; c++)
+		{
+			//set the given card to random int between 0-51
+			deckOrder[c] = irandom_range(0,deckSize-1);
+		
+			//if it's the first card then we don't need to check for dupes
+			if(c>0)
+			{
+				var chosen = false;
+				for(var i=0; i<array_length(cardsSelected);i++)
+				{
+					//check our current card against all previously chosen cards
+					if(deckOrder[c]==cardsSelected[i]){chosen = true;}
+				}
+				//if the card was previously chosen
+				while(chosen)
+				{
+					//increment between 0-51, wrapping the number when we reach 51
+					deckOrder[c] = (deckOrder[c]<deckSize-1) ? deckOrder[c]+1 : 0;
+				
+					var newCard=true;
+					for(var i=0; i<array_length(cardsSelected);i++)
+					{
+						//check this new number against previously chosen cards
+						if(deckOrder[c]==cardsSelected[i]){newCard=false;}
+					}
+					//if the new number hasn't been chosen before, we break the loop
+					if(newCard){chosen=false;}
+				}
+			}
+			//now that we've confirmed it's a new card, we can assign it to our
+			//previously drawn card array
+			cardsSelected[c] = deckOrder[c];
+		}
+	}
+	
+	//if we have a set cardsPerTurn use it
+	if(instance_exists(oMatchManager)&&
+		((pDeck&&instance_find(oMatchManager,0).pCardsPerTurn!=undefined)
+		||(!pDeck&&instance_find(oMatchManager,0).opCardsPerTurn!=undefined)))
+	{
+		cardsPerTurn = (pDeck) ? instance_find(oMatchManager,0).pCardsPerTurn : instance_find(oMatchManager,0).opCardsPerTurn;
+	}
+	else{cardDrawMax = ceil(deckSize/4);}
+	
+	cardsLeft = (pDeck) ? array_length(usableDeck) : array_length(global.opCards);
+	
+	//set our alarm to draw our starting hand next frame
+	alarm[0] = 1;
+}
+
+function DrawCard2()
+{
+	if(curCard<deckSize)
+	{
+		if(firstDraw)
+		{
+			if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
+			else{CreateCard(global.opCards[deckOrder[curCard]]);}
+			curCard++;
+			cardsDrawn++;
+			firstDraw=false;
+		}
+		else if(cardsPerTurn != undefined)
+		{
+			if(cardsDrawn<cardsPerTurn[instance_find(oMatchManager,0).Turn])
+			{
+				if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
+				else{CreateCard(global.opCards[deckOrder[curCard]]);}
+				curCard++;
+				cardsDrawn++;
+			}
+			else{TurnOver();}
+		}
+		else if(cardsDrawn<cardDrawMax && irandom_range(0,cardsLeft)>cardsDrawn)
+		{
+			if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
+			else{CreateCard(global.opCards[deckOrder[curCard]]);}
+			curCard++;
+			cardsDrawn++;
+		}
+		else {TurnOver();}
+	}
+	cardsLeft = deckSize-curCard;
+}
 
 function DeckSetup()
 {
@@ -147,7 +265,7 @@ function DrawCard()
 {
 	if(curCard<52 && cardsDrawn<cardsPerTurn[instance_find(oMatchManager,0).Turn])
 	{
-		if(pDeck){CreateCard(global.PlayerCards[deckOrder[curCard]]);}
+		if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
 		else{CreateCard(global.opCards[deckOrder[curCard]]);}
 		curCard++;
 		cardsDrawn++;

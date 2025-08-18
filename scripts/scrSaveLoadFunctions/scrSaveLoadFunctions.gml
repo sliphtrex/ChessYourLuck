@@ -113,5 +113,7 @@ function LoadGame(fileName)
 		global.DayPart = _loadData[SDDayPart];
 		global.Playthrough = _loadData[SDPlaythrough];
 		global.DogPlaythroughComplete = _loadData[SDDogPlaythroughComplete];
+		
+		global.curTable=0;
 	}
 }

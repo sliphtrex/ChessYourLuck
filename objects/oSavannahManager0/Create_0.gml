@@ -11,7 +11,9 @@ matchOver=false;
 defeated=false;
 postMatchDialogue=0;
 
-global.opCards=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
+global.opCards = [14,15,16,27,28,29];
+//global.opCards=[14,14,15,15,16,16,27,27,28,28,29,29,40,40,41,41,42,42,11,52,53,54,55,56,57];
+show_debug_message(global.opCards);
 Setup();
 
 //This will always be done after calling setup since these will always be diferent
@@ -114,7 +116,7 @@ function TurnManager()
 	//4 = move a piece, 5 = use a special ability
 	switch(choice)
 	{
-		case 1: DrawCard(); break;
+		case 1: DrawCardFromDeck(); break;
 		case 2: SelectCard(); break;
 		case 4: ChoosePieceToMove(); break;
 		case 5: ChooseSpAb(); break;
