@@ -160,6 +160,7 @@
     {"id":{"name":"rPlayerProfileSetup","path":"rooms/rPlayerProfileSetup/rPlayerProfileSetup.yy",},},
     {"id":{"name":"rRainyKnightsCafe","path":"rooms/rRainyKnightsCafe/rRainyKnightsCafe.yy",},},
     {"id":{"name":"rVoid","path":"rooms/rVoid/rVoid.yy",},},
+    {"id":{"name":"scrCharacterDecks","path":"scripts/scrCharacterDecks/scrCharacterDecks.yy",},},
     {"id":{"name":"scrCharacterText","path":"scripts/scrCharacterText/scrCharacterText.yy",},},
     {"id":{"name":"scrGameGlobals","path":"scripts/scrGameGlobals/scrGameGlobals.yy",},},
     {"id":{"name":"scrSaveLoadFunctions","path":"scripts/scrSaveLoadFunctions/scrSaveLoadFunctions.yy",},},

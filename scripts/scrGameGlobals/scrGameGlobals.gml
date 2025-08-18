@@ -11,7 +11,7 @@
 * differently by the oDeck and oStandardCard objects when created in a match.
 *
 * 52 = 1 of Spades, 53 = 1 of Diamonds, 54 = 13 of Spades, 55 = 13 of Diamonds,
-* 56 = 15 of Spades, 57 = 15 of Diamonds
+* 56 = 15 of Spades, 57 = 15 of Diamonds, 58 = King of Queens
 *
 ***********************************************************************************/
 #endregion
