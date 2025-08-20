@@ -11,8 +11,7 @@ matchOver=false;
 defeated=false;
 postMatchDialogue=0;
 
-global.opCards=[14,14,15,15,16,16,27,27,28,28,29,29,40,40,41,41,42,42,11,52,53,54,55,56,57];
-show_debug_message(global.opCards);
+global.opCards=global.SavannahsDecks[0];
 Setup();
 
 //This will always be done after calling setup since these will always be diferent

@@ -256,7 +256,6 @@ function BuySpAb()
 
 function BuyCard(_cost)
 {
-	show_debug_message(itemNumber);
 	global.pDiamonds -= _cost;
 	
 	//add our card to our extras so we can add it to our deck later
@@ -299,7 +298,7 @@ function SetupDeckEditor()
 	
 	//setup a card scroller if we don't have one
 	if(!instance_exists(oCardScroller))
-	{instance_create_layer(0,0,"CardShop",oCardScroller);}
+	{cards = instance_create_layer(0,0,"CardShop",oCardScroller); cards.Setup();}
 }
 
 function SetupSpAbEditor()

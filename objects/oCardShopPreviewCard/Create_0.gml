@@ -2,6 +2,7 @@ card = -1;
 deckPos=-1;
 
 start_x = x;
+curX=camera_get_view_x(view_camera[0]);
 hidden=false;
 
 maskSurface=undefined;
@@ -68,8 +69,6 @@ function SetupCard()
 		case 55: sprite_index=spr_13oD; break;
 		case 56: sprite_index=spr_15oS; break;
 		case 57: sprite_index=spr_15oD; break;
-		default:
-			instance_destroy();
-		break;
+		default: instance_destroy(); break;
 	}
 }

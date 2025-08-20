@@ -5,6 +5,7 @@ spAb3 = undefined;
 specialCard1=undefined;
 specialCard2=undefined;
 specialCard3=undefined;
+cardPreviewer=undefined;
 
 border=45;
 call = "";
@@ -31,15 +32,18 @@ function Savannah()
 		response1 = "Yeah, let's go";
 		response2 = "Nah, not just yet";
 		//set up the preview SpAbs here
-		spAb2 = instance_create_layer(1450,450,"CardShop",oPreviewSpAb);
+		spAb2 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,450,"CardShop",oPreviewSpAb);
 		spAb2.specialAbility = 18;
 		spAb2.Setup();
-		spAb3 = instance_create_layer(1450,750,"CardShop",oPreviewSpAb);
+		spAb3 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,750,"CardShop",oPreviewSpAb);
 		spAb3.specialAbility = 2;
 		spAb3.Setup();
-		spAb1 = instance_create_layer(1450,150,"CardShop",oPreviewSpAb);
+		spAb1 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,150,"CardShop",oPreviewSpAb);
 		spAb1.specialAbility = 34;
 		spAb1.Setup();
+		cardPreviewer = instance_create_layer(camera_get_view_x(view_camera[0]),930,"CardShop",oCardScroller);
+		cardPreviewer.previewDeck = global.SavannahsDecks[global.SavannahMatchNum];
+		cardPreviewer.Setup();
 	break;
 	}
 }
