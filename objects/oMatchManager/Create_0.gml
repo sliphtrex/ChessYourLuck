@@ -53,6 +53,11 @@ pTurn = pStart;
 //turn number
 Turn=0;
 
+//has the AI drawn a card yet
+firstDraw=true;
+//pairs of cards that could be combined
+//see CheckValidComboPairs() for details
+comboPairs = undefined;
 //how many moves have we made this turn
 //set in Alarm 0
 decisionsMade=0;
@@ -162,4 +167,24 @@ function DrawCardFromDeck()
 	//if we draw a joker our pTurn should be different than our curTurn
 	//this will end the state machine
 	if(curTurn==pTurn){alarm[0]=waitTime;}
+}
+
+function CheckValidComboPairs()
+{
+	//a multidimentional array that stores c1 and c2 as [pair#][c1,c2]
+	comboPairs = undefined;
+	
+	//check if we have any pairs that can be combined
+	for(var i=0; i<array_length(global.opHand.cardsHeld)-1; i++)
+	{
+		for(var j=1; i+j<array_length(global.opHand.cardsHeld); j++)
+		{
+			if(global.opHand.cardsHeld[i].pips+global.opHand.cardsHeld[i+j].pips<=14)
+			{
+				if(comboPairs==undefined){comboPairs[0] = [i,i+j];}
+				else{array_push(comboPairs,[i,i+j]);}
+			}
+		}
+	}
+	return comboPairs;
 }

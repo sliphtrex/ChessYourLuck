@@ -60,6 +60,7 @@ function ClosePreview()
 	instance_destroy(instance_find(oMatchPreviewer,0).spAb2);
 	instance_destroy(instance_find(oMatchPreviewer,0).spAb3);
 	instance_destroy(instance_find(oMatchPreviewer,0));
+	cardPreviewer.Close();
 	
 	//this nested switch resets the values changed in scrCharacterText
 	switch(global.ConvoChar)

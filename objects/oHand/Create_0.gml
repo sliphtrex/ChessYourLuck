@@ -72,11 +72,8 @@ function DiscardCard(num)
 }
 
 function CombineCards()
-{
-	pips1 = c1.pips;
-	pips2 = c2.pips;
-	
-	if(pips1+pips2<=14)
+{	
+	if(c1.pips+c2.pips <= 14)
 	{
 		//If either card is not an amalgam we need to remove an extra club
 		//and/or heart. This is because hearts and clubs get set to 1 by

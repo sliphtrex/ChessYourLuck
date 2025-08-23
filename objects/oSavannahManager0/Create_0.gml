@@ -7,10 +7,6 @@ ourPiece=undefined;
 //a temp selected spAb
 ourSpAb=undefined;
 
-matchOver=false;
-defeated=false;
-postMatchDialogue=0;
-
 global.opCards=global.SavannahsDecks[0];
 Setup();
 
@@ -34,6 +30,118 @@ OSA3.Setup();
 * sends us to the function for that particular decision (i.e. draw card, move piece,
 * etc.).
 ***********************************************************************************/
+function TM2()
+{
+	var options = undefined;
+	
+	if(global.opDeck.firstDraw)
+	{
+		//if our hand is full we need to discard cards so we can draw
+		if(array_length(global.opHand.cardsHeld)==5)
+		{
+			//weigh combining cards
+			if(CheckValidComboPairs()!=undefined)
+			{
+				for(var i=0; i=array_length(comboPairs); i++)
+				{
+					if(options==undefined){options=[3];}
+					else{array_push(options,3);}
+				}
+			}
+			//weigh playing cards
+			if(array_length(field.blackPieces)<5)
+			{
+				for(var i=0; i<=(5-array_length(field.blackPieces)); i++)
+				{
+					if(options==undefined){options=[2];}
+					else{array_push(options,2);}
+				}
+			}
+
+			PickChoice(options);
+		}
+		//otherwise we can draw cards without discarding
+		else
+		{
+			PickChoice([1]);
+		}
+	}
+	else
+	{
+		//weigh drawing cards
+		if(array_length(global.opHand.cardsHeld)<5)
+		{
+			for(var i=0; i<=5-array_length(global.opHand.cardsHeld); i++)
+			{
+				if(options==undefined){options=[1];}
+				else{array_push(options,1);}
+			}
+		}
+		
+		//weigh playing cards
+		if(array_length(field.blackPieces)<5)
+		{
+			for(var i=0; i<=(5-array_length(field.blackPieces)); i++)
+			{
+				if(options==undefined){options=[2];}
+				else{array_push(options,2);}
+			}
+		}
+		
+		//weigh combining cards
+		if(CheckValidComboPairs()!=undefined)
+		{
+			for(var i=0; i=array_length(comboPairs); i++)
+			{
+				if(options==undefined){options=[3];}
+				else{array_push(options,3);}
+			}
+		}
+		
+		//weigh moving pieces
+		var movablePieces=0;
+		for(var i=0; i<array_length(field.blackPieces);i++)
+		{if(!field.blackPieces[i].hasMoved){movablePieces++;}}
+		if(movablePieces>0)
+		{
+			for(var i=0; i=array_length(comboPairs); i++)
+			{
+				if(options==undefined){options=[4];}
+				else{array_push(options,4);}
+			}
+		}
+		
+		//weigh spAbs
+		var spAbsReady=0;
+		if(OSA1.CheckIfUsable()){spAbsReady++;}
+		if(OSA2.CheckIfUsable()){spAbsReady++;}
+		if(OSA3.CheckIfUsable()){spAbsReady++;}
+		
+		if(spAbsReady>0)
+		{
+			for(var i=0;i<spAbsReady;i++)
+			{
+				if(options==undefined){options=[5];}
+				else{array_push(options,5);}
+			}
+		}
+		
+		//weigh end turn
+		var endTurnChance=0;
+		if(array_length(options)>10){endTurnChance=1;}
+		else if(array_length(options)>5){endTurnChance=2;}
+		else {endTurnChance=3;}
+		
+		for(var i=0; i<endTurnChance; i++)
+		{
+			if(options==undefined){options=[0];}
+			else{array_push(options,0);}
+		}
+		
+		PickChoice(options);
+	}
+}
+
 function TurnManager()
 {	
 	//set "end turn" as the first element in our array
@@ -66,14 +174,14 @@ function TurnManager()
 	}
 	
 	//if we have more than 1 card in hand we may try to combine cards
-	/*if(array_length(opHand.cardsHeld)>1)
+	if(array_length(global.opHand.cardsHeld)>1)
 	{
 		for(var i=0;i<combine_weight;i++)
 		{
 			if(options==noone){options=[3];}
 			else{array_push(options,3);}
 		}
-	}*/
+	}
 	
 	//check if we have moveable pieces
 	var moveables=0;
@@ -107,7 +215,8 @@ function TurnManager()
 	}
 	
 	//pick an option from the options[]
-	var choice = options[irandom_range(0,array_length(options)-1)];
+	//var choice = options[irandom_range(0,array_length(options)-1)];
+	var choice = 3;
 	
 	//this switch decides where we go from here
 	//0 = end turn, 1 = draw a card, 2 = play a card, 3 = combine cards
@@ -116,6 +225,7 @@ function TurnManager()
 	{
 		case 1: DrawCardFromDeck(); break;
 		case 2: SelectCard(); break;
+		case 3: CombineCardPair(); break;
 		case 4: ChoosePieceToMove(); break;
 		case 5: ChooseSpAb(); break;
 		
@@ -123,6 +233,55 @@ function TurnManager()
 			show_debug_message("The AI has ended it's turn.");
 			field.ChangeTurns();
 		break;
+	}
+}
+
+function PickChoice(op)
+{
+	decisionsMade++;
+	//pick an option from the options[]
+	var choice = op[irandom_range(0,array_length(op)-1)];
+	
+	//this switch decides where we go from here
+	//0 = end turn, 1 = draw a card, 2 = play a card, 3 = combine cards
+	//4 = move a piece, 5 = use a special ability
+	switch(choice)
+	{
+		case 1: DrawCardFromDeck(); break;
+		case 2: SelectCard(); break;
+		case 3: CombineCardPair(); break;
+		case 4: ChoosePieceToMove(); break;
+		case 5: ChooseSpAb(); break;
+		
+		default:
+			show_debug_message("The AI has ended it's turn.");
+			field.ChangeTurns();
+		break;
+	}
+}
+
+function CombineCardPair()
+{
+	//if we have combos choose one to combine
+	if(comboPairs != undefined)
+	{
+		var choice = irandom_range(0,array_length(comboPairs)-1);
+		global.opHand.c1 = global.opHand.cardsHeld[comboPairs[choice][0]];
+		global.opHand.c2 = global.opHand.cardsHeld[comboPairs[choice][1]];
+		show_debug_message("c1: "+string(global.opHand.c1));
+		show_debug_message("c2: "+string(global.opHand.c2));
+		global.opHand.CombineCards();
+		NextMove=undefined;
+		alarm[0]=waitTime;
+		return;
+	}
+	else
+	{
+		//we can't combine so make a new choice
+		decisionsMade--;
+		NextMove=undefined;
+		alarm[0]=waitTime;
+		return;
 	}
 }
 
@@ -231,13 +390,25 @@ function ChoosePieceToMove()
 		}
 	}
 	
-	//select one
-	ourPiece = moveables[irandom_range(0,array_length(moveables)-1)];
-	field.HighlightMoveableSpaces(ourPiece,ourPiece.row,ourPiece.column);
-	NextMove = MovePiece;
-	alarm[0] = waitTime;
-	show_debug_message("The AI selected the "+string(ourPiece.object_index)+" at ("
-		+string(ourPiece.row)+","+string(ourPiece.column)+")");
+	//select one if we have one
+	if(moveables!=undefined)
+	{
+		ourPiece = moveables[irandom_range(0,array_length(moveables)-1)];
+		field.HighlightMoveableSpaces(ourPiece,ourPiece.row,ourPiece.column);
+		NextMove = MovePiece;
+		alarm[0] = waitTime;
+		show_debug_message("The AI selected the "+string(ourPiece.object_index)+" at ("
+			+string(ourPiece.row)+","+string(ourPiece.column)+")");
+	}
+	else
+	{
+		//we have no moveable pieces so make a new choice
+		decisionsMade--;
+		NextMove=undefined;
+		alarm[0]=waitTime;
+		return;
+	}
+	
 }
 
 //This function moves the piece prioritizing attacking over random movement

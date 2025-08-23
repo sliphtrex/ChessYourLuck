@@ -10,8 +10,11 @@
 * Anything index higher than 51 marks a special card and will be handled slightly
 * differently by the oDeck and oStandardCard objects when created in a match.
 *
-* 52 = 1 of Spades, 53 = 1 of Diamonds, 54 = 13 of Spades, 55 = 13 of Diamonds,
-* 56 = 15 of Spades, 57 = 15 of Diamonds, 58 = King of Queens
+* 52 = 1 of clubs, 53 = 1 of hearts, 54 = 1 of Spades, 55 = 1 of Diamonds,
+* 56 = 13 of Spades, 57 = 13 of Diamonds, 58 = 15 of Spades, 59 = 15 of Diamonds,
+* 60 = King of Queens, 61 = Queen of Kings, 62 = Wheel of Wonder, 64 = 2 of Dice,
+* 65 = Stock Card, 66 = Bond Card, 67 = Transfer of Power, 68 = King of Pong,
+* 69 = Department of Defense, 70 = Library Card
 *
 ***********************************************************************************/
 #endregion
@@ -25,7 +28,7 @@ global.PlayerCards = [1,2,3,4,5,14,15,16,17,18,27,28,29,30,31,40,41,42,43,44];
 global.PlayerSpareCards = undefined;
 
 //shows the special cards which can be generated at the shop
-global.UnlockableCards = [52,53,54,55,56,57];
+global.UnlockableCards = [54,55,56,57,58,59];
 
 #region list of Abilities
 /***********************************************************************************
