@@ -158,6 +158,12 @@ function Setup()
 	field.SetupBoard();
 }
 
+function Wait(nm=undefined)
+{
+	NextMove = nm;
+	alarm[0]=waitTime;
+}
+
 //draws a card from the opponent's deck
 function DrawCardFromDeck()
 {
@@ -169,7 +175,30 @@ function DrawCardFromDeck()
 	if(curTurn==pTurn){alarm[0]=waitTime;}
 }
 
-function CheckValidComboPairs()
+//returns undefined if hand is empty
+function FindHighestRankCard()
+{
+	var highestRank = undefined;
+	
+	for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+	{
+		if(highestRank==undefined){highestRank=global.opHand.cardsHeld[i].pips;}
+		else if(global.opHand.cardsHeld[i].pips>highestRank)
+		{highestRank=global.opHand.cardsHeld[i].pips;}
+	}
+	
+	if(highestRank==undefined){return undefined;}
+				
+	for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+	{
+		if(global.opHand.cardsHeld[i].pips==highestRank)
+		{
+			return global.opHand.cardsHeld[i]
+		}
+	}
+}
+
+function CheckValidComboPairs(maxRank=14)
 {
 	//a multidimentional array that stores c1 and c2 as [pair#][c1,c2]
 	comboPairs = undefined;
@@ -179,7 +208,7 @@ function CheckValidComboPairs()
 	{
 		for(var j=1; i+j<array_length(global.opHand.cardsHeld); j++)
 		{
-			if(global.opHand.cardsHeld[i].pips+global.opHand.cardsHeld[i+j].pips<=14)
+			if(global.opHand.cardsHeld[i].pips+global.opHand.cardsHeld[i+j].pips<=maxRank)
 			{
 				if(comboPairs==undefined){comboPairs[0] = [i,i+j];}
 				else{array_push(comboPairs,[i,i+j]);}

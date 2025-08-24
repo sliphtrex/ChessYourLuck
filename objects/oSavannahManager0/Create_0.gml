@@ -34,13 +34,28 @@ function TM2()
 {
 	var options = undefined;
 	
+	//if we haven't drawn a card that's our objective
 	if(global.opDeck.firstDraw)
 	{
 		//if our hand is full we need to discard cards so we can draw
 		if(array_length(global.opHand.cardsHeld)==5)
 		{
+			//start by playing the Queen of Clubs if we have it
+			if(CheckForQueenInHand()){return;}
+			//next we'll try to build up defense around the king
+			else if(!CheckKingSurrounded())
+			{
+				ourCard = FindHighestRankCard();
+				global.opHand.cardSelected = ourCard;
+				ourCard.selected=true;
+				field.CardSelected();
+				Wait(OptimalSupportPlacement);
+				return;
+			}
+			
+			#region weighing our remaining options
 			//weigh combining cards
-			if(CheckValidComboPairs()!=undefined)
+			if(CheckValidComboPairs(12)!=undefined)
 			{
 				for(var i=0; i=array_length(comboPairs); i++)
 				{
@@ -59,13 +74,47 @@ function TM2()
 			}
 
 			PickChoice(options);
+			#endregion
 		}
 		//otherwise we can draw cards without discarding
+		else{DrawCardFromDeck();}
+	}
+	//next we'll try to build up defense around the king
+	else if(!CheckKingSurrounded())
+	{
+		//start by playing the Queen of Clubs if we have it
+		if(CheckForQueenInHand()){return;}
+		//otherwise we'll try to play a different card
+		//or draw one if our hand is empty
 		else
 		{
-			PickChoice([1]);
+			var highestRank = undefined;
+			
+			for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+			{
+				if(highestRank==undefined){highestRank=global.opHand.cardsHeld[i].pips;}
+				else if(global.opHand.cardsHeld[i].pips>highestRank)
+				{highestRank=global.opHand.cardsHeld[i].pips;}
+			}
+			if(highestRank!=undefined)
+			{
+				for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+				{
+					if(global.opHand.cardsHeld[i].pips==highestRank)
+					{
+						ourCard = global.opHand.cardsHeld[i];
+						global.opHand.cardSelected = ourCard;
+						ourCard.selected=true;
+						field.CardSelected();
+						Wait(OptimalSupportPlacement);
+					}
+				}
+			}
+			else{DrawCardFromDeck();}
 		}
 	}
+	//if we have ample pieces we'll focus on other things
+	//(moving pieces, attacking, combining for better cards, drawing, end turn)
 	else
 	{
 		//weigh drawing cards
@@ -236,6 +285,165 @@ function TurnManager()
 	}
 }
 
+function CheckForQueenInHand()
+{
+	for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+	{
+		if(global.opHand.cardsHeld[i].card==11)
+		{
+			ourCard = global.opHand.cardsHeld[i];
+			global.opHand.cardSelected = ourCard;
+			ourCard.selected=true;
+			field.CardSelected();
+			Wait(OptimalQueenPlacement);
+			return true;
+		}
+	}
+	return false;
+}
+
+function CheckKingSurrounded()
+{
+	var adjacentPieces=0;
+	
+	for(var i=0;i<array_length(field.blackPieces);i++)
+	{
+		var myTile = field.blackPieces[i];
+		if(myTile.object_index==oKingB)
+		{
+			var grid = field.grid;
+			//create an array for each of the pieces located at our 8
+			//bordering tiles
+			borderingPieces[0] = (myTile.row>0&&myTile.column>0)
+				? grid[myTile.row-1][myTile.column-1].myPiece : undefined;
+			borderingPieces[1] = (myTile.row>0)
+				? grid[myTile.row-1][myTile.column].myPiece : undefined;
+			borderingPieces[2] = (myTile.row>0&&myTile.column<8)
+				? grid[myTile.row-1][myTile.column+1].myPiece : undefined;
+			borderingPieces[3] = (myTile.column>0)
+				? grid[myTile.row][myTile.column-1].myPiece : undefined;
+			borderingPieces[4] = (myTile.column<8)
+				? grid[myTile.row][myTile.column+1].myPiece : undefined;
+			borderingPieces[5] = (myTile.row<4&&myTile.column>0)
+				? grid[myTile.row+1][myTile.column-1].myPiece : undefined;
+			borderingPieces[6] = (myTile.row<4)
+				? grid[myTile.row+1][myTile.column].myPiece : undefined;
+			borderingPieces[7] = (myTile.row<4&&myTile.column<8)
+				? grid[myTile.row+1][myTile.column+1].myPiece : undefined;
+					
+			for(var j=0;j<8;j++)
+			{
+				if(borderingPieces[j]!=undefined
+					&& object_is_ancestor(borderingPieces[j].object_index,oChessPieceB))
+				{
+					adjacentPieces++;
+				}
+			}
+			
+			if(array_length(field.whitePieces)>=7 && adjacentPieces>=5){return true;}
+			else if(array_length(field.whitePieces)>=5 && adjacentPieces>=4){return true;}
+			else if(adjacentPieces>1) {return true;}
+			return false;
+		}
+	}
+	return false;
+}
+
+function OptimalQueenPlacement()
+{
+	var openSpaces=undefined;
+	
+	for(var i=0;i<array_length(field.blackPieces);i++)
+	{
+		var myTile = field.blackPieces[i];
+		if(myTile.object_index==oKingB)
+		{
+			var grid = field.grid;
+			//create a hierarchy of empty spaces the first one open is the one we'll
+			//ultimately use
+			openSpaces[0] = (myTile.row<4
+				&& grid[myTile.row+1][myTile.column].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column] : undefined;
+			openSpaces[1] = (myTile.row<4&&myTile.column<8
+				&& grid[myTile.row+1][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column+1] : undefined;
+			openSpaces[2] = (myTile.row<4&&myTile.column>0
+				&& grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column-1] : undefined;
+			openSpaces[3] = (myTile.column>0
+				&& grid[myTile.row][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row][myTile.column-1] : undefined;
+			openSpaces[4] = (myTile.column<8
+				&& grid[myTile.row][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row][myTile.column+1] : undefined;
+			openSpaces[5] = (myTile.row>0
+				&& grid[myTile.row-1][myTile.column].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column] : undefined;
+			openSpaces[6] = (myTile.row>0&&myTile.column<8
+				&& grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column+1] : undefined;
+			openSpaces[7] = (myTile.row>0&&myTile.column>0
+				&& grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column-1] : undefined;
+		}
+	}
+	
+	for(var i=0;i<array_length(openSpaces);i++)
+	{
+		if(openSpaces[i]!=undefined){openSpaces[i].PlayPiece(false); break;}
+	}
+	
+	Wait();
+}
+
+//currently just copying Queen, but will edit.
+function OptimalSupportPlacement()
+{
+	var openSpaces=undefined;
+	
+	for(var i=0;i<array_length(field.blackPieces);i++)
+	{
+		var myTile = field.blackPieces[i];
+		if(myTile.object_index==oKingB)
+		{
+			var grid = field.grid;
+			//create a hierarchy of empty spaces the first one open is the one we'll
+			//ultimately use
+			openSpaces[0] = (myTile.row<4
+				&& grid[myTile.row+1][myTile.column].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column] : undefined;
+			openSpaces[1] = (myTile.row<4&&myTile.column<8
+				&& grid[myTile.row+1][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column+1] : undefined;
+			openSpaces[2] = (myTile.row<4&&myTile.column>0
+				&& grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row+1][myTile.column-1] : undefined;
+			openSpaces[3] = (myTile.column>0
+				&& grid[myTile.row][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row][myTile.column-1] : undefined;
+			openSpaces[4] = (myTile.column<8
+				&& grid[myTile.row][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row][myTile.column+1] : undefined;
+			openSpaces[5] = (myTile.row>0
+				&& grid[myTile.row-1][myTile.column].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column] : undefined;
+			openSpaces[6] = (myTile.row>0&&myTile.column<8
+				&& grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column+1] : undefined;
+			openSpaces[7] = (myTile.row>0&&myTile.column>0
+				&& grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+				? grid[myTile.row-1][myTile.column-1] : undefined;
+		}
+	}
+	
+	for(var i=0;i<array_length(openSpaces);i++)
+	{
+		if(openSpaces[i]!=undefined){openSpaces[i].PlayPiece(false); break;}
+	}
+	
+	Wait();
+}
+
 function PickChoice(op)
 {
 	decisionsMade++;
@@ -294,8 +502,7 @@ function SelectCard()
 	global.opHand.cardSelected = ourCard;
 	ourCard.selected=true;
 	field.CardSelected();
-	NextMove = PlayCard;
-	alarm[0]=waitTime;
+	Wait(PlayCard);
 	show_debug_message("The AI chose the "+string(ourCard.pips)+" of "+string(ourCard.suit));
 }
 
