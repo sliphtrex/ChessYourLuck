@@ -211,3 +211,8 @@ function CheckForIcons()
 	}
 	return notBlocked;
 }
+
+function CheckPossibleSpaces(rank)
+{
+	
+}

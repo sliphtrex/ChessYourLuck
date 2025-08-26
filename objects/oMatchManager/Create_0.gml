@@ -231,4 +231,5 @@ function SuitInHand(suit)
 function UpgradePiece()
 {
 	SubOptimalHealth().myTile.UpgradePiece(false);
+	Wait();
 }

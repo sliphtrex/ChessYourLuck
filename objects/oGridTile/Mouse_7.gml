@@ -55,7 +55,7 @@ if(instance_find(oMatchManager,0).pTurn && CheckForIcons())
 				//either show the move options if there's no piece selected
 				if(instance_find(oField,0).pieceSelected==undefined && !myPiece.hasMoved)
 				{
-					instance_find(oField,0).HighlightMoveableSpaces(myPiece,row,column);
+					instance_find(oField,0).HighlightMoveableSpaces(myPiece);
 				}
 				//unselect move options if we're clicking the same piece again.
 				else if(instance_find(oField,0).pieceSelected!=undefined
@@ -75,7 +75,7 @@ if(instance_find(oMatchManager,0).pTurn && CheckForIcons())
 					{instance_find(oField,0).pieceSelected.DestroyIcons();}
 				
 					instance_find(oField,0).UnselectTiles();
-					instance_find(oField,0).HighlightMoveableSpaces(myPiece,row,column);
+					instance_find(oField,0).HighlightMoveableSpaces(myPiece);
 				}
 			}
 			

@@ -7,6 +7,11 @@ ourPiece=undefined;
 //a temp selected spAb
 ourSpAb=undefined;
 
+//checks that step 2 is complete each turn
+kingGoodThisTurn=false;
+//we use this to cycle through our options of how to protect the king
+kingsChoice=0;
+
 global.opCards=global.SavannahsDecks[0];
 Setup();
 
@@ -59,9 +64,13 @@ function TurnManager()
 		else{DrawCardFromDeck();}
 	}
 	//2. Is our king protected from the player?
+	else if(!kingGoodThisTurn)
+	{
+		show_debug_message("king is in danger");
 		//I. does the king have enough pieces surrounding it?
 		if(!CheckKingSurrounded())
 		{
+			show_debug_message("surrounding the king");
 			//i. start by playing the Queen of Clubs if we have it
 			if(CheckForQueenInHand()){return;}
 			//ii. otherwise we'll try to play a different card
@@ -73,36 +82,91 @@ function TurnManager()
 					//a. if we only have pawns, combine cards
 					if(FindHighestRankCard().pips<5
 						&& CheckValidComboPairs(10)!=undefined)
-					{CombineCardPair();}
+					{CombineCardPair(); return;}
 					//b. otherwise, play our highest ranked piece
 					else
 					{
 						SelectCard(FindHighestRankCard());
 						Wait(OptimalSupportPlacement);
+						return;
 					}
 				}
 				//B. otherwise we'll risk drawing
-				else{DrawCardFromDeck();}
+				else{DrawCardFromDeck(); return;}
 			}
 		}
 		//II. is there any piece of the player's that could attack the king?
-		/**********************************************************************
-		* I'm thinking I'll make a function in the individual chess pieces
-		* that we can call to find out their current range of movement.
-		* It'll return an array of oGridTiles which we can cycle through to
-		* see if one of our pieces is on one of the tiles. 
-		**********************************************************************/
-			//i. what pieces can attack the king?
-			//ii. how can we stop that from happening?
-				//A. spAbs?
-					//a. does this spAb deal enough damage? (if not move onto B)
-				//B. attack the piece with one of ours?
-					//a. which of our pieces can attack this piece
-					//b. did it do enough damage? (if not repeat ^ until no more pieces)
-				//C. play a piece to block them from the king?
-					//a. which spaces can the target see?
-					//b. where is the king in relation
-					//c. what's the closest space to the king we can play the piece
+		threatToKing = undefined;
+		for(var i=0;i<array_length(field.whitePieces); i++)
+		{
+			moveableSpaces = field.whitePieces[i].GetMoveableSpaces();
+			for(var j=0; j<array_length(moveableSpaces); j++)
+			{
+				if(moveableSpaces[j].myPiece!=undefined
+					&&moveableSpaces[j].myPiece.object_index = oKingB)
+				{
+					if(threatToKing==undefined){threatToKing[0]=field.whitePieces[i];}
+					else{array_push(threatToKing,field.whitePieces[i]);}
+				}
+			}
+		}
+		
+		if(threatToKing!=undefined)
+		{
+			/******************************************************************
+			* we can get to here, but no further
+			******************************************************************/
+			show_debug_message("threats to king");
+			//i. spAbs?
+			if(kingsChoice==0)
+			{
+				if(OSA1.CheckIfUsable())
+				{
+					show_debug_message("spabs");
+					//attack the first piece on the list (then move onto ii)
+				}
+				kingsChoice++;
+			}
+			//ii. attack the piece with one of ours?
+			else if(kingsChoice==1)
+			{
+				show_debug_message("attacking")
+				//A. which of our pieces can attack this piece
+				kingDefenders = undefined;
+				for(var i=0; i<array_length(field.blackPieces); i++)
+				{
+					if(!field.blackPieces[i].hasMoved)
+					{
+						for(var j=0; j<array_length(field.blackPieces[i].GetMoveableSpaces());j++)
+						{
+							targetPiece = field.blackPieces[i].GetMoveableSpaces[j].myPiece;
+							if(targetPiece==threatToKing[0])
+							{
+								if(kingDefenders==undefined){kingDefenders[0]=field.blackPieces[i]}
+								else{array_push(kingDefenders,field.blackPieces[i]);}
+							}
+						}
+					}
+				}
+				
+				if(kingDefenders!=undefined)
+				{
+					show_debug_message("attacking with "+string(kingDefenders[0].object_index));
+					ourPiece = kingDefenders[0];
+					field.HighlightMoveableSpaces(ourPiece);
+					Wait(MovePiece);
+					return;
+				}
+				//B. repeat ^ until no more pieces
+				else{kingsChoice++;show_debug_message("we're done here");}
+			}
+			//iii. play a piece to block them from the king?
+			//Note: this (only works for bishop,rook,or queen)
+				//a. which spaces can the target see?
+				//b. where is the king in relation
+				//c. what's the closest space to the king we can play the piece
+		}
+	}
 	//3. Should we play more pieces on the board?
 		//I. does our current piece count meet expectation? (if not iterate until yes)
 			//i. if we only have pawns combine them
@@ -648,15 +712,9 @@ function FindMoveablePieces()
 	return moveablePieces;
 }
 
-//this function determines whether to play a piece or upgrade one
-//following up from SelectCard()
 function PlayCard()
 {
-	/*
-	* If our card has upgrade possibilities we want to weight that higher.
-	* We will check this first and only check for other options if we don't
-	* upgrade. This will save us time and space.
-	*/
+	
 	
 	//the tiles that contain our pieces
 	var upgradableTiles = undefined;
@@ -743,7 +801,7 @@ function ChoosePieceToMove()
 	if(moveables!=undefined)
 	{
 		ourPiece = moveables[irandom_range(0,array_length(moveables)-1)];
-		field.HighlightMoveableSpaces(ourPiece,ourPiece.row,ourPiece.column);
+		field.HighlightMoveableSpaces(ourPiece);
 		NextMove = MovePiece;
 		alarm[0] = waitTime;
 		show_debug_message("The AI selected the "+string(ourPiece.object_index)+" at ("
