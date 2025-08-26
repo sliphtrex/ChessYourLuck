@@ -7,9 +7,6 @@ opDeckSort = undefined;
 pCardsPerTurn=undefined;
 opCardsPerTurn=undefined;
 
-//Any objects being created in the manager that will be referenced often need to be
-//stored as a global var. Trust me. It's a headache otherwise!!
-
 //the oHand objects for the player and opponent respectively
 global.pHand = undefined;
 global.opHand = undefined;
@@ -24,8 +21,6 @@ global.pSpade=undefined;
 global.opSpade=undefined;
 
 //represents the opponents default deck, can be edited in the child
-//NOTE: global.PlayerCards is stored in scrGameGlobals because we'll track that
-//throughout the entire game.
 global.opCards=[1,2,3,4,5,14,15,16,17,18,27,28,29,30,31,40,41,42,43,44];
 
 //the depth that the side bars are being drawn at
@@ -40,37 +35,20 @@ PSA3=undefined;		OSA3=undefined;
 //the field object which handles setting up grid tiles
 field=undefined;
 
-//The opponent's diamonds in a given match
+//*NOTE: may make these global vars per character later
 opDiamonds=0;
-//NOTE: the player's diamonds are stored in a global var in scrGameGlobals because
-//we'll want to track them from match to match and in the Rainy Knight's Cafe.
 
 //does the player make the first move?
-//Note: This should also determine the color of our chess pieces
 pStart=true;
-//is it currently the players turn
 pTurn = pStart;
-//turn number
 Turn=0;
 
 //has the AI drawn a card yet
 firstDraw=true;
+
 //pairs of cards that could be combined
 //see CheckValidComboPairs() for details
 comboPairs = undefined;
-//how many moves have we made this turn
-//set in Alarm 0
-decisionsMade=0;
-//how much emphasis do we put on drawing a card
-draw_weight=5;
-//how much emphasis do we put on combining a card
-combine_weight=5;
-//how much emphasis do we put on playing a card
-play_weight=5;
-//how much emphasis do we put on moving pieces
-move_weight=5;
-//how much emphasis do we put on using special abilities
-spAb_weight=5;
 
 //the number of frames we wait between actions
 waitTime = room_speed*1;
@@ -158,13 +136,13 @@ function Setup()
 	field.SetupBoard();
 }
 
+//nm defines our next move; returns to TurnManager if undefined
 function Wait(nm=undefined)
 {
 	NextMove = nm;
 	alarm[0]=waitTime;
 }
 
-//draws a card from the opponent's deck
 function DrawCardFromDeck()
 {
 	var curTurn=pTurn;
@@ -175,7 +153,7 @@ function DrawCardFromDeck()
 	if(curTurn==pTurn){alarm[0]=waitTime;}
 }
 
-//returns undefined if hand is empty
+//returns undefined if hand is empty; otherwise returns oCard
 function FindHighestRankCard()
 {
 	var highestRank = undefined;
@@ -198,12 +176,29 @@ function FindHighestRankCard()
 	}
 }
 
+//will choose a random card from our hand if c is undefined
+function SelectCard(c=undefined)
+{
+	var card=undefined;
+	
+	if(c==undefined)
+	{card = global.opHand.cardsHeld
+		[irandom_range(0,array_length(global.opHand.cardsHeld)-1)];}
+	else{card=c;}
+	
+	ourCard = card;
+	global.opHand.cardSelected = ourCard;
+	ourCard.selected=true;
+	field.CardSelected();
+	show_debug_message("The AI chose the "+string(ourCard.pips)
+		+" of "+string(ourCard.suit));
+}
+
 function CheckValidComboPairs(maxRank=14)
 {
 	//a multidimentional array that stores c1 and c2 as [pair#][c1,c2]
 	comboPairs = undefined;
 	
-	//check if we have any pairs that can be combined
 	for(var i=0; i<array_length(global.opHand.cardsHeld)-1; i++)
 	{
 		for(var j=1; i+j<array_length(global.opHand.cardsHeld); j++)
@@ -216,4 +211,24 @@ function CheckValidComboPairs(maxRank=14)
 		}
 	}
 	return comboPairs;
+}
+
+//returns an array of all cards of a given suit (CHSD = 0123)
+function SuitInHand(suit)
+{
+	hearts = undefined;
+	for(var i=0; i<array_length(global.opHand.cardsHeld)-1; i++)
+	{
+		if(global.opHand.cardsHeld[i].suit==suit)
+		{
+			if(hearts==undefined){hearts[0]=global.opHand.cardsHeld[i];}
+			else{array_push(hearts,global.opHand.cardsHeld[i]);}
+		}
+	}
+	return hearts;
+}
+
+function UpgradePiece()
+{
+	SubOptimalHealth().myTile.UpgradePiece(false);
 }

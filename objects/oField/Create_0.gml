@@ -722,7 +722,7 @@ function ChangeTurns()
 		//this function call sets up our whole opponents turn and won't give control
 		//back to the player until the AI is done
 		else if(instance_find(oMatchManager,0).object_index!=oTutManager)
-		{instance_find(oMatchManager,0).TM2();}//TurnManager();}
+		{instance_find(oMatchManager,0).TurnManager();}
 	}
 }
 

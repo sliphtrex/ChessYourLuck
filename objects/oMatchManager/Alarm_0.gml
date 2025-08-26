@@ -1,3 +1,3 @@
 //when called we can take another action
-if(NextMove==undefined) { TM2();}//TurnManager();}
+if(NextMove==undefined) {TurnManager();}
 else{NextMove();}

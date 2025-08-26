@@ -30,7 +30,115 @@ OSA3.Setup();
 * sends us to the function for that particular decision (i.e. draw card, move piece,
 * etc.).
 ***********************************************************************************/
-function TM2()
+function TurnManager()
+{
+	//1. Have we drawn a card this turn?
+	if(global.opDeck.firstDraw)
+	{
+		//I. if our hand is full we need to play cards first
+		if(array_length(global.opHand.cardsHeld)==5)
+		{
+			//i. if we have the QoC play that first
+			if(CheckForQueenInHand()){return;}
+			//ii. if we only have pawns we should use them
+			else if(FindHighestRankCard().pips<5)
+			{
+				//A. check if pieces can be healed
+				if(SuitInHand(1)!=undefined && SubOptimalHealth()!=undefined)
+				{
+					//a. heal the piece
+					SelectCard(SuitInHand(1)[0]);
+					Wait(UpgradePiece);
+					return;
+				}
+				//B. combine cards if not
+				else {CheckValidComboPairs(10); CombineCardPair(); return;}
+			}
+		}
+		//II.Draw a card
+		else{DrawCardFromDeck();}
+	}
+	//2. Is our king protected from the player?
+		//I. does the king have enough pieces surrounding it?
+		if(!CheckKingSurrounded())
+		{
+			//i. start by playing the Queen of Clubs if we have it
+			if(CheckForQueenInHand()){return;}
+			//ii. otherwise we'll try to play a different card
+			else
+			{
+				//A. if our hand isn't empty
+				if(FindHighestRankCard()!=undefined)
+				{
+					//a. if we only have pawns, combine cards
+					if(FindHighestRankCard().pips<5
+						&& CheckValidComboPairs(10)!=undefined)
+					{CombineCardPair();}
+					//b. otherwise, play our highest ranked piece
+					else
+					{
+						SelectCard(FindHighestRankCard());
+						Wait(OptimalSupportPlacement);
+					}
+				}
+				//B. otherwise we'll risk drawing
+				else{DrawCardFromDeck();}
+			}
+		}
+		//II. is there any piece of the player's that could attack the king?
+		/**********************************************************************
+		* I'm thinking I'll make a function in the individual chess pieces
+		* that we can call to find out their current range of movement.
+		* It'll return an array of oGridTiles which we can cycle through to
+		* see if one of our pieces is on one of the tiles. 
+		**********************************************************************/
+			//i. what pieces can attack the king?
+			//ii. how can we stop that from happening?
+				//A. spAbs?
+					//a. does this spAb deal enough damage? (if not move onto B)
+				//B. attack the piece with one of ours?
+					//a. which of our pieces can attack this piece
+					//b. did it do enough damage? (if not repeat ^ until no more pieces)
+				//C. play a piece to block them from the king?
+					//a. which spaces can the target see?
+					//b. where is the king in relation
+					//c. what's the closest space to the king we can play the piece
+	//3. Should we play more pieces on the board?
+		//I. does our current piece count meet expectation? (if not iterate until yes)
+			//i. if we only have pawns combine them
+			//ii. play the highest ranked piece around the king
+	//4. Can we attack the player's pieces?
+		//I. what pieces can attack?
+		//II. which pieces are they able to attack?
+		//III. which of these pieces has the highest priority to attack
+	//5. Miscellaneous actions
+	/********************************************************
+	* We should weigh VI higher, but this can be random.
+	* Say a ratio of (1:1:1:3:1+n) where n is # of decisions
+	* made already.
+	*********************************************************/
+		//I. can we advance any pawns?
+			//i. do we have any pawns that haven't moved
+		//II. can we use some more expensive spAbs?
+		//III. can we heal any of our pieces?
+			//i. do we have hearts in hand?
+			//ii. do we have pieces with sub-optimal health?
+		//VI. do we need to guard the king again?
+			//i. does the king have enough pieces surrounding it?
+				//A. play more from what's in hand (draw as needed)
+			//ii. is there any piece of the player's that could attack the king?
+				//A. what pieces can attack the king?
+				//B. how can we stop that from happening?
+					//a. play a piece to block them from the king?
+						//aa. which spaces can the target see?
+						//bb. where is the king in relation
+						//cc. what's the closest space to the king we can play the piece
+		//V. end turn
+}
+
+//The old Turn Manager that I'm working on upgrading
+//will delete when finished
+function TurnManager2()
 {
 	var options = undefined;
 	
@@ -45,36 +153,24 @@ function TM2()
 			//next we'll try to build up defense around the king
 			else if(!CheckKingSurrounded())
 			{
-				ourCard = FindHighestRankCard();
-				global.opHand.cardSelected = ourCard;
-				ourCard.selected=true;
-				field.CardSelected();
-				Wait(OptimalSupportPlacement);
-				return;
-			}
-			
-			#region weighing our remaining options
-			//weigh combining cards
-			if(CheckValidComboPairs(12)!=undefined)
-			{
-				for(var i=0; i=array_length(comboPairs); i++)
+				//if we only have pawns we'll combine cards
+				if(FindHighestRankCard().pips<5
+					&& CheckValidComboPairs(10)!=undefined)
+				{CombineCardPair(); return;}
+				//otherwise we'll play a piece
+				else
 				{
-					if(options==undefined){options=[3];}
-					else{array_push(options,3);}
+					SelectCard(FindHighestRankCard());
+					Wait(OptimalSupportPlacement);
+					return;
 				}
 			}
-			//weigh playing cards
-			if(array_length(field.blackPieces)<5)
-			{
-				for(var i=0; i<=(5-array_length(field.blackPieces)); i++)
-				{
-					if(options==undefined){options=[2];}
-					else{array_push(options,2);}
-				}
-			}
-
-			PickChoice(options);
-			#endregion
+			//if we only have pawns combine cards
+			else if(FindHighestRankCard().pips<5
+				&& CheckValidComboPairs(10)!=undefined)
+			{CombineCardPair();}
+			//otherwise just play any piece to make space
+			else{SelectCard(); Wait(PlayCard);}
 		}
 		//otherwise we can draw cards without discarding
 		else{DrawCardFromDeck();}
@@ -85,34 +181,31 @@ function TM2()
 		//start by playing the Queen of Clubs if we have it
 		if(CheckForQueenInHand()){return;}
 		//otherwise we'll try to play a different card
-		//or draw one if our hand is empty
 		else
 		{
-			var highestRank = undefined;
-			
-			for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+			if(FindHighestRankCard()!=undefined)
 			{
-				if(highestRank==undefined){highestRank=global.opHand.cardsHeld[i].pips;}
-				else if(global.opHand.cardsHeld[i].pips>highestRank)
-				{highestRank=global.opHand.cardsHeld[i].pips;}
-			}
-			if(highestRank!=undefined)
-			{
-				for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+				//if we only have pawns combine cards
+				if(FindHighestRankCard().pips<5
+					&& CheckValidComboPairs(10)!=undefined)
+				{CombineCardPair();}
+				//otherwise, play our highest ranked piece
+				else
 				{
-					if(global.opHand.cardsHeld[i].pips==highestRank)
-					{
-						ourCard = global.opHand.cardsHeld[i];
-						global.opHand.cardSelected = ourCard;
-						ourCard.selected=true;
-						field.CardSelected();
-						Wait(OptimalSupportPlacement);
-					}
+					SelectCard(FindHighestRankCard());
+					Wait(OptimalSupportPlacement);
 				}
 			}
 			else{DrawCardFromDeck();}
 		}
 	}
+	
+	//next we'll tackle movement
+	/*else if(FindMoveablePieces()!=undefined)
+	{
+		
+	}*/
+	
 	//if we have ample pieces we'll focus on other things
 	//(moving pieces, attacking, combining for better cards, drawing, end turn)
 	else
@@ -138,7 +231,7 @@ function TM2()
 		}
 		
 		//weigh combining cards
-		if(CheckValidComboPairs()!=undefined)
+		if(CheckValidComboPairs(10)!=undefined)
 		{
 			for(var i=0; i=array_length(comboPairs); i++)
 			{
@@ -188,100 +281,6 @@ function TM2()
 		}
 		
 		PickChoice(options);
-	}
-}
-
-function TurnManager()
-{	
-	//set "end turn" as the first element in our array
-	var options = undefined;
-	//for each decision made the likelyhood of ending the turn increases
-	for(var i=0; i<decisionsMade;i++)
-	{
-		if(options==undefined){options=[0];}
-		else{array_push(options,0);}
-	}
-	
-	//if our hand isn't full we can draw more
-	if(array_length(global.opHand.cardsHeld)<5)
-	{
-		for(var i=0;i<draw_weight;i++)
-		{
-			if(options==undefined){options=[1];}
-			else{array_push(options,1);}
-		}
-	}
-	
-	//if we have cards in our hand we can play cards
-	if(array_length(global.opHand.cardsHeld)>0)
-	{
-		for(var i=0;i<play_weight;i++)
-		{
-			if(options==undefined){options=[2];}
-			else{array_push(options,2);}
-		}
-	}
-	
-	//if we have more than 1 card in hand we may try to combine cards
-	if(array_length(global.opHand.cardsHeld)>1)
-	{
-		for(var i=0;i<combine_weight;i++)
-		{
-			if(options==noone){options=[3];}
-			else{array_push(options,3);}
-		}
-	}
-	
-	//check if we have moveable pieces
-	var moveables=0;
-	for(var i=0; i<array_length(field.blackPieces);i++)
-	{
-		if(field.blackPieces[i].hasMoved==false){moveables++;}
-	}
-	//if there are moveable pieces we'll add the possibility to the list
-	if(moveables>0)
-	{
-		for(var i=0;i<move_weight;i++)
-		{
-			if(options==undefined){options=[4];}
-			else{array_push(options,4);}
-		}
-	}
-	
-	//finally, let's check if we can use any special abilities
-	var spAbsReady=0;
-	if(OSA1.CheckIfUsable()){spAbsReady++;}
-	if(OSA2.CheckIfUsable()){spAbsReady++;}
-	if(OSA3.CheckIfUsable()){spAbsReady++;}
-	//and add that option to the list
-	if(spAbsReady>0)
-	{
-		for(var i=0;i<spAb_weight;i++)
-		{
-			if(options==undefined){options=[5];}
-			else{array_push(options,5);}
-		}
-	}
-	
-	//pick an option from the options[]
-	//var choice = options[irandom_range(0,array_length(options)-1)];
-	var choice = 3;
-	
-	//this switch decides where we go from here
-	//0 = end turn, 1 = draw a card, 2 = play a card, 3 = combine cards
-	//4 = move a piece, 5 = use a special ability
-	switch(choice)
-	{
-		case 1: DrawCardFromDeck(); break;
-		case 2: SelectCard(); break;
-		case 3: CombineCardPair(); break;
-		case 4: ChoosePieceToMove(); break;
-		case 5: ChooseSpAb(); break;
-		
-		default:
-			show_debug_message("The AI has ended it's turn.");
-			field.ChangeTurns();
-		break;
 	}
 }
 
@@ -351,97 +350,251 @@ function CheckKingSurrounded()
 
 function OptimalQueenPlacement()
 {
-	var openSpaces=undefined;
+	var grid = field.grid;
 	
-	for(var i=0;i<array_length(field.blackPieces);i++)
+	if(!CheckKingSurrounded())
 	{
-		var myTile = field.blackPieces[i];
-		if(myTile.object_index==oKingB)
-		{
-			var grid = field.grid;
-			//create a hierarchy of empty spaces the first one open is the one we'll
-			//ultimately use
-			openSpaces[0] = (myTile.row<4
-				&& grid[myTile.row+1][myTile.column].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column] : undefined;
-			openSpaces[1] = (myTile.row<4&&myTile.column<8
-				&& grid[myTile.row+1][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column+1] : undefined;
-			openSpaces[2] = (myTile.row<4&&myTile.column>0
-				&& grid[myTile.row+1][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column-1] : undefined;
-			openSpaces[3] = (myTile.column>0
-				&& grid[myTile.row][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row][myTile.column-1] : undefined;
-			openSpaces[4] = (myTile.column<8
-				&& grid[myTile.row][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row][myTile.column+1] : undefined;
-			openSpaces[5] = (myTile.row>0
-				&& grid[myTile.row-1][myTile.column].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column] : undefined;
-			openSpaces[6] = (myTile.row>0&&myTile.column<8
-				&& grid[myTile.row-1][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column+1] : undefined;
-			openSpaces[7] = (myTile.row>0&&myTile.column>0
-				&& grid[myTile.row-1][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column-1] : undefined;
-		}
+		var myTile = undefined;
+		
+		for(var i=0;i<array_length(field.blackPieces);i++)
+		{if(field.blackPieces[i].object_index==oKingB)
+			{myTile = field.blackPieces[i].myTile; break;}}
+	
+		if(myTile.row<4 && grid[myTile.row+1][myTile.column].myPiece==undefined)
+		{grid[myTile.row+1][myTile.column].PlayPiece(false);}
+		else if((myTile.row<4&&myTile.column<8 && grid[myTile.row+1][myTile.column+1].myPiece==undefined))
+		{grid[myTile.row+1][myTile.column+1].PlayPiece(false);}
+		else if(myTile.row<4&&myTile.column>0 && grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+		{grid[myTile.row+1][myTile.column-1].PlayPiece(false);}
+		else if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
+		{grid[myTile.row][myTile.column-1].PlayPiece(false);}
+		else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
+		{grid[myTile.row][myTile.column+1].PlayPiece(false);}
+		else if(myTile.row>0 && grid[myTile.row-1][myTile.column].myPiece==undefined)
+		{grid[myTile.row-1][myTile.column].PlayPiece(false);}
+		else if(myTile.row>0&&myTile.column<8 && grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+		{grid[myTile.row-1][myTile.column+1].PlayPiece(false);}
+		else if(myTile.row>0&&myTile.column>0 && grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+		{grid[myTile.row-1][myTile.column-1].PlayPiece(false);}
 	}
-	
-	for(var i=0;i<array_length(openSpaces);i++)
+	else
 	{
-		if(openSpaces[i]!=undefined){openSpaces[i].PlayPiece(false); break;}
+		if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false);}
+		else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false);}
+		else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false);}
+		else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false);}
+		else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false);}
+		else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false);}
+		else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false);}
+		else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false);}
+		else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false);}
+		else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false);}
+		else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false);}
+		else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false);}
+		else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false);}
+		else if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false);}
+		else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false);}
+		else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false);}
+		else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
+		else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
 	}
 	
 	Wait();
 }
 
-//currently just copying Queen, but will edit.
 function OptimalSupportPlacement()
 {
-	var openSpaces=undefined;
+	var grid = field.grid;
 	
-	for(var i=0;i<array_length(field.blackPieces);i++)
+	if(!CheckKingSurrounded())
 	{
-		var myTile = field.blackPieces[i];
-		if(myTile.object_index==oKingB)
+		var myTile = undefined;
+		
+		for(var i=0;i<array_length(field.blackPieces);i++)
+		{if(field.blackPieces[i].object_index==oKingB)
+			{myTile = field.blackPieces[i]; break;}}
+		
+		//hierarchy for pawn placement
+		if(ourCard.pips<5)
 		{
-			var grid = field.grid;
-			//create a hierarchy of empty spaces the first one open is the one we'll
-			//ultimately use
-			openSpaces[0] = (myTile.row<4
-				&& grid[myTile.row+1][myTile.column].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column] : undefined;
-			openSpaces[1] = (myTile.row<4&&myTile.column<8
-				&& grid[myTile.row+1][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column+1] : undefined;
-			openSpaces[2] = (myTile.row<4&&myTile.column>0
-				&& grid[myTile.row+1][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row+1][myTile.column-1] : undefined;
-			openSpaces[3] = (myTile.column>0
-				&& grid[myTile.row][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row][myTile.column-1] : undefined;
-			openSpaces[4] = (myTile.column<8
-				&& grid[myTile.row][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row][myTile.column+1] : undefined;
-			openSpaces[5] = (myTile.row>0
-				&& grid[myTile.row-1][myTile.column].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column] : undefined;
-			openSpaces[6] = (myTile.row>0&&myTile.column<8
-				&& grid[myTile.row-1][myTile.column+1].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column+1] : undefined;
-			openSpaces[7] = (myTile.row>0&&myTile.column>0
-				&& grid[myTile.row-1][myTile.column-1].myPiece==undefined)
-				? grid[myTile.row-1][myTile.column-1] : undefined;
+			//start with sides
+			if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row][myTile.column-1].PlayPiece(false);}
+			else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row][myTile.column+1].PlayPiece(false);}
+			//then check forward diagonals
+			else if((myTile.row<4&&myTile.column<8 && grid[myTile.row+1][myTile.column+1].myPiece==undefined))
+			{grid[myTile.row+1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row<4&&myTile.column>0 && grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column-1].PlayPiece(false);}
+			//then check front and center
+			else if(myTile.row<4 && grid[myTile.row+1][myTile.column].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column].PlayPiece(false);}
+			//then check our 6:00
+			else if(myTile.row>0 && grid[myTile.row-1][myTile.column].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column].PlayPiece(false);}
+			//lastly check back facing diagonals
+			else if(myTile.row>0&&myTile.column<8 && grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row>0&&myTile.column>0 && grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column-1].PlayPiece(false);}
+		}
+		//hierarchy for knights
+		else if(ourCard.pips<8)
+		{
+			//check forward diagonals
+			if((myTile.row<4&&myTile.column<8 && grid[myTile.row+1][myTile.column+1].myPiece==undefined))
+			{grid[myTile.row+1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row<4&&myTile.column>0 && grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column-1].PlayPiece(false);}
+			//then check our 6:00
+			else if(myTile.row>0 && grid[myTile.row-1][myTile.column].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column].PlayPiece(false);}
+			//then check back facing diagonals
+			else if(myTile.row>0&&myTile.column<8 && grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row>0&&myTile.column>0 && grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column-1].PlayPiece(false);}
+			//then check sides
+			else if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row][myTile.column-1].PlayPiece(false);}
+			else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row][myTile.column+1].PlayPiece(false);}
+			//then check front and center
+			else if(myTile.row<4 && grid[myTile.row+1][myTile.column].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column].PlayPiece(false);}
+		}
+		//we only have bishops left since we'll only combine up to rank 10
+		else
+		{
+			//check forward diagonals
+			if((myTile.row<4&&myTile.column<8 && grid[myTile.row+1][myTile.column+1].myPiece==undefined))
+			{grid[myTile.row+1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row<4&&myTile.column>0 && grid[myTile.row+1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column-1].PlayPiece(false);}
+			//then check front and center
+			else if(myTile.row<4 && grid[myTile.row+1][myTile.column].myPiece==undefined)
+			{grid[myTile.row+1][myTile.column].PlayPiece(false);}
+			//then check our 6:00
+			else if(myTile.row>0 && grid[myTile.row-1][myTile.column].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column].PlayPiece(false);}
+			//then check back facing diagonals
+			else if(myTile.row>0&&myTile.column<8 && grid[myTile.row-1][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column+1].PlayPiece(false);}
+			else if(myTile.row>0&&myTile.column>0 && grid[myTile.row-1][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row-1][myTile.column-1].PlayPiece(false);}
+			//then check sides
+			else if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
+			{grid[myTile.row][myTile.column-1].PlayPiece(false);}
+			else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
+			{grid[myTile.row][myTile.column+1].PlayPiece(false);}
+		}
+	}
+	else
+	{
+		//hierarchy for pawn placement
+		if(ourCard.pips<5)
+		{
+			//start with edges and work our way in; front row takes priority
+			if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false);}
+			else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false);}
+			else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false);}
+			else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false);}
+			else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false);}
+			else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false);}
+			else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false);}
+			else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false);}
+			else if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false);}
+			else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
+			else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
+			else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false);}
+			else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false);}
+			else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false);}
+			else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false);}
+			else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false);}
+			else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false);}
+			else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false);}
+		}
+		//hierarchy for knights
+		else if(ourCard.pips<8)
+		{
+			//middle front row takes priority since we want to maximize mobility
+			if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false);}
+			else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false);}
+			else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false);}
+			else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false);}
+			else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false);}
+			else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false);}
+			else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false);}
+			else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false);}
+			else if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false);}
+			else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false);}
+			else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false);}
+			else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false);}
+			else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false);}
+			else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false);}
+			else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false);}
+			else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false);}
+			else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
+			else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
+		}
+		//we only have bishops left since we'll only combine up to rank 10
+		else
+		{
+			//we'll prioritize corners first because we can reach the king from there
+			if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
+			else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
+			//then inside corners for the same reason
+			else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false);}
+			else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false);}
+			//after that is mobility: 8
+			else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false);}
+			else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false);}
+			else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false);}
+			else if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false);}
+			//7
+			else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false);}
+			else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false);}
+			else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false);}
+			else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false);}
+			//6
+			else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false);}
+			else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false);}
+			//5
+			else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false);}
+			else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false);}
+			//4
+			else if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false);}
+			else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false);}
 		}
 	}
 	
-	for(var i=0;i<array_length(openSpaces);i++)
-	{
-		if(openSpaces[i]!=undefined){openSpaces[i].PlayPiece(false); break;}
-	}
-	
 	Wait();
+}
+
+//returns the highest ranking piece with sub optimal health
+function SubOptimalHealth()
+{
+	highestRankedPiece=undefined;
+	for(var i=0; i<array_length(field.blackPieces); i++)
+	{
+		if(field.blackPieces[i].object_index==oKingB
+			&&field.blackPieces[i].Health<10)
+		{highestRankedPiece = field.blackPieces[i];}
+		else if(highestRankedPiece.object_index!=oKingB
+			&&field.blackPieces[i].object_index==oQueenB
+			&&field.blackPieces[i].Health<3)
+		{highestRankedPiece = field.blackPieces[i];}
+		else if(highestRankedPiece.object_index!=(oKingB||oQueenB)
+			&&field.blackPieces[i].object_index==oBishopB
+			&&field.blackPieces[i].Health<3)
+		{highestRankedPiece = field.blackPieces[i];}
+		else if(highestRankedPiece.object_index!=(oKingB||oQueenB||oBishopB)
+			&&field.blackPieces[i].object_index==oKnightB
+			&&field.blackPieces[i].Health<3)
+		{highestRankedPiece = field.blackPieces[i];}
+	}
+	return highestRankedPiece;
 }
 
 function PickChoice(op)
@@ -456,7 +609,7 @@ function PickChoice(op)
 	switch(choice)
 	{
 		case 1: DrawCardFromDeck(); break;
-		case 2: SelectCard(); break;
+		case 2: SelectCard(); Wait(PlayCard()) break;
 		case 3: CombineCardPair(); break;
 		case 4: ChoosePieceToMove(); break;
 		case 5: ChooseSpAb(); break;
@@ -470,40 +623,29 @@ function PickChoice(op)
 
 function CombineCardPair()
 {
-	//if we have combos choose one to combine
-	if(comboPairs != undefined)
-	{
-		var choice = irandom_range(0,array_length(comboPairs)-1);
-		global.opHand.c1 = global.opHand.cardsHeld[comboPairs[choice][0]];
-		global.opHand.c2 = global.opHand.cardsHeld[comboPairs[choice][1]];
-		show_debug_message("c1: "+string(global.opHand.c1));
-		show_debug_message("c2: "+string(global.opHand.c2));
-		global.opHand.CombineCards();
-		NextMove=undefined;
-		alarm[0]=waitTime;
-		return;
-	}
-	else
-	{
-		//we can't combine so make a new choice
-		decisionsMade--;
-		NextMove=undefined;
-		alarm[0]=waitTime;
-		return;
-	}
+	var choice = irandom_range(0,array_length(comboPairs)-1);
+	global.opHand.c1 = global.opHand.cardsHeld[comboPairs[choice][0]];
+	global.opHand.c2 = global.opHand.cardsHeld[comboPairs[choice][1]];
+	show_debug_message("c1: "+string(global.opHand.c1));
+	show_debug_message("c2: "+string(global.opHand.c2));
+	global.opHand.CombineCards();
+	NextMove=undefined;
+	alarm[0]=waitTime;
 }
 
-//this function determines what card to play and selects it
-//could be more complex by giving the AI preferences for certain cards over others
-function SelectCard()
+function FindMoveablePieces()
 {
-	var choice = irandom_range(0,array_length(global.opHand.cardsHeld)-1);
-	ourCard = global.opHand.cardsHeld[choice];
-	global.opHand.cardSelected = ourCard;
-	ourCard.selected=true;
-	field.CardSelected();
-	Wait(PlayCard);
-	show_debug_message("The AI chose the "+string(ourCard.pips)+" of "+string(ourCard.suit));
+	moveablePieces = undefined;
+	for(var i=0; i<array_length(field.blackPieces); i++)
+	{
+		if(!field.blackPieces[i].hasMoved
+			&& field.blackPieces[i].object_index!= oKingB)
+		{
+			if(moveablePieces==undefined){moveablePieces[0]=field.blackPieces[i];}
+			else{array_push(moveablePieces,field.blackPieces[i]);}
+		}
+	}
+	return moveablePieces;
 }
 
 //this function determines whether to play a piece or upgrade one
