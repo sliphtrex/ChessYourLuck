@@ -57,3 +57,23 @@ Temporary Items
 # GameMaker temporary files
 *.resource_order
 *.old
+
+*.yyz
+*.yymps
+*.yymp
+*.zip
+*.exe
+*.dll
+*.dmg
+*.apk
+*.aab
+*.log
+*.temp
+*.tmp
+*.swp
+.yyc/
+.config/
+.idea/
+.vs/
+backup/
+*.code-workspace
