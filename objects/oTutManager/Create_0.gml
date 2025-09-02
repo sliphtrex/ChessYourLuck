@@ -20,45 +20,90 @@ queenSelectedFrames=0;
 selected6H=false;
 selected6HFrames=0;
 
-with(instance_create_layer(x,y,"Text",oVoidTextBox))
-{
-	Add_Text("Welcome weary traveller.",1,undefined,575,375);
-	Add_Text("Be not alarmed.",1,undefined,650,375);
-	Add_Text("Although it may look like you're in the vastness of space.",1,undefined,300,375);
-	Add_Text("I assure you, you are within the confines of the Rainy Knight's Caf`.",1,undefined,250,375);
-	Add_Text("Here our guests play a rather unique chess variant.",1,undefined,250,375);
-	Add_Text("Would you like me to show you how?",1,undefined,400,375);
-	Add_Option("Yes",PlayTut);
-	Add_Option("No",AreYouSure);
-}
+global.tut_id = id;
+
+#region dialog setup
+//MARK:
+//TODO: replace this with our dialog stuff
+
+
+//1st param(string): the text we want to display
+//2nd param(int): tells us if we're setting up a Cafe textbox(0) or a Void textbox(1) or an other(-1)
+//3rd param(function): any check we should perform before continuing on (i.e. did the player play a specific card)
+//function Add_Text(_text, RKCorVoid=0, _widthMax = noone, _xpos=noone, _ypos=noone, _check=noone, _sprite=noone
 
 function AreYouSure()
 {
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("So you remember then?",1,undefined,550,375);
-		Add_Option("Yes",FinalWords);
-		Add_Option("No",AsIThought);
-	}
-}
-
-function AsIThought()
-{
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("As I thought.",1,undefined,650,375);
-		NextMove = PlayTut;
+	
+	with(add_detatched_branch(true)){ //NOTE: branches inherit the settings of the parent caller
+		add_page("So you remember then?",550);
+		add_option("Yes",global.tut_id.FinalWords);
+		add_option("No",global.tut_id.AsIThought);
 	}
 }
 
 function PlayTut()
 {
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Then let us begin.",1,undefined,625,375);
-		NextMove = SetupTut;
+	
+	with(add_detatched_branch(true)){
+		add_page("Then let us begin.",625);
+		add_page_action(global.tut_id.SetupTut);
 	}
 }
+
+function AsIThought()
+{
+	with(instance_create_layer(x,y,"Text",eDialogManager)){
+		show_debug_message("-----------\n" + "Spawn " + string(id));
+			/*
+		//We are not gonna replicate these just yet
+		//our line width[per line, per page]
+		line_break_pos[0,page_number]=500;
+		//how many line breaks are on a given page
+		line_break_num[page_number]=0;
+			//how many pixels of overflow from the last line
+		line_break_offset[page_number]=0;
+	
+		textbox_spr[page_number] = sprVoidTextBox;
+		textbox_width[page_number] = 1200;
+		line_width[page_number] = textbox_width[page_number]-(border*2);
+			text_x_offset[page_number] = 235; //these seem to get overriden
+		text_y_offset[page_number] = 170;
+		*/
+	
+		//TODO: maybe move this to the object??
+		voidsettings();
+	
+	
+		add_page("Welcome weary traveller",575);
+		add_page("Be not alarmed",650);
+		add_page("Although it may look like you're in the vastness of space.",300);
+		add_page("I assure you, you are within the confines of the Rainy Knight's Cafe",250);
+		add_page("Here our guests play a rather unique chess variant.",250);
+		add_page("Would you like me to show you how?",400);
+	
+		add_option("Yes", global.tut_id.PlayTut); //FIXME: ye this doesn't work
+		add_option("No", global.tut_id.AreYouSure);
+	}
+}
+
+
+
+
+
+
+
+function AsIThought()
+{
+	with(add_detatched_branch(true)){
+		add_page("As I thought.",650);
+		add_page_action(global.tut_id.PlayTut); //TODO: handle this
+	}
+}
+
+
+
+#endregion
 
 function SetupTut()
 {
@@ -86,37 +131,64 @@ function SetupTut()
 	field = instance_create_layer(800,450,"BoardLayer",oField);
 	field.SetupBoard();
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("You start with a single king each, and a deck of at least 20 cards.",1,undefined, undefined,400);
-		Add_Text("Each player draws a hand of 5.",1,undefined, undefined,400);
-		Add_Text("These cards are your primary method of summoning more chess pieces.",1,undefined,undefined,600);
-		Add_Text("Let's try playing a card.",1,undefined,525,650);
-		Add_Text("Left click that 4 of Hearts.",1,undefined,500,650,CheckFourOfHeartsSelected);
-		Add_Text("Now click the space diagonally right of your king",1,undefined,undefined,375,CheckFourOfHeartsPlayed);
-		Add_Text("Excellent! As you can see, your 4 of Hearts became a pawn.",1,undefined,undefined,350);
-		Add_Text("Now, let's place that 5 of Clubs diagonally to the left of the king.",1,undefined,undefined,350,CheckFiveOfClubsPlayed);
-		Add_Text("Now you have a knight.",1,undefined, 530,400);
-		Add_Text("As you may have guessed the value of the card translates to the strength of the piece.",1);
-		Add_Text("A card with a value of 2-4 becomes a pawn,",1,undefined,250);
-		Add_Text("5-7 a knight,",1,undefined,625);
-		Add_Text("and 8-10 a bishop.",1,undefined,600);
-		Add_Text("Try drawing another card from the deck by clicking on it.",1,undefined,undefined,590,CheckJackOfClubsInHand);
-		Add_Text("What luck, you've just drawn a Jack of Clubs.",1,undefined,250,650);
-		Add_Text("Try playing that front and center.",1,undefined,425,375,CheckJackOfClubsPlayed);
-		Add_Text("In this game, jacks translate as rooks.",1,undefined,400,400);
-		Add_Text("Go ahead and draw two more cards.",1,undefined,200,650,Check8HAnd4C);
-		Add_Text("Now for the fun part.",1,undefined,575,650);
-		Add_Text("Try dragging that 8 of Hearts onto the 2 of Clubs.",1,undefined,undefined,650,CheckFor10Amalgam);
-		Add_Text("Now you're starting to see the ingenuity of this game.",1,undefined,undefined,650);
-		Add_Text("When you combine two cards, they create an amalgam.",1);
-		Add_Text("So long as the value of the two cards does not exceed 14,",1);
-		Add_Text("You can continue combining cards as much as you wish.",1);
-		Add_Text("The total value of the amalgam determines the rank of the chess piece.",1);
-		Add_Text("But now let's focus on the importance of suits.",1);
-		Add_Text("Combine your 2 of Diamonds with the amalgam you just created.",1,undefined,undefined,600,CheckForQueenAmalgam);
-		Add_Text("Play the newly created Queen amalgam to the right of the king.",1,undefined,undefined,375,CheckForQueenPlayed);
-		NextMove = CreateSideBars;
+	with(add_detatched_branch(true)){
+		
+		tb_settings.x = TB_POS.CENTER2;
+		tb_settings.y = TB_POS.CENTER2;
+		
+		add_page("You start with a single king each, and a hand of 5 cards.");
+		add_page("These cards are your primary method of summoning more chess pieces.");
+		
+		add_page("Let's try playing a card.");
+		
+		add_page("Left click that 4 of Hearts."); //MARK: page action
+		add_page_action(global.tut_id.CheckFourOfHeartsSelected);
+		
+		add_page("Now click the space diagonally right of your king"); //MARK: page action
+		add_page_action(global.tut_id.CheckFourOfHeartsPlayed);
+		
+		add_page("Excellent! As you can see, your 4 of Hearts became a pawn.");
+		
+		add_page("Now, let's place that 5 of Clubs diagonally to the left of the king."); //MARK: page action
+		add_page_action(global.tut_id.CheckFiveOfClubsPlayed);
+		
+		add_page("Now you have a knight.");
+		add_page("As you may have guessed the value of the card translates to the strength of the piece.");
+		add_page("A card with a value of 2-4 becomes a pawn,");
+		add_page("5-7 a knight,");
+		add_page("and 8-10 a bishop.");
+		
+		add_page("Try drawing another card from the deck by clicking on it."); //MARK: page action
+		add_page_action(global.tut_id.CheckJackOfClubsInHand);
+		
+		add_page("What luck, you've just drawn a Jack of Clubs.");
+		
+		add_page("Try playing that front and center."); //MARK: page action
+		add_page_action(global.tut_id.CheckJackOfClubsPlayed);
+		
+		add_page("In this game, jacks translate as rooks.");
+		
+		add_page("Go ahead and draw two more cards.");
+		add_page_action(global.tut_id.Check8HAnd4C);
+		
+		add_page("Now for the fun part.");
+		
+		add_page("Try dragging that 8 of Hearts onto the 2 of Clubs."); //MARK: page action
+		add_page_action(global.tut_id.CheckFor10Amalgam);
+		
+		add_page("Now you're starting to see the ingenuity of this game.");
+		add_page("When you combine two cards, they create an amalgam.");
+		add_page("So long as the value of the two cards does not exceed 14,");
+		add_page("You can continue combining cards as much as you wish.");
+		add_page("The total value of the amalgam determines the rank of the chess piece.");
+		add_page("But now let's focus on the importance of suits.");
+		
+		
+		add_page("Combine your 2 of Diamonds with the amalgam you just created."); //MARK: page action
+		add_page_action(global.tut_id.CheckForQueenAmalgam);
+		
+		add_page("Play the newly created Queen amalgam to the right of the king."); //MARK: page action
+		add_page_action(global.tut_id.CheckForQueenPlayed);
 	}
 }
 
@@ -124,9 +196,9 @@ function CheckFourOfHeartsSelected()
 {
 	if(instance_exists(global.pHand.cardSelected)
 	&&global.pHand.cardSelected.suit==1
-	&&global.pHand.cardSelected.pips==4)
-	{return true;}
-	else{return false;}
+	&&global.pHand.cardSelected.pips==4){
+		next_page();
+	}
 }
 
 function CheckFourOfHeartsPlayed()
@@ -134,8 +206,7 @@ function CheckFourOfHeartsPlayed()
 	if(instance_exists(instance_find(oField,0).grid[3][5].myPiece)
 	&&instance_find(oField,0).grid[3][5].myPiece.object_index==oPawnW
 	&&instance_find(oField,0).grid[3][5].myPiece.Health==4)
-	{return true;}
-	else{return false;}
+	{next_page();}
 }
 
 function CheckFiveOfClubsPlayed()
@@ -143,20 +214,17 @@ function CheckFiveOfClubsPlayed()
 	if(instance_exists(instance_find(oField,0).grid[3][3].myPiece)
 	&&instance_find(oField,0).grid[3][3].myPiece.object_index==oKnightW
 	&&instance_find(oField,0).grid[3][3].myPiece.Attack==5)
-	{return true;}
-	else{return false;}
+	{next_page();}
 }
 
 function CheckJackOfClubsInHand()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		if(global.pHand.cardsHeld[i].pips==11
 			&&global.pHand.cardsHeld[i].clubs==11)
-		{cardInHand=true;}
+		{next_page();return;}
 	}
-	return cardInHand;
 }
 
 function CheckJackOfClubsPlayed()
@@ -164,58 +232,41 @@ function CheckJackOfClubsPlayed()
 	if(instance_exists(instance_find(oField,0).grid[3][4].myPiece)
 	&&instance_find(oField,0).grid[3][4].myPiece.object_index==oRookW
 	&&instance_find(oField,0).grid[3][4].myPiece.Attack==10)
-	{return true;}
-	else{return false;}
+	{next_page();}
 }
 
 function Check8HAnd4C()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		if(global.pHand.cardsHeld[i].pips==8
 			&&global.pHand.cardsHeld[i].hearts==8)
-		{cardInHand=true;}
+		{next_page();return;}
 	}
-	return cardInHand;
 }
 
 function CheckFor10Amalgam()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		show_debug_message("Card "+string(i)+" clubs: " + string(global.pHand.cardsHeld[i].clubs));
 		if(global.pHand.cardsHeld[i].pips==10
 			&&global.pHand.cardsHeld[i].clubs==2
 			&&global.pHand.cardsHeld[i].hearts==8)
-		{cardInHand=true;}
+		{next_page();return;}
 	}
-	return cardInHand;
 }
 
 function CheckForQueenAmalgam()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		if(global.pHand.cardsHeld[i].pips==12
 			&&global.pHand.cardsHeld[i].clubs==2
 			&&global.pHand.cardsHeld[i].hearts==8
 			&&global.pHand.cardsHeld[i].diamonds==2)
-		{cardInHand=true;}
+		{next_page();return;}
 	}
-	return cardInHand;
-}
-
-function CheckForQueenPlayed()
-{
-	if(instance_exists(instance_find(oField,0).grid[4][5].myPiece)
-	&&instance_find(oField,0).grid[4][5].myPiece.object_index==oQueenW
-	&&instance_find(oField,0).grid[4][5].myPiece.Attack==2
-	&&instance_find(oField,0).grid[4][5].myPiece.Health==8)
-	{return true;}
-	else{return false;}
 }
 
 function CreateSideBars()
@@ -233,27 +284,40 @@ function CreateSideBars()
 	global.opSpade = instance_create_layer(1500,800,"UILayer",oSpadeCounter);
 	global.opSpade.depth = instance_find(oMatchManager,0).opBorderDepth-1;
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("This Queen has 8 health from the 8 of Hearts,",1,undefined,275,350);
-		Add_Text("and 2 power from the 2 of Clubs.",1,undefined,425,350);
-		Add_Text("As for the diamonds. Well you'll understand in due time.",1,undefined,200,650);
-		Add_Text("Just know you'll want to collect some of those.",1,undefined,200,650);
-		Add_Text("Now, why don't you draw another card.",1,undefined,200,650,CheckIfOpTurn);
-		Add_Text("I'm sorry to say, I knew this would happen.",1,undefined,340);
-		Add_Text("Don't feel too bad. The player going first can't move their pieces on the first turn anyway.",1,undefined,200);
-		Add_Text("Each time you draw a card, that card is replaced with a joker.",1,undefined,200);
-		Add_Text("When you draw one, your turn is forfeit.",1,undefined,350);
-		Add_Text("The number on the deck signals how many original cards are left.",1,undefined,200,650);
-		Add_Text("You must draw at least one card each turn.",1,undefined,200,650);
-		NextMove = SetupAnuTurn;
+	with(add_detatched_branch(true)){
+		add_page("This Queen has 8 health from the 8 of Hearts,");
+		add_page("and 2 power from the 2 of Clubs.");
+		add_page("As for the diamonds. Well you'll understand in due time.");
+		add_page("Just know you'll want to collect some of those.");
+		
+		add_page("Now, why don't you draw another card.");
+		add_page_action(global.tut_id.CheckIfOpTurn);
+		
+		add_page("I'm sorry to say, I knew this would happen.");
+		add_page("Don't feel too bad. The player going first can't move their pieces on the first turn anyway.");
+		add_page("Each time you draw a card, that card is replaced with a joker.");
+		
+		add_page("When you draw one, your turn is forfeit.");
+		add_page_action(global.tut_id.SetupAnuTurn);
+		
 	}
+
+}
+
+function CheckForQueenPlayed()
+{
+	var tut_id = global.tut_id;
+	var create_sidebars = method(id,global.tut_id.CreateSideBars);
+	if(instance_exists(instance_find(oField,0).grid[4][5].myPiece)
+	&&instance_find(oField,0).grid[4][5].myPiece.object_index==oQueenB
+	&&instance_find(oField,0).grid[4][5].myPiece.Attack==2
+	&&instance_find(oField,0).grid[4][5].myPiece.Health==8)
+	{next_page();create_sidebars();}
 }
 
 function CheckIfOpTurn()
 {
-	if(instance_find(oMatchManager,0).pTurn==false){return true;}
-	else{return false;}
+	if(instance_find(oMatchManager,0).pTurn==false){next_page();}
 }
 
 function SetupAnuTurn()
@@ -264,15 +328,15 @@ function SetupAnuTurn()
 	var opet = instance_create_layer(1400,60,"UILayer",oEndTurn);
 	opet.depth = instance_find(oMatchManager,0).pBorderDepth-1;
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("After that, you may click the End Turn button if you're the cautious type.",1,undefined,200,650);
-		Add_Text("Should you find your deck empty at the start of a turn, the game will end, with you the fool.",1,undefined,200,650);
-		Add_Text("...But for now it's my turn.",1,undefined,475);
-		Add_Text("Forgive me, I haven't introduced myself yet.",1,undefined,350);
-		Add_Text("My name is Anu.",1,undefined,650,375);
-		Add_Text("I will simply play this Queen of Diamonds for now and end my turn.",1,undefined,200);
-		NextMove = AnuSelectsQueen;
+	with(add_detatched_branch(true)){
+		
+		add_page("You can also click the End Turn button if you're the cautious type.");
+		add_page("...But for now it's my turn.");
+		add_page("Forgive me, I haven't introduced myself yet.");
+		add_page("My name is Anu.");
+		add_page("I will simply play this Queen of Diamonds for now and end my turn.");
+		add_page_action(global.tut_id.AnuSelectsQueen);
+		
 	}
 }
 
@@ -288,16 +352,21 @@ function AnuSelectsQueen()
 		}
 	}
 	instance_find(oMatchManager,0).queenSelected=true;
+	next_page();
 }
 
 function AnuPlaysQueen()
 {
 	instance_find(oField,0).grid[1][4].PlayPiece(false);
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
+	with(instance_create_layer(x,y,"Text",eDialogManager))
 	{
-		Add_Text("Actually, I'd like to demonstrate something first.",1,undefined,300);
-		NextMove = AnuSelects6H;
+		voidsettings();
+		tb_settings.x = TB_POS.CENTER2;
+		tb_settings.x = TB_POS.CENTER2;
+		
+		add_page("Actually, I'd like to demonstrate something first.");
+		add_page_action(global.tut_id.AnuSelects6H);
 	}
 }
 
@@ -313,18 +382,22 @@ function AnuSelects6H()
 		}
 	}
 	instance_find(oMatchManager,0).selected6H=true;
+	next_page();
 }
 
 function AnuPlays6H()
 {
 	instance_find(oField,0).grid[1][4].UpgradePiece(false);
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("If you click a heart or club card and then select a piece,",1,undefined,250);
-		Add_Text("it will gain the associated health or power respectively.",1,undefined,250);
-		Add_Text("And with that, I will conclude my turn.",1,undefined,400);
-		NextMove = Players2ndTurn;
+	with(instance_create_layer(x,y,"Text",eDialogManager)){
+		voidsettings();
+		tb_settings.x = TB_POS.CENTER2;
+		tb_settings.x = TB_POS.CENTER2;
+		
+		add_page("If you click a heart or club card and then select a piece,");
+		add_page("it will gain the associated health or power respectively.");
+		add_page("And with that, I will conclude my turn.");
+		add_page_action(global.tut_id.Players2ndTurn);
 	}
 }
 
@@ -332,32 +405,40 @@ function Players2ndTurn()
 {
 	instance_find(oField,0).ChangeTurns();
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Go ahead and draw a card... And fear not!",1,undefined,200,650);
-		Add_Text("The first draw on a given turn is always on the house.",1,undefined,200,600, CheckForAceOfSpades);
-		Add_Text("Well done! The Ace of Spades!",1,undefined,400,650);
-		Add_Text("Play that next to your king and see what happens.",1,undefined,undefined,350, CheckAcePlayed);
-		Add_Text("Aces manifest themselves as a graduated pawn.",1,undefined,400,350);
-		Add_Text("Click on the pawn you just played.",1,undefined,450,350);
-		Add_Text("Now click on the king icon.",1,undefined,450,350, CheckFor2ndKing);
-		Add_Text("In this game you can have as many kings as you wish,",1);
-		Add_Text("But you must have at least one or it's game over!",1);
-		Add_Text("Now, because you played an Ace of Spades it gave you 14 spade pips.",1,undefined,200,50);
-		NextMove = SetupSpecialAbilities;
+	with(add_detatched_branch(true)){
+		
+		add_page("Go ahead and draw a card... And fear not!");
+		
+		add_page("The first draw on a given turn is always on the house.");
+		add_page_action(global.tut_id.CheckForAceOfSpades);
+		
+		add_page("Well done! The Ace of Spades!");
+		
+		add_page("Play that next to your king and see what happens.");
+		add_page_action(global.tut_id.CheckAcePlayed);
+		
+		add_page("Aces manifest themselves as a graduated pawn.");
+		add_page("Click on the pawn you just played.");
+		
+		add_page("Now click on the king icon.");
+		add_page_action(global.tut_id.CheckFor2ndKing);
+		
+		add_page("In this game you can have as many kings as you wish,");
+		add_page("But you must have at least one or it's game over!");
+		
+		add_page("Now, because you played an Ace of Spades it gave you 14 spade pips.");
+		add_page_action(global.tut_id.SetupSpecialAbilities);
 	}
 }
 
 function CheckForAceOfSpades()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		if(global.pHand.cardsHeld[i].pips==14
 			&&global.pHand.cardsHeld[i].spades==14)
-		{cardInHand=true;}
+		{next_page();}
 	}
-	return cardInHand;
 }
 
 function CheckAcePlayed()
@@ -366,7 +447,7 @@ function CheckAcePlayed()
 	&&instance_find(oField,0).grid[4][3].myPiece.object_index==oPawnW
 	&&instance_find(oField,0).grid[4][3].myPiece.Attack==1
 	&&instance_find(oField,0).grid[4][3].myPiece.Health==1)
-	{return true;} else {return false;}
+	{next_page();}
 }
 
 function CheckFor2ndKing()
@@ -375,7 +456,7 @@ function CheckFor2ndKing()
 	&&instance_find(oField,0).grid[4][3].myPiece.object_index==oKingW
 	&&instance_find(oField,0).grid[4][3].myPiece.Attack==1
 	&&instance_find(oField,0).grid[4][3].myPiece.Health==1)
-	{return true;} else {return false;}
+	{next_page();}
 }
 
 function SetupSpecialAbilities()
@@ -411,53 +492,64 @@ function SetupSpecialAbilities()
 	OSA3.specialAbility = 34;
 	OSA3.Setup();
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Spade pips, or SP for short, allow you to use your special abilities.",1);
-		Add_Text("If you hover over them, you can see a description of what each ability does.",1);
-		Add_Text("Try inflicting your Pain ability on my queen.",1,undefined,undefined,undefined, CheckPainOnQueen);
-		Add_Text("Great! Now use your knight to attack it.",1,undefined,undefined,undefined, CheckKnightAttacksQueen);
-		Add_Text("In this game, you must lower the piece's health to 0 to capture.",1);
-		Add_Text("Why not use your rook to capture my queen?",1,undefined,undefined,undefined, CheckRookAttacksQueen);
-		Add_Text("Allow me one more lesson before we finish here.",1);
-		Add_Text("Do me the favor of drawing 4 more cards.",1,undefined,undefined,undefined,Check10CInHand);
-		Add_Text("Notice your 4 of Spades moved to the discard pile.",1);
-		Add_Text("Your hand of cards is capped at 5. No exceptions.",1);
-		Add_Text("It's not ideal, but we must make due with what we are given.",1);
-		Add_Text("Move your 10 of Clubs to the position two right of the pawn.",1,undefined,undefined,undefined, CheckBishopCreated);
-		Add_Text("Now attack my only king and end the match.",1,undefined,undefined,undefined, CheckKingDown);
-		NextMove = FinalWords;
+	with(add_detatched_branch(true)){
+		add_page("Spade pips, or SP for short, allow you to use your special abilities.");
+		add_page("If you hover over them, you can see a description of what each ability does.");
+		
+		add_page("Try inflicting your Pain ability on my queen.");
+		add_page_action(global.tut_id.CheckPainOnQueen);
+		
+		add_page("Great! Now use your knight to attack it.");
+		add_page_action(global.tut_id.CheckKnightAttacksQueen);
+		
+		add_page("In this game, you must lower the piece's health to 0 to capture.");
+		
+		add_page("Why not use your rook to capture my queen?");
+		add_page_action(global.tut_id.CheckRookAttacksQueen);
+		
+		add_page("Allow me one more lesson before we finish here.");
+		
+		add_page("Do me the favor of drawing 4 more cards.");
+		add_page_action(global.tut_id.Check10CInHand);
+		
+		add_page("Notice your 4 of Spades moved to the discard pile.");
+		add_page("Your hand of cards is capped at 5. No exceptions.");
+		add_page("It's not ideal, but we must make due with what we are given.");
+		
+		add_page("Move your 10 of Clubs to the position two right of the pawn.");
+		add_page_action(global.tut_id.CheckBishopCreated);
+		
+		add_page("Now attack my only king and end the match.");
+		add_page_action(global.tut_id.CheckKingDown);
 	}
 }
 
 function CheckPainOnQueen()
 {
 	if(instance_find(oField,0).grid[1][4].myPiece.Health == 6)
-	{return true;} else {return false;}
+	{next_page(); return ;}
 }
 
 function CheckKnightAttacksQueen()
 {
 	if(instance_find(oField,0).grid[1][4].myPiece.Health == 1)
-	{return true;} else {return false;}
+	{next_page(); return ;}
 }
 
 function CheckRookAttacksQueen()
 {
-	if(instance_find(oField,0).grid[1][4].myPiece.object_index == oRookW)
-	{return true;} else {return false;}
+	if(instance_find(oField,0).grid[1][4].myPiece.object_index == oRookB)
+	{next_page(); return;}
 }
 
 function Check10CInHand()
 {
-	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
 		if(global.pHand.cardsHeld[i].pips==10
 			&&global.pHand.cardsHeld[i].clubs==10)
-		{cardInHand=true;}
+		{next_page();return;}
 	}
-	return cardInHand;
 }
 
 function CheckBishopCreated()
@@ -466,29 +558,29 @@ function CheckBishopCreated()
 	&&instance_find(oField,0).grid[3][7].myPiece.object_index==oBishopW
 	&&instance_find(oField,0).grid[3][7].myPiece.Attack==10
 	&&instance_find(oField,0).grid[3][7].myPiece.Health==1)
-	{return true;} else {return false;}
+	{next_page();}
 }
 
 function CheckKingDown()
 {
-	if(instance_find(oField,0).grid[0][4].myPiece.object_index == oBishopW)
-	{return true;} else {return false;}
+	var finalwords = method(id,global.tut_id.FinalWords);
+	if(instance_find(oField,0).grid[0][4].myPiece.object_index == oBishopB)
+	{finalwords();}
 }
 
 function FinalWords()
 {
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Very well then.",1);
-		Add_Text("There will be no checks nor mates here.",1,undefined,350,375);
-		Add_Text("Nor any warnings of potential misfortunes.",1,undefined,350,375);
-		Add_Text("Don't get careless.",1,undefined,575,375);
-		NextMove = DefineForm;
+	with(add_detatched_branch(true)){
+		add_page("There will be no checks nor mates here.");
+		add_page("Nor any warnings of potential misfortunes.");
+		add_page("Don't get careless.");
+		add_page_action(global.tut_id.DefineForm);
 	}
 }
 
 function DefineForm()
 {
+	next_page();
 	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
 	trans.nextRoom = rPlayerProfileSetup;
 }
