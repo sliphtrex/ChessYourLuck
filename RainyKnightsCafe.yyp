@@ -60,6 +60,9 @@
     {"$GMFolder":"","%Name":"MatchRelatedMisc","folderPath":"folders/Sprites/MatchRelatedMisc.yy","name":"MatchRelatedMisc","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"RainyKnightCharacters","folderPath":"folders/Sprites/RainyKnightCharacters.yy","name":"RainyKnightCharacters","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"RainyKnightsCafe","folderPath":"folders/Sprites/RainyKnightsCafe.yy","name":"RainyKnightsCafe","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Testing","folderPath":"folders/Testing.yy","name":"Testing","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"TestObjects","folderPath":"folders/Testing/TestObjects.yy","name":"TestObjects","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"TestScripts","folderPath":"folders/Testing/TestScripts.yy","name":"TestScripts","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Tile Sets","folderPath":"folders/Tile Sets.yy","name":"Tile Sets","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Timelines","folderPath":"folders/Timelines.yy","name":"Timelines","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -72,6 +75,8 @@
   },
   "name":"RainyKnightsCafe",
   "resources":[
+    {"id":{"name":"eCharacterDialog","path":"objects/eCharacterDialog/eCharacterDialog.yy",},},
+    {"id":{"name":"eDialogManager","path":"objects/eDialogManager/eDialogManager.yy",},},
     {"id":{"name":"oAdam","path":"objects/oAdam/oAdam.yy",},},
     {"id":{"name":"oAmalgamCard","path":"objects/oAmalgamCard/oAmalgamCard.yy",},},
     {"id":{"name":"oAmanda","path":"objects/oAmanda/oAmanda.yy",},},
