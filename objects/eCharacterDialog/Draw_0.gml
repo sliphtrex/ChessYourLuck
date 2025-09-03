@@ -37,5 +37,3 @@ var char_y = tb_y - char_h;
 
 draw_sprite_stretched(img,0,char_x,char_y,char_w,char_h);
 draw_text_ext(char_x + border, char_y + border, name, line_spacing,line_width);
-
-//TODO: have option to draw options on the top. probs will need to be in the parent function

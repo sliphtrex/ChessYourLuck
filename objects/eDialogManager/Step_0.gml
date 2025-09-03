@@ -21,7 +21,7 @@ if(is_clicked){
 			var cur_selected = tb_content.cur_selected;
 			if(cur_selected != undefined && cur_selected.cb != undefined){
 				var cb = rebind_cb(cur_selected.cb);
-				cb(); //TODO: do we want to rebind all callbacks??
+				cb();
 			}
 			return;
 		}

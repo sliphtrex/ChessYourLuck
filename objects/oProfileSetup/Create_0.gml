@@ -1,12 +1,14 @@
-with(instance_create_layer(x,y,"Text",oVoidTextBox))
+with(instance_create_layer(x,y,"Text",eDialogManager))
 {
-	Add_Text("Alright. Next order of business.",1);
-	Add_Text("Before you can proceed, we must define your form.",1,undefined,350,375);
-	NextMove = CharacterSelect;
+	voidsettings();
+	add_page("Alright. Next order of business.");
+	add_page("Before you can proceed, we must define your form.",350,375);
+	add_page_action(CharacterSelect);
 }
 
 function CharacterSelect()
 {
+	next_page();
 	show_debug_message("in CharacterSelect");
 	charSelected=false;
 	
@@ -26,24 +28,24 @@ function CharacterSelect()
 		charIcons[3].Setup();
 	}
 	
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
+	with(instance_create_layer(x,y,"Text",eDialogManager))
 	{
-		Add_Text("Out of the following options, how would you most like to be perceived by others?",1,undefined,350,375,CharacterSelectedCheck);
-		NextMove = LastChance;
+		voidsettings();
+		add_page("Out of the following options, how would you most like to be perceived by others?",350,375);
+		add_page_action(CharacterSelect);
 	}
 }
 
 function CharacterSelectedCheck()
 {
 	show_debug_message(global.PlayerIcon);
-	if(global.PlayerIcon==0||global.PlayerIcon==1||global.PlayerIcon==2||global.PlayerIcon==3){return true;}
-	else{return false;}
+	if(global.PlayerIcon==0||global.PlayerIcon==1||global.PlayerIcon==2||global.PlayerIcon==3){next_page();LastChance();}
 }
 
 function LastChance()
 {
 	with(oCharIcon){instance_destroy();}
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
+	with(instance_create_layer(x,y,"Text",eDialogManager))
 	{
 		var iconString = undefined;
 		switch(global.PlayerIcon)
@@ -53,22 +55,24 @@ function LastChance()
 			case 2: iconString = "dog"; break;
 			case 3: iconString = "cat"; break;
 		}
-		Add_Text("You've chosen "+iconString+".",1);
-		Add_Text("Are you sure you're happy with your choice? This will impact how your story unfolds.",1);
-			Add_Option("Yes",FinalWords2);
-			Add_Option("Not sure", CharacterSelect);
+		
+		voidsettings();
+		add_page("You've chosen "+iconString+".");
+		Add_Text("Are you sure you're happy with your choice? This will impact how your story unfolds.");
+			add_option("Yes",FinalWords2);
+			add_option("Not sure", CharacterSelect);
 	}
 }
 
 function FinalWords2()
 {
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
+	with(add_detatched_branch(true))
 	{
-		Add_Text("Very good.",1);
-		Add_Text("Your tangible form will appear as such.",1,undefined,350,375);
-		Add_Text("Over the next fortnight, you will meet many new faces.",1,undefined,350,375);
-		Add_Text("Weary traveller, I implore you to get to know them well.",1,undefined,575,375);
-		NextMove = EndTut;
+		add_page("Very good.");
+		add_page("Your tangible form will appear as such.",350,375);
+		add_page("Over the next fortnight, you will meet many new faces.",350,375);
+		add_page("Weary traveller, I implore you to get to know them well.",575,375);
+		add_page_action(EndTut);
 	}
 }
 

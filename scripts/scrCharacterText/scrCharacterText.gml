@@ -63,23 +63,22 @@ function SelectedEditSpAbs()
 #endregion
 
 #region Savannah's Story
-//TODO: convert this
 
 function SavannahWin()
 {
-	with(instance_create_layer(global.curTable*1920,780,"Text",oRKCTextBox))
+	with(instance_create_layer(global.curTable*1920,780,"Text",eCharacterDialog))
 	{
-			Add_Text("Heyo! That's just how the cookie crumbles sometimes.\nDon't worry. Be Happy.\n There's always tomorrow.");
-			NextMove = ChangeDayPart;
+			add_page("Heyo! That's just how the cookie crumbles sometimes.\nDon't worry. Be Happy.\n There's always tomorrow.");
+			add_page_action(ChangeDayPart);
 	}
 }
 
 function SavannahLose()
 {
-	with(instance_create_layer(global.curTable*1920,780,"Text",oRKCTextBox))
+	with(instance_create_layer(global.curTable*1920,780,"Text",eCharacterDialog))
 	{
-			Add_Text("Yo, what the heck! That's crazy!\nYou must have cheated.\nNo way you're that good.\nAlright, game recognizes game.");
-			NextMove = ChangeDayPart;
+			add_page("Yo, what the heck! That's crazy!\nYou must have cheated.\nNo way you're that good.\nAlright, game recognizes game.");
+			add_page_action(ChangeDayPart);
 	}
 }
 
@@ -148,6 +147,7 @@ function PreviewPlayer()
 
 function ChangeDayPart()
 {
+	next_page();
 	if(!(global.DayPart==2 && global.DayNum==13))
 	{
 		global.postMatch = false;

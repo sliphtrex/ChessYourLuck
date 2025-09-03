@@ -18,7 +18,6 @@ function rkcsettings(name){
 	tb_settings.x = TB_POS.LEFT;
 	tb_settings.y = TB_POS.BOTTOM;
 	
-	//TODO: don't make this fixed
 	tb_settings.border = 45;
 	//tb_settings.w = 1600 - (tb_settings.border * 2);
 	tb_settings.w = TB_DIM.FILL_W;
@@ -31,7 +30,7 @@ function rkcsettings(name){
 //	tb_settings.w = TB_DIM.FILL_W;
 //	recalculate_line_width();
 	
-	//TODO: add character name and sprite box
+	//TODO: sprite box
 	char_settings.name = name;
 }
 #endregion

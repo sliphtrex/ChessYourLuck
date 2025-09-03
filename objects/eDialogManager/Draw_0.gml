@@ -30,8 +30,6 @@ var bg_img = tb_settings.bg_img;
 
 //NOTE: we inherit these in child class
 
-					
-//TODO: handle this
 var ctb_w = tb_w;
 switch(tb_settings.x){
 	case TB_POS.CENTER2:
@@ -122,7 +120,6 @@ for(var i = 0; tb_content.chars_drawn == page_len && i < array_length(page.optio
 	draw_sprite_stretched(bg_img,bg_selection,ox,oy,w,h);
 	draw_text(ox + border, oy + border, option.txt);
 	
-	//TODO: let's try to replicate the rVoid dialog sizing and positioning for now
 		
 }	
 

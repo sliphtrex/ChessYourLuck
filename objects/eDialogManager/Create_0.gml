@@ -38,7 +38,7 @@ tb_settings = {
 };
 
 enum TB_POS{
-	CENTER = -1, //TODO: we might get rid of this. 
+	CENTER = -1,
 	CENTER2 = -2,
 	
 	//x only
@@ -52,7 +52,7 @@ enum TB_POS{
 
 enum TB_DIM{
 	FILL_W = -1,
-	FILL_H = -1, //TODO: do we want this??
+	FILL_H = -1,
 };
 
 tb_content = {
@@ -113,7 +113,7 @@ function add_branch(next_page = -1,next_id = id, cr_layer = layer){
 	return inst;
 }
 
-//TODO: get rid of all detatched branches. we don't really need it
+
 function add_detatched_branch(to_destroy_caller = false){
 	inst = add_branch(-1,id);
 	with(inst){
@@ -129,7 +129,6 @@ function add_detatched_branch(to_destroy_caller = false){
 }
 
 
-//TODO: add a settings struct for per page settings
 function make_page(text, options = [], x = 0, y = 0, speed = 1){
 	return {txt : text, len : string_length(text), options : options,
 		settings : { x : x, y : y, spd : speed},

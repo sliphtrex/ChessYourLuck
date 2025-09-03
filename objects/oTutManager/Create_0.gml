@@ -23,20 +23,12 @@ selected6HFrames=0;
 global.tut_id = id;
 
 #region dialog setup
-//MARK:
-//TODO: replace this with our dialog stuff
-
-
-//1st param(string): the text we want to display
-//2nd param(int): tells us if we're setting up a Cafe textbox(0) or a Void textbox(1) or an other(-1)
-//3rd param(function): any check we should perform before continuing on (i.e. did the player play a specific card)
-//function Add_Text(_text, RKCorVoid=0, _widthMax = noone, _xpos=noone, _ypos=noone, _check=noone, _sprite=noone
 
 function AreYouSure()
 {
 	
 	with(add_detatched_branch(true)){ //NOTE: branches inherit the settings of the parent caller
-		add_page("So you remember then?",550);
+		add_page("So you remember then?");
 		add_option("Yes",global.tut_id.FinalWords);
 		add_option("No",global.tut_id.AsIThought);
 	}
@@ -46,12 +38,12 @@ function PlayTut()
 {
 	
 	with(add_detatched_branch(true)){
-		add_page("Then let us begin.",625);
+		add_page("Then let us begin.");
 		add_page_action(global.tut_id.SetupTut);
 	}
 }
 
-function AsIThought()
+
 {
 	with(instance_create_layer(x,y,"Text",eDialogManager)){
 		show_debug_message("-----------\n" + "Spawn " + string(id));
@@ -70,17 +62,17 @@ function AsIThought()
 			text_x_offset[page_number] = 235; //these seem to get overriden
 		text_y_offset[page_number] = 170;
 		*/
-	
-		//TODO: maybe move this to the object??
+		
 		voidsettings();
+		tb_settings.x = TB_POS.CENTER2;
+		tb_settings.y = TB_POS.CENTER2;
 	
-	
-		add_page("Welcome weary traveller",575);
-		add_page("Be not alarmed",650);
-		add_page("Although it may look like you're in the vastness of space.",300);
-		add_page("I assure you, you are within the confines of the Rainy Knight's Cafe",250);
-		add_page("Here our guests play a rather unique chess variant.",250);
-		add_page("Would you like me to show you how?",400);
+		add_page("Welcome weary traveller");
+		add_page("Be not alarmed");
+		add_page("Although it may look like you're in the vastness of space.");
+		add_page("I assure you, you are within the confines of the Rainy Knight's Cafe");
+		add_page("Here our guests play a rather unique chess variant.");
+		add_page("Would you like me to show you how?");
 	
 		add_option("Yes", global.tut_id.PlayTut); //FIXME: ye this doesn't work
 		add_option("No", global.tut_id.AreYouSure);
@@ -96,8 +88,8 @@ function AsIThought()
 function AsIThought()
 {
 	with(add_detatched_branch(true)){
-		add_page("As I thought.",650);
-		add_page_action(global.tut_id.PlayTut); //TODO: handle this
+		add_page("As I thought.");
+		add_page_action(global.tut_id.PlayTut);
 	}
 }
 
