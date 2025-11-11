@@ -150,6 +150,18 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			//it will handle deletion on it's own
 			grid[row][column].myPiece.Health = newHealth;
 			
+			//if this is a threat to the king remove it from our threat array
+			if(!instance_find(oMatchManager,0).pTurn
+				&& instance_find(oMatchManager,0).threatToKing !=undefined
+				&& array_length(instance_find(oMatchManager,0).threatToKing)>0)
+			{
+				for(var i=0;i<array_length(instance_find(oMatchManager,0).threatToKing);i++)
+				{
+					if(instance_find(oMatchManager,0).threatToKing[i]==grid[row][column].mypiece)
+					{array_delete(instance_find(oMatchManager,0).threatToKing,i,1);break;}
+				}
+			}
+			
 			//store the piece at the new oGridTile and remove it from the old tile
 			grid[row][column].myPiece=grid[rs][cs].myPiece;
 			grid[rs][cs].myPiece = undefined;
@@ -221,8 +233,9 @@ function ChangeTurns()
 		
 		global.pDeck.firstDraw=true;
 		
-		//reset the AI's decision streak;
+		//reset the AI's decision streak and kingGoodThisTurn;
 		instance_find(oMatchManager,0).decisionsMade = 0;
+		instance_find(oMatchManager,0).kingGoodThisTurn = false;
 		
 		if(instance_find(oMatchManager,0).pStart)
 		{

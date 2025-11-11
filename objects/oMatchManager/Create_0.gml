@@ -7,6 +7,13 @@ opDeckSort = undefined;
 pCardsPerTurn=undefined;
 opCardsPerTurn=undefined;
 
+//a temp selected card
+ourCard=undefined;
+//a temp selected piece
+ourPiece=undefined;
+//a temp selected spAb
+ourSpAb=undefined;
+
 //the oHand objects for the player and opponent respectively
 global.pHand = undefined;
 global.opHand = undefined;

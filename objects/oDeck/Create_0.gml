@@ -50,7 +50,7 @@ function DeckSetup2()
 		
 		for(var c=0; c<deckSize; c++)
 		{
-			//set the given card to random int between 0-51
+			//set the given card to random int between 0-(deckSize-1)
 			deckOrder[c] = irandom_range(0,deckSize-1);
 		
 			//if it's the first card then we don't need to check for dupes
@@ -65,7 +65,7 @@ function DeckSetup2()
 				//if the card was previously chosen
 				while(chosen)
 				{
-					//increment between 0-51, wrapping the number when we reach 51
+					//increment between 0-(deckSize-1), wrapping the number when we reach (deckSize-1)
 					deckOrder[c] = (deckOrder[c]<deckSize-1) ? deckOrder[c]+1 : 0;
 				
 					var newCard=true;

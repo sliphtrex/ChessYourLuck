@@ -1,12 +1,9 @@
 event_inherited();
 
-//a temp selected card
-ourCard=undefined;
-//a temp selected piece
-ourPiece=undefined;
-//a temp selected spAb
-ourSpAb=undefined;
-
+//have we checked our threats this turn
+threatAssessmentDone=false;
+//pieces that can attack the king
+threatToKing=undefined;
 //checks that step 2 is complete each turn
 kingGoodThisTurn=false;
 //we use this to cycle through our options of how to protect the king
@@ -95,37 +92,44 @@ function TurnManager()
 				else{DrawCardFromDeck(); return;}
 			}
 		}
+		
 		//II. is there any piece of the player's that could attack the king?
-		threatToKing = undefined;
-		for(var i=0;i<array_length(field.whitePieces); i++)
+		if(!threatAssessmentDone)
 		{
-			moveableSpaces = field.whitePieces[i].GetMoveableSpaces();
-			for(var j=0; j<array_length(moveableSpaces); j++)
+			threatToKing=undefined
+			for(var i=0;i<array_length(field.whitePieces); i++)
 			{
-				if(moveableSpaces[j].myPiece!=undefined
-					&&moveableSpaces[j].myPiece.object_index = oKingB)
+				moveableSpaces = field.whitePieces[i].GetMoveableSpaces();
+				for(var j=0; j<array_length(moveableSpaces); j++)
 				{
-					if(threatToKing==undefined){threatToKing[0]=field.whitePieces[i];}
-					else{array_push(threatToKing,field.whitePieces[i]);}
+					if(moveableSpaces[j].myPiece!=undefined
+						&&moveableSpaces[j].myPiece.object_index = oKingB)
+					{
+						if(threatToKing==undefined){threatToKing[0]=field.whitePieces[i];}
+						else{array_push(threatToKing,field.whitePieces[i]);}
+					}
 				}
 			}
+			threatAssessmentDone=true;
 		}
 		
-		if(threatToKing!=undefined)
+		if(threatToKing!=undefined && array_length(threatToKing)>0)
 		{
-			/******************************************************************
-			* we can get to here, but no further
-			******************************************************************/
-			show_debug_message("threats to king");
+			show_debug_message(kingsChoice);
 			//i. spAbs?
 			if(kingsChoice==0)
 			{
 				if(OSA1.CheckIfUsable())
 				{
-					show_debug_message("spabs");
+					OSA1.UseAbility(threatToKing[0]);
+					
+					show_debug_message("Used Pain on "+ string(threatToKing[0].object_index) + " at ("
+						+ string(threatToKing[0].row) +","+ string(threatToKing[0].column) + ")");
 					//attack the first piece on the list (then move onto ii)
 				}
 				kingsChoice++;
+				Wait();
+				return;
 			}
 			//ii. attack the piece with one of ours?
 			else if(kingsChoice==1)
@@ -139,7 +143,7 @@ function TurnManager()
 					{
 						for(var j=0; j<array_length(field.blackPieces[i].GetMoveableSpaces());j++)
 						{
-							targetPiece = field.blackPieces[i].GetMoveableSpaces[j].myPiece;
+							targetPiece = field.blackPieces[i].GetMoveableSpaces()[j].myPiece;
 							if(targetPiece==threatToKing[0])
 							{
 								if(kingDefenders==undefined){kingDefenders[0]=field.blackPieces[i]}
@@ -158,14 +162,151 @@ function TurnManager()
 					return;
 				}
 				//B. repeat ^ until no more pieces
-				else{kingsChoice++;show_debug_message("we're done here");}
+				else
+				{
+					kingsChoice++;
+					show_debug_message("we're done here");
+					Wait();
+					return;
+				}
 			}
 			//iii. play a piece to block them from the king?
-			//Note: this (only works for bishop,rook,or queen)
-				//a. which spaces can the target see?
-				//b. where is the king in relation
-				//c. what's the closest space to the king we can play the piece
+			else if(kingsChoice==2)
+			{
+				if(FindHighestRankCard()!=undefined)
+				{
+					//a. where is the king in relation to our threat
+					kingRow=undefined;
+					kingColumn=undefined;
+					seenSpace = threatToKing[0].GetMoveableSpaces();
+					for(var i=0;i<array_length(seenSpace);i++)
+					{
+						if(seenSpace[i].myPiece!=undefined
+							&& seenSpace[i].myPiece.object_index == oKingB)
+						{
+							kingRow = seenSpace[i].row;
+							kingColumn = seenSpace[i].column;
+							break;
+						}
+					}
+					
+					//b. (if we can) where do we place the piece in relation?
+					//block top left
+					if(kingColumn-threatToKing[0].column>1
+						&& kingRow-threatToKing[0].row==kingColumn-threatToKing[0].column
+						&& threatToKing[0].row==0)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow-1][kingColumn-1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block above
+					else if(threatToKing[0].row==0 
+						&& kingRow-threatToKing[0].row>1
+						&& kingRow==threatToKing[0].row)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow-1][kingColumn].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block top right
+					else if(threatToKing[0].column-kingColumn>1
+						&& kingRow-threatToKing[0].row==threatToKing[0].column-kingColumn
+						&& threatToKing[0].row == 0)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow-1][kingColumn+1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block right
+					else if(threatToKing[0].column-kingColumn>1
+						&& kingRow==threatToKing[0].row &&kingRow<2)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow][kingColumn+1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block bottom right
+					else if(threatToKing[0].column-kingColumn>1
+						&& threatToKing[0].row-kingRow==threatToKing[0].column-kingColumn
+						&& kingRow == 0)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow+1][kingColumn+1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block below
+					else if(threatToKing[0].row-kingRow>1
+						&& threatToKing[0].column==kingColumn
+						&& kingRow==0)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow+1][kingColumn].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block bottom left
+					else if(kingColumn-threatToKing[0].column>1
+						&& threatToKing[0].row-kingRow==kingColumn-threatToKing[0].column
+						&& kingRow == 0)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow+1][kingColumn-1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//block left
+					else if(kingColumn-threatToKing[0].column>1
+						&& kingRow==threatToKing[0].row && kingRow<2)
+					{
+						SelectCard(FindHighestRankCard());
+						field.grid[kingRow][kingColumn-1].PlayPiece();
+						array_delete(threatToKing,0,1);
+						Wait();
+						return;
+					}
+					//if there's no place to block then we're done
+					else{kingGoodThisTurn=true;}
+				}
+				//if our hand is empty we can draw
+				else{DrawCardFromDeck();}
+			}
 		}
+		else
+		{kingGoodThisTurn=true; Wait();}
+		
+		/*for(var i=0;i<array_length(field.whitePieces); i++)
+		{
+			moveableSpaces = field.whitePieces[i].GetMoveableSpaces();
+			for(var j=0; j<array_length(moveableSpaces); j++)
+			{
+				if(moveableSpaces[j].myPiece!=undefined
+					&&moveableSpaces[j].myPiece.object_index = oKingB)
+				{
+					if(threatToKing==undefined){threatToKing[0]=field.whitePieces[i];}
+					else{array_push(threatToKing,field.whitePieces[i]);}
+				}
+			}
+		}
+		
+		if(threatToKing==undefined){kingGoodThisTurn=true;}*/
+	}
+	else
+	{
+		show_debug_message("The AI has ended it's turn.");
+		field.ChangeTurns();
 	}
 	//3. Should we play more pieces on the board?
 		//I. does our current piece count meet expectation? (if not iterate until yes)
@@ -714,8 +855,6 @@ function FindMoveablePieces()
 
 function PlayCard()
 {
-	
-	
 	//the tiles that contain our pieces
 	var upgradableTiles = undefined;
 	//we only want to upgrade if the selected card has clubs or hearts
