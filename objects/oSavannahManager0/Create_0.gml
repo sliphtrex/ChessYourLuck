@@ -4,12 +4,17 @@ event_inherited();
 threatAssessmentDone=false;
 //pieces that can attack the king
 threatToKing=undefined;
-//checks that step 2 is complete each turn
+//checks that step 3 is complete each turn
 kingGoodThisTurn=false;
 //we use this to cycle through our options of how to protect the king
 kingsChoice=0;
+//holds a reference to the Queen of clubs once played
+queen=undefined;
+//checks that step 2 is complete each turn
+queenGoodThisTurn=false;
 
 global.opCards=global.SavannahsDecks[0];
+//opDeckSort = [0,10,12,8,16,18,19,11,14,6,3,4,7,4,13,1,17,5,9,15];
 Setup();
 
 //This will always be done after calling setup since these will always be diferent
@@ -54,13 +59,33 @@ function TurnManager()
 					return;
 				}
 				//B. combine cards if not
-				else {CheckValidComboPairs(10); CombineCardPair(); return;}
+				else {CombineCardPair(); return;}
 			}
 		}
 		//II.Draw a card
-		else{DrawCardFromDeck();}
+		else{DrawCardFromDeck(18);}
 	}
-	//2. Is our king protected from the player?
+	//2. Is the Queen healthy?
+	else if(queen!=undefined && !queenGoodThisTurn)
+	{
+		if(queen.Health<10 && (cardsDrawn<3||SuitInHand(1)!=undefined))
+		{
+			//I. If we have hearts
+			if(SuitInHand(1)!=undefined)
+			{
+				//i. Heal the queen
+				SelectCard(SuitInHand(1)[0]);
+				//we only want to heal the queen once per turn.
+				queenGoodThisTurn=true;
+				Wait(UpgradePiece);
+			}
+			//II. Draw a card
+			else{DrawCardFromDeck();}
+		}
+		else
+		{queenGoodThisTurn=true; Wait();}
+	}
+	//3. Is our king protected from the player?
 	else if(!kingGoodThisTurn)
 	{
 		show_debug_message("king is in danger");
@@ -158,7 +183,7 @@ function TurnManager()
 					show_debug_message("attacking with "+string(kingDefenders[0].object_index));
 					ourPiece = kingDefenders[0];
 					field.HighlightMoveableSpaces(ourPiece);
-					Wait(MovePiece);
+					Wait(AttackPiece);
 					return;
 				}
 				//B. repeat ^ until no more pieces
@@ -197,7 +222,8 @@ function TurnManager()
 						&& threatToKing[0].row==0)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow-1][kingColumn-1].PlayPiece();
+						field.grid[kingRow-1][kingColumn-1].PlayPiece(false);
+						//field.grid[kingRow-1][kingColumn-1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -208,7 +234,8 @@ function TurnManager()
 						&& kingRow==threatToKing[0].row)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow-1][kingColumn].PlayPiece();
+						field.grid[kingRow-1][kingColumn].PlayPiece(false);
+						//field.grid[kingRow-1][kingColumn].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -219,7 +246,8 @@ function TurnManager()
 						&& threatToKing[0].row == 0)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow-1][kingColumn+1].PlayPiece();
+						field.grid[kingRow-1][kingColumn+1].PlayPiece(false);
+						//field.grid[kingRow-1][kingColumn+1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -229,7 +257,8 @@ function TurnManager()
 						&& kingRow==threatToKing[0].row &&kingRow<2)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow][kingColumn+1].PlayPiece();
+						field.grid[kingRow][kingColumn+1].PlayPiece(false);
+						//field.grid[kingRow][kingColumn+1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -240,7 +269,8 @@ function TurnManager()
 						&& kingRow == 0)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow+1][kingColumn+1].PlayPiece();
+						field.grid[kingRow+1][kingColumn+1].PlayPiece(false);
+						//field.grid[kingRow+1][kingColumn+1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -251,7 +281,8 @@ function TurnManager()
 						&& kingRow==0)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow+1][kingColumn].PlayPiece();
+						field.grid[kingRow+1][kingColumn].PlayPiece(false);
+						//field.grid[kingRow+1][kingColumn].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -262,7 +293,8 @@ function TurnManager()
 						&& kingRow == 0)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow+1][kingColumn-1].PlayPiece();
+						field.grid[kingRow+1][kingColumn-1].PlayPiece(false);
+						//field.grid[kingRow+1][kingColumn-1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
@@ -272,50 +304,83 @@ function TurnManager()
 						&& kingRow==threatToKing[0].row && kingRow<2)
 					{
 						SelectCard(FindHighestRankCard());
-						field.grid[kingRow][kingColumn-1].PlayPiece();
+						field.grid[kingRow][kingColumn-1].PlayPiece(false);
+						//field.grid[kingRow][kingColumn-1].myPiece.hasMoved = true;
 						array_delete(threatToKing,0,1);
 						Wait();
 						return;
 					}
 					//if there's no place to block then we're done
-					else{kingGoodThisTurn=true;}
+					else{kingGoodThisTurn=true; kingsChoice=0; Wait();}
+					
+					show_debug_message(kingsChoice);
 				}
 				//if our hand is empty we can draw
 				else{DrawCardFromDeck();}
 			}
 		}
 		else
-		{kingGoodThisTurn=true; Wait();}
-		
-		/*for(var i=0;i<array_length(field.whitePieces); i++)
+		{kingGoodThisTurn=true; kingsChoice=0; Wait();}
+	}
+	//4. Move the pieces we can, prioritizing attacking.
+	moveablePieces = FindMoveablePieces();
+	if(kingGoodThisTurn && moveablePieces!=undefined)
+	{
+		//I. Can we attack the player's pieces?
+		for(var i=0;i<array_length(moveablePieces);i++)
 		{
-			moveableSpaces = field.whitePieces[i].GetMoveableSpaces();
-			for(var j=0; j<array_length(moveableSpaces); j++)
+			moveableSpaces = moveablePieces[i].GetMoveableSpaces();
+			for(var j=0; j<array_length(moveableSpaces);j++)
 			{
-				if(moveableSpaces[j].myPiece!=undefined
-					&&moveableSpaces[j].myPiece.object_index = oKingB)
+				if(moveableSpaces[j].myPiece!=undefined)
 				{
-					if(threatToKing==undefined){threatToKing[0]=field.whitePieces[i];}
-					else{array_push(threatToKing,field.whitePieces[i]);}
+					ourPiece = moveablePieces[i];
+					array_delete(moveablePieces,i,1);
+					break;
 				}
 			}
 		}
-		
-		if(threatToKing==undefined){kingGoodThisTurn=true;}*/
+		if(ourPiece!=undefined)
+		{
+			field.HighlightMoveableSpaces(ourPiece);
+			//i. which pieces are they able to attack?
+			//ii. which of these pieces has the highest priority to attack
+			show_debug_message("we're attacking");
+			NextMove = AttackPiece;
+			alarm[0] = waitTime;
+		}
+		//II. Move whatever pieces we can.
+		else if(array_length(moveablePieces)>0)
+		{
+			ourPiece = moveablePieces[0];
+			array_delete(moveablePieces,0,1);
+			field.HighlightMoveableSpaces(ourPiece);
+			//i. optimal piece placement
+			show_debug_message("we're moving");
+			NextMove = MovePiece;
+			alarm[0] = waitTime;
+		}
+		else
+		{
+			show_debug_message("No more pieces to move");
+			moveablePieces=undefined;
+			NextMove = undefined;
+			alarm[0] = waitTime;
+		}
 	}
-	else
+	else if(kingGoodThisTurn)
 	{
 		show_debug_message("The AI has ended it's turn.");
 		field.ChangeTurns();
 	}
-	//3. Should we play more pieces on the board?
+	//4. Should we play more pieces on the board?
+	/*if(array_length(field.blackPieces)<10)
+	{
 		//I. does our current piece count meet expectation? (if not iterate until yes)
+		//We'll set this to 10 to give us max 10 turns in our first game
 			//i. if we only have pawns combine them
 			//ii. play the highest ranked piece around the king
-	//4. Can we attack the player's pieces?
-		//I. what pieces can attack?
-		//II. which pieces are they able to attack?
-		//III. which of these pieces has the highest priority to attack
+	}*/
 	//5. Miscellaneous actions
 	/********************************************************
 	* We should weigh VI higher, but this can be random.
@@ -446,10 +511,10 @@ function TurnManager2()
 		}
 		
 		//weigh moving pieces
-		var movablePieces=0;
+		var moveablePieces=0;
 		for(var i=0; i<array_length(field.blackPieces);i++)
-		{if(!field.blackPieces[i].hasMoved){movablePieces++;}}
-		if(movablePieces>0)
+		{if(!field.blackPieces[i].hasMoved){moveablePieces++;}}
+		if(moveablePieces>0)
 		{
 			for(var i=0; i=array_length(comboPairs); i++)
 			{
@@ -603,7 +668,7 @@ function OptimalQueenPlacement()
 		else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
 		else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
 	}
-	
+	queen = field.blackPieces[array_length(field.blackPieces)-1];
 	Wait();
 }
 
@@ -694,6 +759,8 @@ function OptimalSupportPlacement()
 			else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
 			{grid[myTile.row][myTile.column+1].PlayPiece(false);}
 		}
+		
+		field.blackPieces[array_length(field.blackPieces)-1].hasMoved=true;
 	}
 	else
 	{
@@ -783,18 +850,21 @@ function SubOptimalHealth()
 	highestRankedPiece=undefined;
 	for(var i=0; i<array_length(field.blackPieces); i++)
 	{
-		if(field.blackPieces[i].object_index==oKingB
+		if(field.blackPieces[i].object_index==oQueenB
 			&&field.blackPieces[i].Health<10)
 		{highestRankedPiece = field.blackPieces[i];}
-		else if(highestRankedPiece.object_index!=oKingB
-			&&field.blackPieces[i].object_index==oQueenB
+		else if((highestRankedPiece!=undefined
+			&&highestRankedPiece.object_index!=oQueenB)
+			&&field.blackPieces[i].object_index==oKingB
 			&&field.blackPieces[i].Health<3)
 		{highestRankedPiece = field.blackPieces[i];}
-		else if(highestRankedPiece.object_index!=(oKingB||oQueenB)
+		else if(highestRankedPiece!=undefined
+			&&highestRankedPiece.object_index!=(oKingB||oQueenB)
 			&&field.blackPieces[i].object_index==oBishopB
 			&&field.blackPieces[i].Health<3)
 		{highestRankedPiece = field.blackPieces[i];}
-		else if(highestRankedPiece.object_index!=(oKingB||oQueenB||oBishopB)
+		else if(highestRankedPiece!=undefined
+			&&highestRankedPiece.object_index!=(oKingB||oQueenB||oBishopB)
 			&&field.blackPieces[i].object_index==oKnightB
 			&&field.blackPieces[i].Health<3)
 		{highestRankedPiece = field.blackPieces[i];}
@@ -828,6 +898,7 @@ function PickChoice(op)
 
 function CombineCardPair()
 {
+	CheckValidComboPairs(10);
 	var choice = irandom_range(0,array_length(comboPairs)-1);
 	global.opHand.c1 = global.opHand.cardsHeld[comboPairs[choice][0]];
 	global.opHand.c2 = global.opHand.cardsHeld[comboPairs[choice][1]];
@@ -838,6 +909,7 @@ function CombineCardPair()
 	alarm[0]=waitTime;
 }
 
+//for this match our king won't move
 function FindMoveablePieces()
 {
 	moveablePieces = undefined;
@@ -957,22 +1029,112 @@ function ChoosePieceToMove()
 	
 }
 
-//This function moves the piece prioritizing attacking over random movement
-function MovePiece()
+function AttackPiece()
 {
-	//check how many tiles we can move to
-	var moveables = undefined;
-	for(var i=0;i<5;i++)
+	moveables = ourPiece.GetMoveableSpaces();
+	if(moveables!=undefined)
 	{
-		for(var j=0;j<9;j++)
+		var pieces=undefined;
+		for(var i=0;i<array_length(moveables);i++)
 		{
-			if(field.grid[i][j].selectable)
+			if(moveables[i].myPiece!=undefined)
 			{
-				if(moveables==undefined){moveables[0]=field.grid[i][j];}
-				else{array_push(moveables,field.grid[i][j]);}
+				if(pieces==undefined){pieces[0]=moveables[i].myPiece;}
+				else{array_push(pieces,moveables[i].myPiece);}
 			}
 		}
+		if(pieces!=undefined)
+		{
+			var pieceToAttack = pieces[0];
+			if(array_length(pieces)>1)
+			{
+				for(var i=1;i<array_length(pieces);i++)
+				{
+					//choose the highest ranked piece
+					if(CompareRank(pieces[i],pieces[i-1])!=undefined)
+					{pieceToAttack=CompareRank(pieces[i],pieces[i-1]);}
+					//or choose the least healthy of the two equal ranked pieces
+					else
+					{
+						if(pieces[i].Health < pieceToAttack.Health)
+						{pieceToAttack=pieces[i];}
+					}
+				}
+			}
+			//...and attack
+			field.MovePieceToPlace(pieceToAttack.row,pieceToAttack.column);
+			show_debug_message(string(ourPiece.object_index)+" attacked ("+string(pieceToAttack.row)+","+string(pieceToAttack.column)+")");
+			
+			ourPiece=undefined;
+			NextMove = undefined;
+			alarm[0] = waitTime;
+		}
 	}
+}
+
+function MovePiece()
+{
+	switch(ourPiece.object_index)
+	{
+	case oPawnB:
+		if(ourPiece.row<4 && field.grid[ourPiece.row+1][ourPiece.column].myPiece==undefined)
+		{field.MovePieceToPlace(ourPiece.row+1,ourPiece.column);}
+		else{ourPiece.hasMoved = true; field.UnselectTiles();}
+		break;
+	case oKnightB: case oBishopB: case oQueenB:
+		//what spaces can we move to
+		var spaces = ourPiece.GetMoveableSpaces();
+		if(spaces!=undefined)
+		{
+			//highest point total decides which space we move to
+			pointTotals = array_create(array_length(spaces),0);
+			//determine point totals
+			for(var i=0;i<array_length(spaces);i++)
+			{
+				//what can we see from this potential spot
+				var potentialities = ourPiece.GetMoveableSpaces(spaces[i].row,spaces[i].column);
+				for(var j=0;j<array_length(potentialities);j++)
+				{
+					if(potentialities[j].myPiece!=undefined)
+					{
+						switch(potentialities[j].myPiece.object_index)
+						{
+						case oPawnW:	pointTotals[i]+=1; break;
+						case oKnightW:	pointTotals[i]+=2; break;
+						case oBishopW:	pointTotals[i]+=3; break;
+						case oRookW:	pointTotals[i]+=5; break;
+						case oQueenW:	pointTotals[i]+=9; break;
+						case oKingW:	pointTotals[i]+=15; break;
+						}
+					}
+				}
+				show_debug_message(string(pointTotals[i])+" at ["+string(spaces[i].row)+","+string(spaces[i].column)+"]");
+			}
+			var highestPointTotal=0;
+			//select the highest
+			for(var i=1;i<array_length(pointTotals);i++)
+			{
+				if(pointTotals[i]>pointTotals[highestPointTotal])
+				{highestPointTotal=i;}
+			}
+			//move there
+			field.MovePieceToPlace(spaces[highestPointTotal].row,spaces[highestPointTotal].column);
+		}
+		else
+		{ourPiece.hasMoved = true; field.UnselectTiles();}
+		break;
+	}
+	show_debug_message("We've moved?");
+	ourPiece=undefined;
+	NextMove=undefined;
+	alarm[0]=waitTime;
+}
+
+//This function moves the piece prioritizing attacking over random movement
+function MovePiece2()
+{
+	moveables = ourPiece.GetMoveableSpaces();
+	
 	//if we have spaces to move to...
 	if(moveables!=undefined)
 	{

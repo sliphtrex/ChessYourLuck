@@ -8,8 +8,8 @@ hasMoved = false;
 pragma=false;
 image_speed=0;
 
-//returns an array of oGridTiles that we can move to
-function GetMoveableSpaces()
+//returns an array of oGridTiles that we can move to from a given space[r][c]
+function GetMoveableSpaces(r=row,c=column)
 {
 	moveableSpaces = undefined;
 	grid = instance_find(oField,0).grid;
@@ -22,50 +22,50 @@ function GetMoveableSpaces()
 		
 		if(instance_find(oMatchManager,0).pStart != BorW)
 		{
-			if(row>0 && grid[row-1][column].myPiece==undefined)
+			if(r>0 && grid[r-1][c].myPiece==undefined)
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column];}
-				else{array_push(moveableSpaces,grid[row-1][column]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c];}
+				else{array_push(moveableSpaces,grid[r-1][c]);}
 			}
 		
-			if(row>0 && column>0 && grid[row-1][column-1].myPiece!=undefined
-				&& object_is_ancestor(grid[row-1][column-1].myPiece.object_index,
+			if(r>0 && c>0 && grid[r-1][c-1].myPiece!=undefined
+				&& object_is_ancestor(grid[r-1][c-1].myPiece.object_index,
 					(BorW) ? oChessPieceW : oChessPieceB))
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column-1];}
-				else{array_push(moveableSpaces,grid[row-1][column-1]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c-1];}
+				else{array_push(moveableSpaces,grid[r-1][c-1]);}
 			}
 		
-			if(row>0 && column<8 && grid[row-1][column+1].myPiece!=undefined
-				&& object_is_ancestor(grid[row-1][column+1].myPiece.object_index,
+			if(r>0 && c<8 && grid[r-1][c+1].myPiece!=undefined
+				&& object_is_ancestor(grid[r-1][c+1].myPiece.object_index,
 					(BorW) ? oChessPieceW : oChessPieceB))
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column+1];}
-				else{array_push(moveableSpaces,grid[row-1][column+1]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c+1];}
+				else{array_push(moveableSpaces,grid[r-1][c+1]);}
 			}
 		}
 		else
 		{
-			if(row<4 && grid[row+1][column].myPiece==undefined)
+			if(r<4 && grid[r+1][c].myPiece==undefined)
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column];}
-				else{array_push(moveableSpaces,grid[row+1][column]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c];}
+				else{array_push(moveableSpaces,grid[r+1][c]);}
 			}
 		
-			if(row<4 && column>0 && grid[row+1][column-1].myPiece!=undefined
-				&& object_is_ancestor(grid[row+1][column-1].myPiece.object_index,
+			if(r<4 && c>0 && grid[r+1][c-1].myPiece!=undefined
+				&& object_is_ancestor(grid[r+1][c-1].myPiece.object_index,
 					(BorW) ? oChessPieceW : oChessPieceB))
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column-1];}
-				else{array_push(moveableSpaces,grid[row+1][column-1]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c-1];}
+				else{array_push(moveableSpaces,grid[r+1][c-1]);}
 			}
 		
-			if(row<4 && column<8 && grid[row+1][column+1].myPiece!=undefined
-				&& object_is_ancestor(grid[row+1][column+1].myPiece.object_index,
+			if(r<4 && c<8 && grid[r+1][c+1].myPiece!=undefined
+				&& object_is_ancestor(grid[r+1][c+1].myPiece.object_index,
 					(BorW) ? oChessPieceW : oChessPieceB))
 			{
-				if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column+1];}
-				else{array_push(moveableSpaces,grid[row+1][column+1]);}
+				if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c+1];}
+				else{array_push(moveableSpaces,grid[r+1][c+1]);}
 			}
 		}
 	#endregion
@@ -74,61 +74,61 @@ function GetMoveableSpaces()
 	#region Knight Movement
 		var BorW = (object_index==oKnightB);
 		
-		if(row>1 && column>0 && (grid[row-2][column-1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-2][column-1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-2][column-1].myPiece.object_index,oChessPieceB))))
+		if(r>1 && c>0 && (grid[r-2][c-1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-2][c-1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-2][c-1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-2][column-1];}
-			else{array_push(moveableSpaces,grid[row-2][column-1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-2][c-1];}
+			else{array_push(moveableSpaces,grid[r-2][c-1]);}
 		}
-		if(row>1 && column<8 && (grid[row-2][column+1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-2][column+1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-2][column+1].myPiece.object_index,oChessPieceB))))
+		if(r>1 && c<8 && (grid[r-2][c+1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-2][c+1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-2][c+1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-2][column+1];}
-			else{array_push(moveableSpaces,grid[row-2][column+1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-2][c+1];}
+			else{array_push(moveableSpaces,grid[r-2][c+1]);}
 		}
-		if(row>0 && column>1 && (grid[row-1][column-2].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-1][column-2].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-1][column-2].myPiece.object_index,oChessPieceB))))
+		if(r>0 && c>1 && (grid[r-1][c-2].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-1][c-2].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-1][c-2].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column-2];}
-			else{array_push(moveableSpaces,grid[row-1][column-2]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c-2];}
+			else{array_push(moveableSpaces,grid[r-1][c-2]);}
 		}
-		if(row>0 && column<7 && (grid[row-1][column+2].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-1][column+2].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-1][column+2].myPiece.object_index,oChessPieceB))))
+		if(r>0 && c<7 && (grid[r-1][c+2].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-1][c+2].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-1][c+2].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column+2];}
-			else{array_push(moveableSpaces,grid[row-1][column+2]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c+2];}
+			else{array_push(moveableSpaces,grid[r-1][c+2]);}
 		}
-		if(row<4 && column>1 && (grid[row+1][column-2].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+1][column-2].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+1][column-2].myPiece.object_index,oChessPieceB))))
+		if(r<4 && c>1 && (grid[r+1][c-2].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+1][c-2].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+1][c-2].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column-2];}
-			else{array_push(moveableSpaces,grid[row+1][column-2]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c-2];}
+			else{array_push(moveableSpaces,grid[r+1][c-2]);}
 		}
-		if(row<4 && column<7 && (grid[row+1][column+2].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+1][column+2].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+1][column+2].myPiece.object_index,oChessPieceB))))
+		if(r<4 && c<7 && (grid[r+1][c+2].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+1][c+2].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+1][c+2].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column+2];}
-			else{array_push(moveableSpaces,grid[row+1][column+2]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c+2];}
+			else{array_push(moveableSpaces,grid[r+1][c+2]);}
 		}
-		if(row<3 && column>0 && (grid[row+2][column-1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+2][column-1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+2][column-1].myPiece.object_index,oChessPieceB))))
+		if(r<3 && c>0 && (grid[r+2][c-1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+2][c-1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+2][c-1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+2][column-1];}
-			else{array_push(moveableSpaces,grid[row+2][column-1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+2][c-1];}
+			else{array_push(moveableSpaces,grid[r+2][c-1]);}
 		}
-		if(row<3 && column<8 && (grid[row+2][column+1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+2][column+1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+2][column+1].myPiece.object_index,oChessPieceB))))
+		if(r<3 && c<8 && (grid[r+2][c+1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+2][c+1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+2][c+1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+2][column+1];}
-			else{array_push(moveableSpaces,grid[row+2][column+1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+2][c+1];}
+			else{array_push(moveableSpaces,grid[r+2][c+1]);}
 		}
 	#endregion
 	break;
@@ -137,8 +137,8 @@ function GetMoveableSpaces()
 		var BorW = (object_index==oBishopB);
 	
 		#region UpLeft Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -162,8 +162,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region UpRight Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -187,8 +187,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region DownLeft Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -212,8 +212,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region DownRight Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -245,8 +245,8 @@ function GetMoveableSpaces()
 		var BorW = (object_index==oRookB);
 		
 		#region Above Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -270,8 +270,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Below Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces below can be selected
 		while(search)
@@ -296,8 +296,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Left Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces left can be selected
 		while(search)
@@ -322,8 +322,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Right Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces right can be selected
 		while(search)
@@ -356,8 +356,8 @@ function GetMoveableSpaces()
 		var BorW = (object_index==oQueenB);
 		
 		#region Upward Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -381,8 +381,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region UpRight Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -406,8 +406,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Right Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces right can be selected
 		while(search)
@@ -432,8 +432,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region DownRight Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -457,8 +457,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Downward Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces below can be selected
 		while(search)
@@ -483,8 +483,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region DownLeft Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -508,8 +508,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region Left Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		//determine how many spaces left can be selected
 		while(search)
@@ -534,8 +534,8 @@ function GetMoveableSpaces()
 		}
 		#endregion
 		#region UpLeft Diagonal Movement
-		curRow=row;
-		curCol=column;
+		curRow=r;
+		curCol=c;
 		search = true;
 		while(search)
 		{
@@ -564,61 +564,61 @@ function GetMoveableSpaces()
 	#region King Movement
 		var BorW = (object_index==oKingB);
 		
-		if(row>0 && column>0 && (grid[row-1][column-1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-1][column-1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-1][column-1].myPiece.object_index,oChessPieceB))))
+		if(r>0 && c>0 && (grid[r-1][c-1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-1][c-1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-1][c-1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column-1];}
-			else{array_push(moveableSpaces,grid[row-1][column-1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c-1];}
+			else{array_push(moveableSpaces,grid[r-1][c-1]);}
 		}
-		if(row>0 && (grid[row-1][column].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-1][column].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-1][column].myPiece.object_index,oChessPieceB))))
+		if(r>0 && (grid[r-1][c].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-1][c].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-1][c].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column];}
-			else{array_push(moveableSpaces,grid[row-1][column]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c];}
+			else{array_push(moveableSpaces,grid[r-1][c]);}
 		}
-		if(row>0 && column<8 && (grid[row-1][column+1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row-1][column+1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row-1][column+1].myPiece.object_index,oChessPieceB))))
+		if(r>0 && c<8 && (grid[r-1][c+1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r-1][c+1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r-1][c+1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row-1][column+1];}
-			else{array_push(moveableSpaces,grid[row-1][column+1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r-1][c+1];}
+			else{array_push(moveableSpaces,grid[r-1][c+1]);}
 		}
-		if(column>0 && (grid[row][column-1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row][column-1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row][column-1].myPiece.object_index,oChessPieceB))))
+		if(c>0 && (grid[r][c-1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r][c-1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r][c-1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row][column-1];}
-			else{array_push(moveableSpaces,grid[row][column-1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r][c-1];}
+			else{array_push(moveableSpaces,grid[r][c-1]);}
 		}
-		if(column<8 && (grid[row][column+1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row][column+1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row][column+1].myPiece.object_index,oChessPieceB))))
+		if(c<8 && (grid[r][c+1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r][c+1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r][c+1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row][column+1];}
-			else{array_push(moveableSpaces,grid[row][column+1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r][c+1];}
+			else{array_push(moveableSpaces,grid[r][c+1]);}
 		}
-		if(row<4 && column>0 && (grid[row+1][column-1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+1][column-1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+1][column-1].myPiece.object_index,oChessPieceB))))
+		if(r<4 && c>0 && (grid[r+1][c-1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+1][c-1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+1][c-1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column-1];}
-			else{array_push(moveableSpaces,grid[row+1][column-1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c-1];}
+			else{array_push(moveableSpaces,grid[r+1][c-1]);}
 		}
-		if(row<4 && (grid[row+1][column].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+1][column].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+1][column].myPiece.object_index,oChessPieceB))))
+		if(r<4 && (grid[r+1][c].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+1][c].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+1][c].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column];}
-			else{array_push(moveableSpaces,grid[row+1][column]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c];}
+			else{array_push(moveableSpaces,grid[r+1][c]);}
 		}
-		if(row<4 && column<8 && (grid[row+1][column+1].myPiece==undefined
-			||((BorW) && object_is_ancestor(grid[row+1][column+1].myPiece.object_index,oChessPieceW))
-			||((!BorW) && object_is_ancestor(grid[row+1][column+1].myPiece.object_index,oChessPieceB))))
+		if(r<4 && c<8 && (grid[r+1][c+1].myPiece==undefined
+			||((BorW) && object_is_ancestor(grid[r+1][c+1].myPiece.object_index,oChessPieceW))
+			||((!BorW) && object_is_ancestor(grid[r+1][c+1].myPiece.object_index,oChessPieceB))))
 		{
-			if(moveableSpaces==undefined){moveableSpaces[0] = grid[row+1][column+1];}
-			else{array_push(moveableSpaces,grid[row+1][column+1]);}
+			if(moveableSpaces==undefined){moveableSpaces[0] = grid[r+1][c+1];}
+			else{array_push(moveableSpaces,grid[r+1][c+1]);}
 		}
 	#endregion
 	break;

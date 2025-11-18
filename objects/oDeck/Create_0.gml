@@ -3,7 +3,7 @@
 * This array tracks the randomly assigned order of cards for a given match.
 * For example: if the first int at deckOrder[0] = 39, we would get
 * global.PlayerCards[39] as the first card drawn in our deck. This would be the Ace
-* of Diamonds if the deck hasn't been modified by the player yet.
+* of Diamonds in a standard 52 card deck.
 *
 ***********************************************************************************/
 deckOrder[0] = 0;
@@ -99,14 +99,30 @@ function DeckSetup2()
 	alarm[0] = 1;
 }
 
-function DrawCard2()
+//can pass a card by reference number to search for that specific card
+function DrawCard(forcedCard=undefined)
 {
+	cardToDraw=curCard;
+	//if we find the desired card it'll draw it, otherwise we draw curCard
+	if(forcedCard!=undefined)
+	{
+		for(var i=curCard;i<array_length(deckOrder);i++)
+		{
+			if(forcedCard==deckOrder[i])
+			{
+				cardToDraw = i;
+				curCard--;
+				break;}
+		}
+	}
+	
 	if(curCard<deckSize)
 	{
 		if(firstDraw)
 		{
-			if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
-			else{CreateCard(global.opCards[deckOrder[curCard]]);}
+			if(pDeck){CreateCard(usableDeck[deckOrder[cardToDraw]]);}
+			else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
+			if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 			curCard++;
 			cardsDrawn++;
 			firstDraw=false;
@@ -115,8 +131,9 @@ function DrawCard2()
 		{
 			if(cardsDrawn<cardsPerTurn[instance_find(oMatchManager,0).Turn])
 			{
-				if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
-				else{CreateCard(global.opCards[deckOrder[curCard]]);}
+				if(pDeck){CreateCard(usableDeck[deckOrder[cardToDraw]]);}
+				else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
+				if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 				curCard++;
 				cardsDrawn++;
 			}
@@ -124,8 +141,9 @@ function DrawCard2()
 		}
 		else if(cardsDrawn<cardDrawMax && irandom_range(0,cardsLeft)>cardsDrawn)
 		{
-			if(pDeck){CreateCard(usableDeck[deckOrder[curCard]]);}
-			else{CreateCard(global.opCards[deckOrder[curCard]]);}
+			if(pDeck){CreateCard(usableDeck[deckOrder[cardToDraw]]);}
+			else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
+			if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 			curCard++;
 			cardsDrawn++;
 		}
@@ -261,7 +279,7 @@ function DeckSetup()
 	alarm[0] = 1;
 }
 
-function DrawCard()
+function DrawCardOLD1()
 {
 	if(curCard<52 && cardsDrawn<cardsPerTurn[instance_find(oMatchManager,0).Turn])
 	{

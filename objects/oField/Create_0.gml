@@ -157,7 +157,7 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			{
 				for(var i=0;i<array_length(instance_find(oMatchManager,0).threatToKing);i++)
 				{
-					if(instance_find(oMatchManager,0).threatToKing[i]==grid[row][column].mypiece)
+					if(instance_find(oMatchManager,0).threatToKing[i]==grid[row][column].myPiece)
 					{array_delete(instance_find(oMatchManager,0).threatToKing,i,1);break;}
 				}
 			}
@@ -235,7 +235,9 @@ function ChangeTurns()
 		
 		//reset the AI's decision streak and kingGoodThisTurn;
 		instance_find(oMatchManager,0).decisionsMade = 0;
+		instance_find(oMatchManager,0).cardsDrawn = 0;
 		instance_find(oMatchManager,0).kingGoodThisTurn = false;
+		instance_find(oMatchManager,0).threatAssessmentDone=false;
 		
 		if(instance_find(oMatchManager,0).pStart)
 		{

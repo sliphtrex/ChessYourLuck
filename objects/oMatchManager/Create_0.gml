@@ -13,6 +13,8 @@ ourCard=undefined;
 ourPiece=undefined;
 //a temp selected spAb
 ourSpAb=undefined;
+//# of cards drawn so far on a given turn
+cardsDrawn = 0;
 
 //the oHand objects for the player and opponent respectively
 global.pHand = undefined;
@@ -150,10 +152,11 @@ function Wait(nm=undefined)
 	alarm[0]=waitTime;
 }
 
-function DrawCardFromDeck()
+function DrawCardFromDeck(fc=undefined)
 {
+	cardsDrawn++;
 	var curTurn=pTurn;
-	global.opDeck.DrawCard2();
+	global.opDeck.DrawCard(fc);
 	show_debug_message("The AI drew a card. Cards drawn: "+string(global.opDeck.cardsDrawn));
 	//if we draw a joker our pTurn should be different than our curTurn
 	//this will end the state machine
@@ -239,4 +242,35 @@ function UpgradePiece()
 {
 	SubOptimalHealth().myTile.UpgradePiece(false);
 	Wait();
+}
+
+function FindRank(obj)
+{
+	rank = undefined;
+	switch(obj.object_index)
+	{
+	case oPawnB: case oPawnW:
+		rank=0; break;
+	case oKnightB: case oKnightW:
+		rank=1; break;
+	case oBishopB: case oBishopW:
+		rank=2; break;
+	case oRookB: case oRookW:
+		rank=3; break;
+	case oQueenB: case oQueenW:
+		rank=4; break;
+	case oKingB: case oKingW:
+		rank=5; break;
+	}
+	return rank;
+}
+
+function CompareRank(objA,objB)
+{
+	rankA=FindRank(objA);
+	rankB=FindRank(objB);
+	
+	if(rankA>rankB){return objA;}
+	else if(rankB>rankA){return objB;}
+	else {return undefined;}
 }
