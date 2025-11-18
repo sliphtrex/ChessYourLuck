@@ -120,8 +120,12 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 		grid[row][column].myPiece.y = grid[row][column].y;
 		
 		//if a pawn makes it to the other side, graduate it
-		if((grid[row][column].myPiece.object_index==oPawnB && row==0)
-			||(grid[row][column].myPiece.object_index==oPawnW && row==4))
+		if((instance_find(oMatchManager,0).pStart
+			&&(grid[row][column].myPiece.object_index==oPawnB && row==4)
+			||(grid[row][column].myPiece.object_index==oPawnW && row==0))
+			||(!instance_find(oMatchManager,0).pStart
+			&&(grid[row][column].myPiece.object_index==oPawnB && row==0)
+			||(grid[row][column].myPiece.object_index==oPawnW && row==4)))
 		{grid[row][column].myPiece.graduated=true;}
 		
 		//we can no longer move this piece on this turn

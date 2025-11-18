@@ -144,6 +144,8 @@ function GraduatePawn(obj,rank)
 	//save these so we can copy them to the new piece
 	var obja = obj.Attack;
 	var objh = obj.Health;
+	var objr = obj.row;
+	var objc = obj.column;
 	var objhm = obj.hasMoved;
 	var newPiece=undefined;
 	
@@ -176,8 +178,10 @@ function GraduatePawn(obj,rank)
 	
 	newPiece.Attack = obja;
 	newPiece.Health = objh;
-	newPiece.hasMoved = objhm;
+	newPiece.row = objr;
+	newPiece.column = objc;
 	newPiece.myTile = id;
+	newPiece.hasMoved = objhm;
 	#endregion
 	
 	//remove the old piece
