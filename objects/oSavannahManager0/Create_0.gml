@@ -856,7 +856,7 @@ function SubOptimalHealth()
 		else if((highestRankedPiece!=undefined
 			&&highestRankedPiece.object_index!=oQueenB)
 			&&field.blackPieces[i].object_index==oKingB
-			&&field.blackPieces[i].Health<3)
+			&&field.blackPieces[i].Health<5)
 		{highestRankedPiece = field.blackPieces[i];}
 		else if(highestRankedPiece!=undefined
 			&&highestRankedPiece.object_index!=(oKingB||oQueenB)
@@ -1272,6 +1272,66 @@ function ChooseSpAbSpace()
 	ourSpAb=undefined;
 	NextMove=undefined;
 	alarm[0] = waitTime;
+}
+
+//each Manager needs to have this for narrative consistency
+//Creates a text response when a piece is captured
+//obj = the pieces object_index
+function PieceDeathResponse(obj)
+{
+	switch(obj)
+	{
+	case oPawnB:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("How could you?",1,undefined,500,200);}
+	break;
+	case oKnightB:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("You'll pay for this.",1,undefined,500,200);}
+	break;
+	case oBishopB:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("Jerk! That was my bestie!",1,undefined,500,200);}
+	break;
+	case oQueenB:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("Okay, we're enemies now.",1,undefined,500,200);}
+	break;
+	case oPawnW:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("Bruh, are you trying?",1,undefined,500,200);}
+	break;
+	case oKnightW:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("Do better.",1,undefined,500,200);}
+	break;
+	case oBishopW:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("That's what you get.",1,undefined,500,200);}
+	break;
+	case oRookW:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("Hurts, doesn't it?",1,undefined,500,200);}
+	break;
+	case oQueenW:
+		with(instance_create_layer(x,y,"Text",oVoidTextBox))
+		{Add_Text("I'm the queen around here!",1,undefined,500,200);}
+	break;
+	case oKingW:
+		//here we only do this if the player has multiple kings
+		kingCount = 0;
+		for(var i=0;i<array_length(field.whitePieces);i++)
+		{if(field.whitePieces[i].object_index==oKingW){kingCount++;}}
+		if(kingCount>1)
+		{
+			with(instance_create_layer(x,y,"Text",oVoidTextBox))
+			{
+				Add_Text("Too easy...",1,undefined,500,200);
+				Add_Text("Wait, there's more?!",1,undefined,500,200);
+			}
+		}
+	break;
+	}
 }
 
 function MatchWin()

@@ -25,7 +25,7 @@ function SetupKing(BorW)
 	audio_play_sound(sndPlacePiece,1,false);
 	
 	myPiece.Attack = 1;
-	myPiece.Health = 5;
+	myPiece.Health = 3;
 	myPiece.row = row;
 	myPiece.column = column;
 	myPiece.myTile = id;

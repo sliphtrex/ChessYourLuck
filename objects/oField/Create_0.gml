@@ -150,6 +150,10 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 		//if they don't have health left destroy them and take their place
 		if(!grid[row][column].myPiece.pragma && newHealth<=0)
 		{
+			//send the piece we're destroying to our MatchManager to decide how to respond
+			instance_find(oMatchManager,0).PieceDeathResponse
+				(grid[row][column].myPiece.object_index);
+			
 			//we set the other piece's health to newHealth;
 			//it will handle deletion on it's own
 			grid[row][column].myPiece.Health = newHealth;
