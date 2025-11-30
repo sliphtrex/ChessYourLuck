@@ -55,6 +55,20 @@ function TurnManager()
 				{
 					//a. heal the piece
 					SelectCard(SuitInHand(1)[0]);
+					show_debug_message("Healing piece");
+					//response
+					var text="";
+					var dialogue=irandom(3);
+					if(dialogue==0){text="Peace.";}
+					else if(dialogue==1){text="Love.";}
+					else if(dialogue==2){text="Unity.";}
+					else{text="Respect.";}
+					
+					var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+					tb.text = text;
+					tb.bg = sprSavannahVoidTextBox;
+					tb.color = #8c52ff;
+					
 					Wait(UpgradePiece);
 					return;
 				}
@@ -77,6 +91,21 @@ function TurnManager()
 				SelectCard(SuitInHand(1)[0]);
 				//we only want to heal the queen once per turn.
 				queenGoodThisTurn=true;
+				
+				show_debug_message("Healing queen");
+				//response
+				var text="";
+				var dialogue=irandom(3);
+				if(dialogue==0){text="Peace.";}
+				else if(dialogue==1){text="Love.";}
+				else if(dialogue==2){text="Unity.";}
+				else{text="Respect.";}
+					
+				var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+				tb.text = text;
+				tb.bg = sprSavannahVoidTextBox;
+				tb.color = #8c52ff;
+				
 				Wait(UpgradePiece);
 			}
 			//II. Draw a card
@@ -373,7 +402,7 @@ function TurnManager()
 		show_debug_message("The AI has ended it's turn.");
 		field.ChangeTurns();
 	}
-	//4. Should we play more pieces on the board?
+	//5. Should we play more pieces on the board?
 	/*if(array_length(field.blackPieces)<10)
 	{
 		//I. does our current piece count meet expectation? (if not iterate until yes)
@@ -381,7 +410,7 @@ function TurnManager()
 			//i. if we only have pawns combine them
 			//ii. play the highest ranked piece around the king
 	}*/
-	//5. Miscellaneous actions
+	//6. Miscellaneous actions
 	/********************************************************
 	* We should weigh VI higher, but this can be random.
 	* Say a ratio of (1:1:1:3:1+n) where n is # of decisions
@@ -621,6 +650,7 @@ function CheckKingSurrounded()
 function OptimalQueenPlacement()
 {
 	var grid = field.grid;
+	var played = false;
 	
 	if(!CheckKingSurrounded())
 	{
@@ -631,44 +661,56 @@ function OptimalQueenPlacement()
 			{myTile = field.blackPieces[i].myTile; break;}}
 	
 		if(myTile.row<4 && grid[myTile.row+1][myTile.column].myPiece==undefined)
-		{grid[myTile.row+1][myTile.column].PlayPiece(false);}
+		{grid[myTile.row+1][myTile.column].PlayPiece(false); played=true;}
 		else if((myTile.row<4&&myTile.column<8 && grid[myTile.row+1][myTile.column+1].myPiece==undefined))
-		{grid[myTile.row+1][myTile.column+1].PlayPiece(false);}
+		{grid[myTile.row+1][myTile.column+1].PlayPiece(false); played=true;}
 		else if(myTile.row<4&&myTile.column>0 && grid[myTile.row+1][myTile.column-1].myPiece==undefined)
-		{grid[myTile.row+1][myTile.column-1].PlayPiece(false);}
+		{grid[myTile.row+1][myTile.column-1].PlayPiece(false); played=true;}
 		else if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
-		{grid[myTile.row][myTile.column-1].PlayPiece(false);}
+		{grid[myTile.row][myTile.column-1].PlayPiece(false); played=true;}
 		else if(myTile.column<8 && grid[myTile.row][myTile.column+1].myPiece==undefined)
-		{grid[myTile.row][myTile.column+1].PlayPiece(false);}
+		{grid[myTile.row][myTile.column+1].PlayPiece(false); played=true;}
 		else if(myTile.row>0 && grid[myTile.row-1][myTile.column].myPiece==undefined)
-		{grid[myTile.row-1][myTile.column].PlayPiece(false);}
+		{grid[myTile.row-1][myTile.column].PlayPiece(false); played=true;}
 		else if(myTile.row>0&&myTile.column<8 && grid[myTile.row-1][myTile.column+1].myPiece==undefined)
-		{grid[myTile.row-1][myTile.column+1].PlayPiece(false);}
+		{grid[myTile.row-1][myTile.column+1].PlayPiece(false); played=true;}
 		else if(myTile.row>0&&myTile.column>0 && grid[myTile.row-1][myTile.column-1].myPiece==undefined)
-		{grid[myTile.row-1][myTile.column-1].PlayPiece(false);}
+		{grid[myTile.row-1][myTile.column-1].PlayPiece(false); played=true;}
 	}
 	else
 	{
-		if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false);}
-		else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false);}
-		else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false);}
-		else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false);}
-		else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false);}
-		else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false);}
-		else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false);}
-		else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false);}
-		else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false);}
-		else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false);}
-		else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false);}
-		else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false);}
-		else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false);}
-		else if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false);}
-		else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false);}
-		else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false);}
-		else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false);}
-		else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false);}
+		if(grid[1][4].myPiece==undefined){grid[1][4].PlayPiece(false); played=true;}
+		else if(grid[0][4].myPiece==undefined){grid[0][4].PlayPiece(false); played=true;}
+		else if(grid[1][5].myPiece==undefined){grid[1][5].PlayPiece(false); played=true;}
+		else if(grid[0][5].myPiece==undefined){grid[0][5].PlayPiece(false); played=true;}
+		else if(grid[1][3].myPiece==undefined){grid[1][3].PlayPiece(false); played=true;}
+		else if(grid[0][3].myPiece==undefined){grid[0][3].PlayPiece(false); played=true;}
+		else if(grid[1][6].myPiece==undefined){grid[1][6].PlayPiece(false); played=true;}
+		else if(grid[0][6].myPiece==undefined){grid[0][6].PlayPiece(false); played=true;}
+		else if(grid[1][2].myPiece==undefined){grid[1][2].PlayPiece(false); played=true;}
+		else if(grid[0][2].myPiece==undefined){grid[0][2].PlayPiece(false); played=true;}
+		else if(grid[1][7].myPiece==undefined){grid[1][7].PlayPiece(false); played=true;}
+		else if(grid[1][1].myPiece==undefined){grid[1][1].PlayPiece(false); played=true;}
+		else if(grid[1][8].myPiece==undefined){grid[1][8].PlayPiece(false); played=true;}
+		else if(grid[1][0].myPiece==undefined){grid[1][0].PlayPiece(false); played=true;}
+		else if(grid[0][7].myPiece==undefined){grid[0][7].PlayPiece(false); played=true;}
+		else if(grid[0][1].myPiece==undefined){grid[0][1].PlayPiece(false); played=true;}
+		else if(grid[0][8].myPiece==undefined){grid[0][8].PlayPiece(false); played=true;}
+		else if(grid[0][0].myPiece==undefined){grid[0][0].PlayPiece(false); played=true;}
 	}
-	queen = field.blackPieces[array_length(field.blackPieces)-1];
+	if(played)
+	{
+		queen = field.blackPieces[array_length(field.blackPieces)-1];
+		
+		var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
+		tb.text = "The Queen has arrived!";
+		tb.type = 1;
+		tb.textDuration=3;
+		tb.x=(room_width/2)-((string_width("The Queen has arrived!")+tb.border)/2);
+		tb.y=200;
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
+	}
 	Wait();
 }
 
@@ -1282,40 +1324,62 @@ function PieceDeathResponse(obj)
 	switch(obj)
 	{
 	case oPawnB:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("How could you?",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "How could you?";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oKnightB:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("You'll pay for this.",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "You'll pay for this.";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oBishopB:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("Jerk! That was my bestie!",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "Jerk! That was my bestie!";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oQueenB:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("Okay, we're enemies now.",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
+		tb.text = "Okay, we're enemies now.";
+		tb.type = 1;
+		tb.textDuration=3;
+		tb.x=(room_width/2)-((string_width("Okay, we're enemies now.")+tb.border)/2);
+		tb.y=200;
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oPawnW:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("Bruh, are you trying?",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "Bruh, are you trying?";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oKnightW:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("Do better.",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "Do better.";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oBishopW:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("That's what you get.",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "That's what you get.";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oRookW:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("Hurts, doesn't it?",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "Hurts, doesn't it?";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oQueenW:
-		with(instance_create_layer(x,y,"Text",oVoidTextBox))
-		{Add_Text("I'm the queen around here!",1,undefined,500,200);}
+		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = "I'm the queen around here!";
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
 	break;
 	case oKingW:
 		//here we only do this if the player has multiple kings
@@ -1324,11 +1388,16 @@ function PieceDeathResponse(obj)
 		{if(field.whitePieces[i].object_index==oKingW){kingCount++;}}
 		if(kingCount>1)
 		{
-			with(instance_create_layer(x,y,"Text",oVoidTextBox))
-			{
-				Add_Text("Too easy...",1,undefined,500,200);
-				Add_Text("Wait, there's more?!",1,undefined,500,200);
-			}
+			var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+			tb.text = "Too easy...";
+			tb.bg = sprSavannahVoidTextBox;
+			tb.color = #8c52ff;
+			
+			tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+			tb.x += string_width("Too easy...")+(tb.border*3);
+			tb.text = "Wait, there's more?!";
+			tb.bg = sprSavannahVoidTextBox;
+			tb.color = #8c52ff;
 		}
 	break;
 	}

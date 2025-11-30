@@ -213,7 +213,8 @@ function CheckValidComboPairs(maxRank=14)
 	{
 		for(var j=1; i+j<array_length(global.opHand.cardsHeld); j++)
 		{
-			if(global.opHand.cardsHeld[i].pips+global.opHand.cardsHeld[i+j].pips<=maxRank)
+			if(global.opHand.cardsHeld[i].pips+global.opHand.cardsHeld[i+j].pips<=maxRank
+				&&global.opHand.cardsHeld[i].card<54&&global.opHand.cardsHeld[i+j].card<54)
 			{
 				if(comboPairs==undefined){comboPairs[0] = [i,i+j];}
 				else{array_push(comboPairs,[i,i+j]);}

@@ -73,39 +73,31 @@ function Setup()
 	{
 		switch(card)
 		{
-		case 52: //1oS
+		case 52: case 53: //1oC 1oH 
+			pips=1;
+			clubs=1;
+			hearts=1;
+		break;
+		case 54: //1oS
 			pips=1;
 			clubs=1;
 			hearts=1;
 			spades=1;
 		break;
-		case 53: //1oD
+		case 55: //1oD
 			pips=1;
 			clubs=1;
 			hearts=1;
 			diamonds=1;
 		break;
-		case 54: //13oS
-			var luck = irandom_range(0,12);
-			pips = (luck==0) ? 12 : 1;
-			clubs= (luck==1) ? 10 : 1;
-			hearts=(luck==2) ? 10 : 1;
-			spades=13;
-		break;
-		case 55: //13oD
-			pips=1;
-			clubs=1;
-			hearts=1;
-			diamonds=13;
-		break;
 		case 56: //15oS
-			pips=1;
+			pips=14;
 			clubs=1;
 			hearts=1;
 			spades=15;
 		break;
 		case 57: //15oD
-			pips=1;
+			pips=14;
 			clubs=1;
 			hearts=1;
 			diamonds=15;
@@ -170,10 +162,8 @@ function Setup()
 		case 49: sprite_index=spr_JoD; break;
 		case 50: sprite_index=spr_QoD; break;
 		case 51: sprite_index=spr_KoD; break;
-		case 52: sprite_index=spr_1oS; break;
-		case 53: sprite_index=spr_1oD; break;
-		case 54: sprite_index=spr_13oS; break;
-		case 55: sprite_index=spr_13oD; break;
+		case 54: sprite_index=spr_1oS; break;
+		case 55: sprite_index=spr_1oD; break;
 		case 56: sprite_index=spr_15oS; break;
 		case 57: sprite_index=spr_15oD; break;
 		default:

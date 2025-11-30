@@ -1,7 +1,7 @@
 accept_key = mouse_check_button_released(mb_left);
 
 textbox_x = camera_get_view_x(view_camera[0]);
-textbox_y = camera_get_view_y(view_camera[0])+600;
+textbox_y = camera_get_view_y(view_camera[0])+room_height-textbox_height;
 
 #region advancing pages
 if(setup && accept_key)

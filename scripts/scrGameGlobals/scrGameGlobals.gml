@@ -11,7 +11,7 @@
 * differently by the oDeck and oStandardCard objects when created in a match.
 *
 * 52 = 1 of clubs, 53 = 1 of hearts, 54 = 1 of Spades, 55 = 1 of Diamonds,
-* 56 = 13 of Spades, 57 = 13 of Diamonds, 58 = 15 of Spades, 59 = 15 of Diamonds,
+* 56 = 15 of Spades, 57 = 15 of Diamonds,
 * 60 = King of Queens, 61 = Queen of Kings, 62 = Wheel of Wonder, 64 = 2 of Dice,
 * 65 = Stock Card, 66 = Bond Card, 67 = Transfer of Power, 68 = King of Pong,
 * 69 = Department of Defense, 70 = Library Card
@@ -22,7 +22,8 @@
 global.PlayerCards = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
 	25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
 */
-global.PlayerCards = [14,15,16,17,18,14,15,16,17,18,14,15,16,17,18,14,15,16,17,18];
+//global.PlayerCards = [14,15,16,17,18,14,15,16,17,18,14,15,16,17,18,14,15,16,17,18];//Hearts
+global.PlayerCards = [40,41,42,43,44,40,41,42,43,44,40,41,42,43,44,40,41,42,43,44];//Diamonds
 	
 //this lists cards that the player owns but that aren't currently in their deck
 global.PlayerSpareCards = undefined;

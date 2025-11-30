@@ -9,7 +9,7 @@ spareCards[0]=undefined;
 //display our deck of cards on create
 for(var i=0;i<array_length(global.PlayerSpareCards);i++)
 {
-	spareCards[i] = instance_create_layer(1400,(170+(150*i)),"CardShop",oSpareCard);
+	spareCards[i] = instance_create_layer(room_width-100,(170+(150*i)),"CardShop",oSpareCard);
 	spareCards[i].card = global.PlayerSpareCards[i];
 	spareCards[i].Setup();
 }

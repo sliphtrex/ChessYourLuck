@@ -17,6 +17,9 @@ switch(global.ConvoChar)
 	case "Savannah":
 		Savannah();
 		break;
+	case "Adam":
+		Adam();
+		break;
 	default:
 	break;
 }
@@ -41,6 +44,36 @@ function Savannah()
 		spAb1 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,150,"CardShop",oPreviewSpAb);
 		spAb1.specialAbility = 34;
 		spAb1.Setup();
+		//set up card preview here
+		cardPreviewer = instance_create_layer(camera_get_view_x(view_camera[0]),930,"CardShop",oCardScroller);
+		cardPreviewer.previewDeck = global.SavannahsDecks[global.SavannahMatchNum];
+		cardPreviewer.Setup();
+	break;
+	}
+}
+#endregion
+
+#region Adam's match previews
+function Adam()
+{
+	switch(global.AdamMatchNum)
+	{
+	case 0:
+		//set up our text here
+		call = "It's me Adam?";
+		response1 = "Yes, you're Adam";
+		response2 = "No, you're full of shit!";
+		//set up the preview SpAbs here
+		spAb2 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,450,"CardShop",oPreviewSpAb);
+		spAb2.specialAbility = 18;
+		spAb2.Setup();
+		spAb3 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,750,"CardShop",oPreviewSpAb);
+		spAb3.specialAbility = 2;
+		spAb3.Setup();
+		spAb1 = instance_create_layer(camera_get_view_x(view_camera[0])+1770,150,"CardShop",oPreviewSpAb);
+		spAb1.specialAbility = 34;
+		spAb1.Setup();
+		//set up card preview here
 		cardPreviewer = instance_create_layer(camera_get_view_x(view_camera[0]),930,"CardShop",oCardScroller);
 		cardPreviewer.previewDeck = global.SavannahsDecks[global.SavannahMatchNum];
 		cardPreviewer.Setup();

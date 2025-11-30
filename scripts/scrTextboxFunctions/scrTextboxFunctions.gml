@@ -1,10 +1,10 @@
 function DefaultCafeTextBox()
 {
-	line_break_pos[0,page_number]=1600;
+	line_break_pos[0,page_number]=1920;
 	line_break_num[page_number]=0;
 	line_break_offset[page_number]=0;
 	
-	textbox_width[page_number] = 1600;
+	textbox_width[page_number] = 1920;
 	line_width[page_number] = textbox_width[page_number]-(border*2);
 	textbox_spr[page_number] = sprRKCTextBox;
 	//character portraits should be bottom left aligned
@@ -33,7 +33,7 @@ function DefaultVoidTextBox()
 //and it will take care of the rest.
 function StartConvo()
 {
-	with(instance_create_layer(1920*global.curTable,780,"Text",oRKCTextBox))
+	with(instance_create_layer(1920*global.curTable,960,"Text",oRKCTextBox))
 	{
 		CharacterText();
 	}

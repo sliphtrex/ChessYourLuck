@@ -127,6 +127,19 @@ function SavannahBadChoice()
 }
 #endregion
 
+#region
+function AdamText()
+{
+	switch(global.AdamConvos)
+	{
+	case 0:
+		Add_Text("It's me Adam.");
+		NextMove = PreviewPlayer();
+	break;
+	}
+}
+#endregion
+
 //the oMatchPreviewer object will set up the appropriate preview for a given match using
 //the MatchPreview variable to determine which character we're currently talking to and
 //that player's Match number to determine what their deck and abilities will look like.

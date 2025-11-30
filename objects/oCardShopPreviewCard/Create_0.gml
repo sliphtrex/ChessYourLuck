@@ -63,10 +63,8 @@ function SetupCard()
 		case 49: sprite_index=spr_JoD; break;
 		case 50: sprite_index=spr_QoD; break;
 		case 51: sprite_index=spr_KoD; break;
-		case 52: sprite_index=spr_1oS; break;
-		case 53: sprite_index=spr_1oD; break;
-		case 54: sprite_index=spr_13oS; break;
-		case 55: sprite_index=spr_13oD; break;
+		case 54: sprite_index=spr_1oS; break;
+		case 55: sprite_index=spr_1oD; break;
 		case 56: sprite_index=spr_15oS; break;
 		case 57: sprite_index=spr_15oD; break;
 		default: instance_destroy(); break;

@@ -1,6 +1,6 @@
 {
   "$GMSprite":"",
-  "%Name":"sprVoidTextBox",
+  "%Name":"sprSavannahVoidTextBox",
   "bboxMode":0,
   "bbox_bottom":63,
   "bbox_left":0,
@@ -13,7 +13,6 @@
   "For3D":false,
   "frames":[
     {"$GMSpriteFrame":"","%Name":"7ef4aa38-9bbd-422b-a205-ae95ab276fa5","name":"7ef4aa38-9bbd-422b-a205-ae95ab276fa5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"aa6d656c-534d-4a80-a306-6dc876cfb0e8","name":"aa6d656c-534d-4a80-a306-6dc876cfb0e8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -22,7 +21,7 @@
   "layers":[
     {"$GMImageLayer":"","%Name":"72aafc45-0724-4081-9608-0b2231457a6c","blendMode":0,"displayName":"default","isLocked":false,"name":"72aafc45-0724-4081-9608-0b2231457a6c","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name":"sprVoidTextBox",
+  "name":"sprSavannahVoidTextBox",
   "nineSlice":{
     "$GMNineSliceData":"",
     "bottom":9,
@@ -53,7 +52,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"v1",
-    "%Name":"sprVoidTextBox",
+    "%Name":"sprSavannahVoidTextBox",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -69,7 +68,7 @@
     },
     "eventStubScript":null,
     "eventToFunction":{},
-    "length":2.0,
+    "length":1.0,
     "lockOrigin":false,
     "moments":{
       "$KeyframeStore<MomentsEventKeyframe>":"",
@@ -77,7 +76,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"sprVoidTextBox",
+    "name":"sprSavannahVoidTextBox",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,
@@ -91,11 +90,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7ef4aa38-9bbd-422b-a205-ae95ab276fa5","path":"sprites/sprVoidTextBox/sprVoidTextBox.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"7ef4aa38-9bbd-422b-a205-ae95ab276fa5","path":"sprites/sprSavannahVoidTextBox/sprSavannahVoidTextBox.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
               },"Disabled":false,"id":"29b7da55-e49a-4a22-a2e0-fb99bed6f5f0","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"aa6d656c-534d-4a80-a306-6dc876cfb0e8","path":"sprites/sprVoidTextBox/sprVoidTextBox.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"5680debd-369e-420d-84fe-29bfdf2cf703","IsCreationKey":false,"Key":1.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
