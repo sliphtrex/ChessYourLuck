@@ -6,7 +6,6 @@ if(global.curTable==undefined)
 }
 else if(global.postMatch)
 {
-	show_debug_message("was the player defeated: "+string(global.playerDefeated));
 	if(global.playerDefeated)
 	{
 		switch(global.ConvoChar)

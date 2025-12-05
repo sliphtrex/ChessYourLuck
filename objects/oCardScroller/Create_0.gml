@@ -15,9 +15,6 @@ cardProfs=undefined;
 function Setup()
 {
 	curX=camera_get_view_x(view_camera[0]);
-	show_debug_message(curX);
-	show_debug_message("preview deck: "+string(previewDeck));
-	show_debug_message("cardprofs: "+string(cardProfs));
 	
 	for(var i=0;i<array_length(previewDeck);i++)
 	{
@@ -26,9 +23,6 @@ function Setup()
 		cardProfs[i].deckPos=i;
 		cardProfs[i].SetupCard();
 	}
-	
-	show_debug_message("preview deck: "+string(previewDeck));
-	show_debug_message("cardprofs: "+string(cardProfs));
 }
 
 function Close()

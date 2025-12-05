@@ -14,7 +14,6 @@ if(shop && instance_find(oShopGenerator,0).heldSpAb!=undefined)
 		&& hSpAb != instance_find(oShopGenerator,0).pSpAb1.specialAbility
 		&& hSpAb != instance_find(oShopGenerator,0).pSpAb3.specialAbility)
 	{
-		show_debug_message(instance_find(oShopGenerator,0).heldSpAb.spAb);
 		specialAbility = hSpAb;
 		global.PlayerSpecialAbility2 = specialAbility;
 	}

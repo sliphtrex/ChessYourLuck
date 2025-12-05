@@ -103,7 +103,6 @@ function SavannahText()
 //handles good player responses for Savannah
 function SavannahGoodChoice()
 {
-	show_debug_message("Good Choice");
 	switch(global.SavannahConvos)
 	{
 		case 0:
@@ -116,7 +115,6 @@ function SavannahGoodChoice()
 //handles bad player responses for Savannah
 function SavannahBadChoice()
 {
-	show_debug_message("Bad Choice");
 	switch(global.SavannahConvos)
 	{
 		case 0:

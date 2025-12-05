@@ -7,6 +7,10 @@ if(type==0)
 else if(type==1)
 {
 	if(curTimer==1){totalTime=textDuration*room_speed;}
-	if(curTimer==totalTime){instance_destroy();}
+	if(curTimer==totalTime)
+	{
+		if(NextMove!=undefined){NextMove();}
+		instance_destroy();
+	}
 	curTimer++;
 }

@@ -67,7 +67,7 @@ function Setup()
 {
 	#region player setup
 	//setup player Hand
-	global.pHand = instance_create_layer(800,800,"CardObjects",oHand);
+	global.pHand = instance_create_layer(room_width/2,800,"CardObjects",oHand);
 	global.pHand.pHand=true;
 	//setup player Deck
 	global.pDeck = instance_create_layer(292,800,"CardObjects",oDeck);
@@ -122,7 +122,7 @@ function Setup()
 	//setup opponent's discard pile
 	global.opDiscard = instance_create_layer(292,95,"CardObjects",oDiscardPile); 
 	//setup opponent's side border
-	opBorderDepth = instance_create_layer(1400,0,"UILayer",oVoidBorder).depth;
+	opBorderDepth = instance_create_layer(room_width-sprite_get_width(sprVoidBorders),0,"UILayer",oVoidBorder).depth;
 	//setup opponent's diamond counter
 	global.opDiamondCounter = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
 	global.opDiamondCounter.pCounter=false;
@@ -157,7 +157,6 @@ function DrawCardFromDeck(fc=undefined)
 	cardsDrawn++;
 	var curTurn=pTurn;
 	global.opDeck.DrawCard(fc);
-	show_debug_message("The AI drew a card. Cards drawn: "+string(global.opDeck.cardsDrawn));
 	//if we draw a joker our pTurn should be different than our curTurn
 	//this will end the state machine
 	if(curTurn==pTurn){alarm[0]=waitTime;}
@@ -200,7 +199,6 @@ function SelectCard(c=undefined)
 	global.opHand.cardSelected = ourCard;
 	ourCard.selected=true;
 	field.CardSelected();
-	show_debug_message("The AI chose the "+string(ourCard.pips)
 		+" of "+string(ourCard.suit));
 }
 
@@ -237,6 +235,23 @@ function SuitInHand(suit)
 		}
 	}
 	return hearts;
+}
+
+//returns true and sets ourCard to the given card if found
+function FindCard(card)
+{
+	for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
+	{
+		if(global.opHand.cardsHeld[i].card==card)
+		{
+			ourCard = global.opHand.cardsHeld[i];
+			global.opHand.cardSelected = ourCard;
+			ourCard.selected=true;
+			field.CardSelected();
+			return true;
+		}
+	}
+	return false;
 }
 
 function UpgradePiece()

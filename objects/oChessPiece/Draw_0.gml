@@ -7,11 +7,9 @@ if(Health<=0)
 	{
 		Health=1;
 		pragma=false;
-		show_debug_message("pragma used");
 	}
 	else
 	{
-		show_debug_message("We're destroying the piece");
 		instance_find(oField,0).RemovePiece(id);
 		if(myTile.myPiece==id){myTile.myPiece = undefined;}
 		instance_destroy();

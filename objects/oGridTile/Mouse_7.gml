@@ -17,7 +17,6 @@ if(instance_find(oMatchManager,0).pTurn && CheckForIcons())
 			switch(ability.specialAbility)
 			{
 				case 0:
-					show_debug_message(string("(")+string(x)+","+string(y)+")");
 					ability.UseAbility(id);
 				break;
 				case 14: case 34:

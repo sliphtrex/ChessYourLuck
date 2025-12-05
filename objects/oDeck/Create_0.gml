@@ -99,7 +99,7 @@ function DeckSetup2()
 	alarm[0] = 1;
 }
 
-//can pass a card by reference number to search for that specific card
+//can pass a card[] by reference number to search for that specific card
 function DrawCard(forcedCard=undefined)
 {
 	cardToDraw=curCard;
@@ -108,11 +108,15 @@ function DrawCard(forcedCard=undefined)
 	{
 		for(var i=curCard;i<array_length(deckOrder);i++)
 		{
-			if(forcedCard==deckOrder[i])
+			for(var j=0;j<array_length(forcedCard);j++)
 			{
-				cardToDraw = i;
-				curCard--;
-				break;}
+				if((!pDeck&&global.opCards[deckOrder[i]]==forcedCard[j]))
+				{
+					cardToDraw = i;
+					curCard--;
+					break;
+				}
+			}
 		}
 	}
 	

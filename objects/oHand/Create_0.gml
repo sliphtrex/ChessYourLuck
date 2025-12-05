@@ -11,8 +11,8 @@ cardSelected = undefined;
 //Adds cards to the 5 card hand and removes the oldest one if too many.
 function AddToHand(obj)
 {
-	if(pHand){handX=590; handY=800;}
-	else{handX=1010;handY=95;}
+	if(pHand){handX=(room_width/2)-210; handY=room_height-100;}
+	else{handX=(room_width/2)+210;handY=100;}
 	
 	array_push(cardsHeld,obj);
 	cardsHeld[array_length(cardsHeld)-1].y=handY;

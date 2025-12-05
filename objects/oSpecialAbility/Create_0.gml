@@ -77,7 +77,6 @@ function UseAbility(obj=undefined)
 				obj.myPiece.row = obj.row; obj.myPiece.column = obj.column;
 				obj.myPiece.myTile = obj.id;
 				instance_find(oField,0).AddPiece(obj.myPiece);
-				show_debug_message(string("(")+string(obj.myPiece.x)+","+string(obj.myPiece.y)+")");
 				
 				used = true;
 			}
@@ -134,12 +133,11 @@ function UseAbility(obj=undefined)
 			{
 				if(obj.pragma)
 				{
-					show_debug_message("This piece already has pragma active.");
+					//use later for player feedback
 				}
 				else
 				{
 					obj.pragma = true;
-					show_debug_message(obj.pragma);
 					used = true;
 				}
 			}

@@ -73,7 +73,7 @@ function Setup()
 	{
 		switch(card)
 		{
-		case 52: case 53: //1oC 1oH 
+		case 52: case 53: //52 = 1oC, 53 = 1oH 
 			pips=1;
 			clubs=1;
 			hearts=1;

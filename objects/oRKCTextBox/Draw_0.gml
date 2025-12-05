@@ -14,7 +14,6 @@ if(setup && accept_key)
 			{page++; draw_char=0;}
 			else
 			{
-				show_debug_message(option_number);
 				if(option_number==0 || option_pos!=-1)
 				{
 					//Note: we must invoke both NextMove and optionLinkID[option_pos].

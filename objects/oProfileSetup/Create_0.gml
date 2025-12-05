@@ -7,7 +7,6 @@ with(instance_create_layer(x,y,"Text",oVoidTextBox))
 
 function CharacterSelect()
 {
-	show_debug_message("in CharacterSelect");
 	charSelected=false;
 	
 	charIcons[0] = instance_create_layer(x,y,"UILayer",oCharIcon);
@@ -35,7 +34,6 @@ function CharacterSelect()
 
 function CharacterSelectedCheck()
 {
-	show_debug_message(global.PlayerIcon);
 	if(global.PlayerIcon==0||global.PlayerIcon==1||global.PlayerIcon==2||global.PlayerIcon==3){return true;}
 	else{return false;}
 }

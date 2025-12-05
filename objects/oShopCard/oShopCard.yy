@@ -6,8 +6,8 @@
   "name":"oShopCard",
   "overriddenProperties":[],
   "parent":{
-    "name":"Card Objects",
-    "path":"folders/Objects/Card Objects/Card Objects.yy",
+    "name":"Card Related Objects",
+    "path":"folders/Objects/Card Objects/Card Related Objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

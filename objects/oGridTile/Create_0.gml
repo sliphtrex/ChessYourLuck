@@ -82,16 +82,11 @@ function PlayPiece(_playerPiece)
 	instance_find(oField,0).AddPiece(myPiece);
 	
 	if(ourHand.cardSelected.spades>0)
-	{	
-		instance_find(oParticleManager,0).SpadeParticles(ourHand.cardSelected.spades,x,y,_playerPiece);
-	}
-	
+	{instance_find(oParticleManager,0).SpadeParticles(ourHand.cardSelected.spades,x,y,_playerPiece);}
+
 	if(ourHand.cardSelected.diamonds>0)
-	{
-		instance_find(oParticleManager,0).DiamondParticles(ourHand.cardSelected.diamonds,x,y,_playerPiece);
-		//if(_playerPiece){global.pDiamonds += ourHand.cardSelected.diamonds;}
-		//else{instance_find(oMatchManager,0).opDiamonds += ourHand.cardSelected.diamonds;}
-	}
+	{instance_find(oParticleManager,0).DiamondParticles(ourHand.cardSelected.diamonds,x,y,_playerPiece);}
+
 	//destroy the associated card
 	ourHand.FindAndDestroy(ourHand.cardSelected);
 	ourHand.cardSelected = undefined;

@@ -185,7 +185,6 @@ function CheckFor10Amalgam()
 	var cardInHand=false;
 	for(var i=0;i<array_length(global.pHand.cardsHeld);i++)
 	{
-		show_debug_message("Card "+string(i)+" clubs: " + string(global.pHand.cardsHeld[i].clubs));
 		if(global.pHand.cardsHeld[i].pips==10
 			&&global.pHand.cardsHeld[i].clubs==2
 			&&global.pHand.cardsHeld[i].hearts==8)

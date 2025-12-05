@@ -18,8 +18,10 @@ function SetupBoard()
 		for(var j=0;j<9;j++)
 		{
 			grid[i][j] = instance_create_layer(
-			480+(j*80),
-			290+(i*80),
+			(room_width/2)-(sprite_get_width(spr_GridTile)*4)
+				+(j*sprite_get_width(spr_GridTile)),
+			(room_height/2)-(sprite_get_height(spr_GridTile)*2)
+				+(i*sprite_get_height(spr_GridTile)),
 			"BoardLayer", oGridTile);
 			grid[i][j].row = i;
 			grid[i][j].column = j;
@@ -119,15 +121,6 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 		grid[row][column].myPiece.x = grid[row][column].x;
 		grid[row][column].myPiece.y = grid[row][column].y;
 		
-		//if a pawn makes it to the other side, graduate it
-		if((instance_find(oMatchManager,0).pStart
-			&&(grid[row][column].myPiece.object_index==oPawnB && row==4)
-			||(grid[row][column].myPiece.object_index==oPawnW && row==0))
-			||(!instance_find(oMatchManager,0).pStart
-			&&(grid[row][column].myPiece.object_index==oPawnB && row==0)
-			||(grid[row][column].myPiece.object_index==oPawnW && row==4)))
-		{grid[row][column].myPiece.graduated=true;}
-		
 		//we can no longer move this piece on this turn
 		grid[row][column].myPiece.hasMoved = true;
 		
@@ -141,9 +134,6 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			- grid[rs][cs].myPiece.Attack;
 		
 		var pragma = (grid[row][column].myPiece.pragma) ? "active." : "not active.";
-		show_debug_message(string(grid[row][column].myPiece.object_index)+" has "
-			+string(newHealth)+" health. Pragma is: "
-			+ pragma);
 		
 		audio_play_sound(sndAttackPiece,1,false);
 		
@@ -187,7 +177,6 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			
 			//we can no longer move this piece on this turn
 			grid[row][column].myPiece.hasMoved = true;
-			show_debug_message("We attacked");
 		}
 		else
 		{
@@ -195,6 +184,16 @@ function MovePieceToPlace(row,column,rs=rowSelected,cs=colSelected)
 			grid[rs][cs].myPiece.hasMoved = true;
 		}
 	}
+	
+	//if a pawn makes it to the other side, graduate it
+	if((instance_find(oMatchManager,0).pStart
+		&&(grid[row][column].myPiece.object_index==oPawnB && row==4)
+		||(grid[row][column].myPiece.object_index==oPawnW && row==0))
+		||(!instance_find(oMatchManager,0).pStart
+		&&(grid[row][column].myPiece.object_index==oPawnB && row==0)
+		||(grid[row][column].myPiece.object_index==oPawnW && row==4)))
+	{grid[row][column].myPiece.graduated=true;}
+	
 	UnselectTiles();
 }
 
@@ -241,12 +240,6 @@ function ChangeTurns()
 		
 		global.pDeck.firstDraw=true;
 		
-		//reset the AI's decision streak and kingGoodThisTurn;
-		instance_find(oMatchManager,0).decisionsMade = 0;
-		instance_find(oMatchManager,0).cardsDrawn = 0;
-		instance_find(oMatchManager,0).kingGoodThisTurn = false;
-		instance_find(oMatchManager,0).threatAssessmentDone=false;
-		
 		if(instance_find(oMatchManager,0).pStart)
 		{
 			for(var i=0;i<array_length(whitePieces);i++)
@@ -264,6 +257,11 @@ function ChangeTurns()
 	}
 	else
 	{
+		//reset the AI's decision streak and kingGoodThisTurn;
+		instance_find(oMatchManager,0).decisionsMade = 0;
+		instance_find(oMatchManager,0).cardsDrawn = 0;
+		instance_find(oMatchManager,0).kingGoodThisTurn = false;
+		instance_find(oMatchManager,0).threatAssessmentDone=false;
 		global.opDeck.firstDraw=true;
 		
 		if(!instance_find(oMatchManager,0).pStart)
@@ -371,13 +369,11 @@ function CheckForKings()
 		{
 			if(blackPieces[i].object_index==oKingB){kingCountB++;}
 		}
-		show_debug_message("Checking for kings\nWhite King Count: "+string(kingCountW)
-			+"\nBlack King Count: "+string(kingCountB));
 		if((!instance_find(oMatchManager,0).pStart && kingCountW==0&&kingCountB>0)
 			||(instance_find(oMatchManager,0).pStart && kingCountB==0&&kingCountW>0))
-		{instance_find(oMatchManager,0).MatchWin();show_debug_message("We won.");}
+		{instance_find(oMatchManager,0).MatchWin();}
 		else if((instance_find(oMatchManager,0).pStart && kingCountW==0&&kingCountB>0)
 			||(!instance_find(oMatchManager,0).pStart && kingCountB==0&&kingCountW>0))
-		{instance_find(oMatchManager,0).MatchDefeat();show_debug_message("we lost.");}
+		{instance_find(oMatchManager,0).MatchDefeat();}
 	}
 }

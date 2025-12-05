@@ -47,7 +47,6 @@ if(pSpadePips>0)
 	{
 		var pip = instance_create_layer(px,py,"UILayer",oSpadePipParticle);
 		pip.Setup(true, curPSpip);
-		show_debug_message("curPSpip = "+string(curPSpip));
 		switch(curPSpip)
 		{
 			case 2: audio_play_sound(sndSP2,1,false); break;
@@ -65,7 +64,7 @@ if(pSpadePips>0)
 
 if(opSpadePips>0)
 {
-	if(curOPDFrames==0)
+	if(curOPSFrames==0)
 	{
 		var pip = instance_create_layer(opx,opy,"UILayer",oSpadePipParticle);
 		pip.Setup(false, curOPSpip);
@@ -77,7 +76,7 @@ if(opSpadePips>0)
 			default: audio_play_sound(sndSP5,1,false); break;
 		}
 		curOPSpip++;
-		curOPDFrames=spadeOffset;
+		curOPSFrames=spadeOffset;
 		opSpadePips--;
 	}
 	curOPSFrames--;

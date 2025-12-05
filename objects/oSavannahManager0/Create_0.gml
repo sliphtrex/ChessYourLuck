@@ -14,7 +14,6 @@ queen=undefined;
 queenGoodThisTurn=false;
 
 global.opCards=global.SavannahsDecks[0];
-//opDeckSort = [0,10,12,8,16,18,19,11,14,6,3,4,7,4,13,1,17,5,9,15];
 Setup();
 
 //This will always be done after calling setup since these will always be diferent
@@ -55,7 +54,6 @@ function TurnManager()
 				{
 					//a. heal the piece
 					SelectCard(SuitInHand(1)[0]);
-					show_debug_message("Healing piece");
 					//response
 					var text="";
 					var dialogue=irandom(3);
@@ -75,9 +73,16 @@ function TurnManager()
 				//B. combine cards if not
 				else {CombineCardPair(); return;}
 			}
+			//iii. otherwise, we'll play our highest ranked piece
+			else
+			{
+				SelectCard(FindHighestRankCard());
+				Wait(OptimalSupportPlacement);
+				return;
+			}
 		}
 		//II.Draw a card
-		else{DrawCardFromDeck(18);}
+		else{DrawCardFromDeck([11]);}
 	}
 	//2. Is the Queen healthy?
 	else if(queen!=undefined && !queenGoodThisTurn)
@@ -92,7 +97,6 @@ function TurnManager()
 				//we only want to heal the queen once per turn.
 				queenGoodThisTurn=true;
 				
-				show_debug_message("Healing queen");
 				//response
 				var text="";
 				var dialogue=irandom(3);
@@ -117,11 +121,9 @@ function TurnManager()
 	//3. Is our king protected from the player?
 	else if(!kingGoodThisTurn)
 	{
-		show_debug_message("king is in danger");
 		//I. does the king have enough pieces surrounding it?
 		if(!CheckKingSurrounded())
 		{
-			show_debug_message("surrounding the king");
 			//i. start by playing the Queen of Clubs if we have it
 			if(CheckForQueenInHand()){return;}
 			//ii. otherwise we'll try to play a different card
@@ -169,18 +171,11 @@ function TurnManager()
 		
 		if(threatToKing!=undefined && array_length(threatToKing)>0)
 		{
-			show_debug_message(kingsChoice);
 			//i. spAbs?
 			if(kingsChoice==0)
 			{
-				if(OSA1.CheckIfUsable())
-				{
-					OSA1.UseAbility(threatToKing[0]);
-					
-					show_debug_message("Used Pain on "+ string(threatToKing[0].object_index) + " at ("
-						+ string(threatToKing[0].row) +","+ string(threatToKing[0].column) + ")");
-					//attack the first piece on the list (then move onto ii)
-				}
+				//attack the first piece on the list (then move onto ii)
+				if(OSA1.CheckIfUsable()) {OSA1.UseAbility(threatToKing[0]);}
 				kingsChoice++;
 				Wait();
 				return;
@@ -188,7 +183,6 @@ function TurnManager()
 			//ii. attack the piece with one of ours?
 			else if(kingsChoice==1)
 			{
-				show_debug_message("attacking")
 				//A. which of our pieces can attack this piece
 				kingDefenders = undefined;
 				for(var i=0; i<array_length(field.blackPieces); i++)
@@ -209,7 +203,6 @@ function TurnManager()
 				
 				if(kingDefenders!=undefined)
 				{
-					show_debug_message("attacking with "+string(kingDefenders[0].object_index));
 					ourPiece = kingDefenders[0];
 					field.HighlightMoveableSpaces(ourPiece);
 					Wait(AttackPiece);
@@ -219,7 +212,6 @@ function TurnManager()
 				else
 				{
 					kingsChoice++;
-					show_debug_message("we're done here");
 					Wait();
 					return;
 				}
@@ -341,8 +333,6 @@ function TurnManager()
 					}
 					//if there's no place to block then we're done
 					else{kingGoodThisTurn=true; kingsChoice=0; Wait();}
-					
-					show_debug_message(kingsChoice);
 				}
 				//if our hand is empty we can draw
 				else{DrawCardFromDeck();}
@@ -374,7 +364,6 @@ function TurnManager()
 			field.HighlightMoveableSpaces(ourPiece);
 			//i. which pieces are they able to attack?
 			//ii. which of these pieces has the highest priority to attack
-			show_debug_message("we're attacking");
 			NextMove = AttackPiece;
 			alarm[0] = waitTime;
 		}
@@ -385,23 +374,18 @@ function TurnManager()
 			array_delete(moveablePieces,0,1);
 			field.HighlightMoveableSpaces(ourPiece);
 			//i. optimal piece placement
-			show_debug_message("we're moving");
 			NextMove = MovePiece;
 			alarm[0] = waitTime;
 		}
 		else
 		{
-			show_debug_message("No more pieces to move");
 			moveablePieces=undefined;
 			NextMove = undefined;
 			alarm[0] = waitTime;
 		}
 	}
 	else if(kingGoodThisTurn)
-	{
-		show_debug_message("The AI has ended it's turn.");
-		field.ChangeTurns();
-	}
+	{field.ChangeTurns();}
 	//5. Should we play more pieces on the board?
 	/*if(array_length(field.blackPieces)<10)
 	{
@@ -585,18 +569,7 @@ function TurnManager2()
 
 function CheckForQueenInHand()
 {
-	for(var i=0; i<array_length(global.opHand.cardsHeld); i++)
-	{
-		if(global.opHand.cardsHeld[i].card==11)
-		{
-			ourCard = global.opHand.cardsHeld[i];
-			global.opHand.cardSelected = ourCard;
-			ourCard.selected=true;
-			field.CardSelected();
-			Wait(OptimalQueenPlacement);
-			return true;
-		}
-	}
+	if(FindCard(11)) {Wait(OptimalQueenPlacement); return true;}
 	return false;
 }
 
@@ -716,6 +689,59 @@ function OptimalQueenPlacement()
 
 function OptimalSupportPlacement()
 {
+	var tb=undefined;
+	
+	if(ourCard.hearts>1)
+	{
+		var text="";
+		var dialogue=irandom(3);
+		if(dialogue==0){text="Peace.";}
+		else if(dialogue==1){text="Love.";}
+		else if(dialogue==2){text="Unity.";}
+		else{text="Respect.";}
+		
+		tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = text;
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
+	}
+	
+	if(ourCard.spades>0)
+	{
+		var moveMe = irandom(1);
+		if(tb!=undefined && !moveMe){tb.x += irandom(100);}
+		
+		var text="";
+		var dialogue=irandom(1);
+		if(dialogue==0){text="Oo-oh yeeeaaahhh.";}
+		else if(dialogue==1){text="Feeling good.";}
+		
+		tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = text;
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
+		
+		if(tb!=undefined && moveMe){tb.x += irandom(100);}
+	}
+	
+	if(ourCard.diamonds>0)
+	{
+		var moveMe = irandom(1);
+		if(tb!=undefined && !moveMe){tb.x += irandom(100);}
+		
+		var text="";
+		var dialogue=irandom(1);
+		if(dialogue==0){text="Dolla dolla bills!";}
+		else if(dialogue==1){text="Cash money money!";}
+		
+		tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+		tb.text = text;
+		tb.bg = sprSavannahVoidTextBox;
+		tb.color = #8c52ff;
+		
+		if(tb!=undefined && moveMe){tb.x += irandom(100);}
+	}
+	
 	var grid = field.grid;
 	
 	if(!CheckKingSurrounded())
@@ -932,7 +958,6 @@ function PickChoice(op)
 		case 5: ChooseSpAb(); break;
 		
 		default:
-			show_debug_message("The AI has ended it's turn.");
 			field.ChangeTurns();
 		break;
 	}
@@ -944,8 +969,6 @@ function CombineCardPair()
 	var choice = irandom_range(0,array_length(comboPairs)-1);
 	global.opHand.c1 = global.opHand.cardsHeld[comboPairs[choice][0]];
 	global.opHand.c2 = global.opHand.cardsHeld[comboPairs[choice][1]];
-	show_debug_message("c1: "+string(global.opHand.c1));
-	show_debug_message("c2: "+string(global.opHand.c2));
 	global.opHand.CombineCards();
 	NextMove=undefined;
 	alarm[0]=waitTime;
@@ -990,7 +1013,6 @@ function PlayCard()
 		//if we have pieces to upgrade and we've chosen to upgrade... upgrade
 		if(upgradableTiles!=undefined && weUpgrade>0)
 		{
-			show_debug_message("The AI upgraded a piece");
 			upgradableTiles[irandom_range(0,array_length(upgradableTiles)-1)].UpgradePiece(false);
 			
 			//if we upgraded we can stop the function here
@@ -1018,7 +1040,6 @@ function PlayCard()
 	//if we don't have open spaces to play pieces we can stop the function here
 	if(selectedTiles==undefined)
 	{
-		show_debug_message("The AI rethought their decision.");
 		ourCard=undefined;
 		NextMove=undefined;
 		alarm[0]=waitTime;
@@ -1027,7 +1048,6 @@ function PlayCard()
 	//Otherwise, we play the card to the field
 	else
 	{
-		show_debug_message("The AI played a piece");
 		selectedTiles[irandom_range(0,array_length(selectedTiles)-1)].PlayPiece(false);
 		ourCard=undefined;
 		NextMove=undefined;
@@ -1057,8 +1077,6 @@ function ChoosePieceToMove()
 		field.HighlightMoveableSpaces(ourPiece);
 		NextMove = MovePiece;
 		alarm[0] = waitTime;
-		show_debug_message("The AI selected the "+string(ourPiece.object_index)+" at ("
-			+string(ourPiece.row)+","+string(ourPiece.column)+")");
 	}
 	else
 	{
@@ -1105,7 +1123,6 @@ function AttackPiece()
 			}
 			//...and attack
 			field.MovePieceToPlace(pieceToAttack.row,pieceToAttack.column);
-			show_debug_message(string(ourPiece.object_index)+" attacked ("+string(pieceToAttack.row)+","+string(pieceToAttack.column)+")");
 			
 			ourPiece=undefined;
 			NextMove = undefined;
@@ -1150,7 +1167,6 @@ function MovePiece()
 						}
 					}
 				}
-				show_debug_message(string(pointTotals[i])+" at ["+string(spaces[i].row)+","+string(spaces[i].column)+"]");
 			}
 			var highestPointTotal=0;
 			//select the highest
@@ -1166,7 +1182,6 @@ function MovePiece()
 		{ourPiece.hasMoved = true; field.UnselectTiles();}
 		break;
 	}
-	show_debug_message("We've moved?");
 	ourPiece=undefined;
 	NextMove=undefined;
 	alarm[0]=waitTime;
@@ -1208,7 +1223,6 @@ function MovePiece2()
 			var moveSpace = kings[irandom_range(0,array_length(kings)-1)];
 			//...and try to move there
 			field.MovePieceToPlace(moveSpace.row,moveSpace.column);
-			show_debug_message(string(ourPiece.object_index)+" moved to ("+string(moveSpace.row)+","+string(moveSpace.column)+")");
 		}
 		else if(pieces!=undefined)
 		{
@@ -1216,7 +1230,6 @@ function MovePiece2()
 			var moveSpace = pieces[irandom_range(0,array_length(pieces)-1)];
 			//...and try to move there
 			field.MovePieceToPlace(moveSpace.row,moveSpace.column);
-			show_debug_message(string(ourPiece.object_index)+" moved to ("+string(moveSpace.row)+","+string(moveSpace.column)+")");
 		}
 		else
 		{
@@ -1224,7 +1237,6 @@ function MovePiece2()
 			var moveSpace = moveables[irandom_range(0,array_length(moveables)-1)];
 			//...and try to move there
 			field.MovePieceToPlace(moveSpace.row,moveSpace.column);
-			show_debug_message(string(ourPiece.object_index)+" moved to ("+string(moveSpace.row)+","+string(moveSpace.column)+")");
 		}
 	}
 	//Otherwise, let's do something else
@@ -1294,7 +1306,6 @@ function ChooseSpAbSpace()
 	
 	if(selectables==undefined)
 	{
-		show_debug_message("The AI rethought it's decision.");
 	}
 	else
 	{
@@ -1308,7 +1319,6 @@ function ChooseSpAbSpace()
 				ourSpAb.UseAbility(choice.myPiece);
 			break;
 		}
-		show_debug_message("The AI used Pain on ("+string(choice.row)+","+string(choice.column)+")");
 	}
 	
 	ourSpAb=undefined;
@@ -1404,25 +1414,33 @@ function PieceDeathResponse(obj)
 }
 
 function MatchWin()
-{
-	show_debug_message("made it to MatchWin.");
+{		
 	global.playerDefeated=false;
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Oh man... I lost.",1);
-		NextMove = EndMatch;
-	}
+	
+	var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
+	tb.text = "Oh man... I lost.";
+	tb.type = 1;
+	tb.textDuration=3;
+	tb.x=(room_width/2)-((string_width("Oh man... I lost.")+tb.border)/2);
+	tb.y=200;
+	tb.bg = sprSavannahVoidTextBox;
+	tb.color = #8c52ff;
+	tb.NextMove = EndMatch;
 }
 
 function MatchDefeat()
 {
-	show_debug_message("made it to MatchDefeat.");
 	global.playerDefeated=true;
-	with(instance_create_layer(x,y,"Text",oVoidTextBox))
-	{
-		Add_Text("Oh man... I won... cool.",1);
-		NextMove = EndMatch;
-	}
+	
+	var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
+	tb.text = "Oh man... I won... cool.";
+	tb.type = 1;
+	tb.textDuration=3;
+	tb.x=(room_width/2)-((string_width("Oh man... I won... cool.")+tb.border)/2);
+	tb.y=200;
+	tb.bg = sprSavannahVoidTextBox;
+	tb.color = #8c52ff;
+	tb.NextMove = EndMatch;
 }
 
 function EndMatch()
