@@ -102,6 +102,7 @@ function DeckSetup2()
 //can pass a card[] by reference number to search for that specific card
 function DrawCard(forcedCard=undefined)
 {
+	show_debug_message("before draw curCard: "+string(curCard));
 	cardToDraw=curCard;
 	//if we find the desired card it'll draw it, otherwise we draw curCard
 	if(forcedCard!=undefined)
@@ -128,6 +129,7 @@ function DrawCard(forcedCard=undefined)
 			else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
 			if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 			curCard++;
+			show_debug_message("post draw curCard: "+string(curCard));
 			cardsDrawn++;
 			firstDraw=false;
 		}
@@ -139,6 +141,7 @@ function DrawCard(forcedCard=undefined)
 				else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
 				if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 				curCard++;
+				show_debug_message("post draw curCard: "+string(curCard));
 				cardsDrawn++;
 			}
 			else{TurnOver();}
@@ -149,6 +152,7 @@ function DrawCard(forcedCard=undefined)
 			else{CreateCard(global.opCards[deckOrder[cardToDraw]]);}
 			if(cardToDraw!=curCard){array_delete(deckOrder,cardToDraw,1);}
 			curCard++;
+			show_debug_message("post draw curCard: "+string(curCard));
 			cardsDrawn++;
 		}
 		else {TurnOver();}

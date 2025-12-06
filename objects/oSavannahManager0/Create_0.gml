@@ -10,6 +10,8 @@ kingGoodThisTurn=false;
 kingsChoice=0;
 //holds a reference to the Queen of clubs once played
 queen=undefined;
+//has the queen been played yet.
+queenPlayed=false;
 //checks that step 2 is complete each turn
 queenGoodThisTurn=false;
 
@@ -38,9 +40,45 @@ OSA3.Setup();
 ***********************************************************************************/
 function TurnManager()
 {
-	//1. Have we drawn a card this turn?
+	//1. Do we have pawns to graduate?
+	for(var i=0;i<array_length(field.blackPieces);i++)
+	{
+		if(field.blackPieces[i].object_index==oPawnB
+			&&field.blackPieces[i].graduated==true)
+		{
+			show_debug_message("[1]");
+			//I. If we have a queen or the QC hasn't been played yet: bishop
+			if(queen!=undefined||queenPlayed==false)
+			{
+				field.blackPieces[i].myTile.GraduatePawn(field.blackPieces[i],1);
+				
+				tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+				tb.text = "Join the party, bestie!";
+				tb.bg = sprSavannahVoidTextBox;
+				tb.color = #8c52ff;
+			}
+			//II. Otherwise, make this pawn the new queen.
+			else
+			{
+				field.blackPieces[i].myTile.GraduatePawn(field.blackPieces[i],3);
+				queen = field.blackPieces[array_length(field.blackPieces)-1];
+				
+				var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
+				tb.text = "The Queen is back baby!";
+				tb.type = 1;
+				tb.textDuration=3;
+				tb.x=(room_width/2)-((string_width("The Queen is back baby!")+tb.border)/2);
+				tb.y=200;
+				tb.bg = sprSavannahVoidTextBox;
+				tb.color = #8c52ff;
+			}
+		}
+	}
+	//2. Have we drawn a card this turn?
 	if(global.opDeck.firstDraw)
 	{
+		show_debug_message("[2]");
+		
 		//I. if our hand is full we need to play cards first
 		if(array_length(global.opHand.cardsHeld)==5)
 		{
@@ -84,15 +122,29 @@ function TurnManager()
 		//II.Draw a card
 		else{DrawCardFromDeck([11]);}
 	}
-	//2. Is the Queen healthy?
+	//3. Is the Queen healthy?
 	else if(queen!=undefined && !queenGoodThisTurn)
 	{
-		if(queen.Health<10 && (cardsDrawn<3||SuitInHand(1)!=undefined))
+		show_debug_message("[3]");
+		
+		//I. Try to use Philautia if we can
+		if(queen.Health<10 && OSA3.CheckIfUsable())
 		{
-			//I. If we have hearts
+			OSA3.UseAbility();
+				
+			var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+			tb.text = "Work hard, then... Treat yourself, girl!";
+			tb.bg = sprSavannahVoidTextBox;
+			tb.color = #8c52ff;
+			queenGoodThisTurn=true;
+		}
+		//II. Otherwise, use hearts.
+		else if(queen.Health<10 && (cardsDrawn<1||SuitInHand(1)!=undefined))
+		{
+			//i. If we have hearts
 			if(SuitInHand(1)!=undefined)
 			{
-				//i. Heal the queen
+				//A. Heal the queen
 				SelectCard(SuitInHand(1)[0]);
 				//we only want to heal the queen once per turn.
 				queenGoodThisTurn=true;
@@ -112,15 +164,18 @@ function TurnManager()
 				
 				Wait(UpgradePiece);
 			}
-			//II. Draw a card
+			//ii. Otherwise, draw a card.
 			else{DrawCardFromDeck();}
 		}
+		//III. Otherwise, let's move on.
 		else
 		{queenGoodThisTurn=true; Wait();}
 	}
-	//3. Is our king protected from the player?
+	//4. Is our king protected from the player?
 	else if(!kingGoodThisTurn)
 	{
+		show_debug_message("[4]");
+		
 		//I. does the king have enough pieces surrounding it?
 		if(!CheckKingSurrounded())
 		{
@@ -175,7 +230,19 @@ function TurnManager()
 			if(kingsChoice==0)
 			{
 				//attack the first piece on the list (then move onto ii)
-				if(OSA1.CheckIfUsable()) {OSA1.UseAbility(threatToKing[0]);}
+				if(OSA1.CheckIfUsable())
+				{
+					var popAfter=false;
+					if(threatToKing[0].Health==1&&pragma==false){popAfter=true;}
+					OSA1.UseAbility(threatToKing[0]);
+					
+					var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+					tb.text = "How do YOU like it?";
+					tb.bg = sprSavannahVoidTextBox;
+					tb.color = #8c52ff;
+					
+					if(popAfter){array_delete(threatToKing,0,1);}
+				}
 				kingsChoice++;
 				Wait();
 				return;
@@ -332,19 +399,36 @@ function TurnManager()
 						return;
 					}
 					//if there's no place to block then we're done
-					else{kingGoodThisTurn=true; kingsChoice=0; Wait();}
+					else{kingsChoice++; Wait();}
 				}
 				//if our hand is empty we can draw
 				else{DrawCardFromDeck();}
 			}
+			//iv. We can't fight anymore, so heal using Society if we can.
+			else if(kingsChoice==3 && OSA3.CheckIfUsable())
+			{
+				OSA3.UseAbility();
+				
+				var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+				tb.text = "Friends stick together!";
+				tb.bg = sprSavannahVoidTextBox;
+				tb.color = #8c52ff;
+				
+				kingGoodThisTurn=true;
+				kingsChoice=0;
+				Wait();
+			}
+			//v. Otherwise, we're done here!
+			else{kingGoodThisTurn=true; kingsChoice=0; Wait();}
 		}
-		else
-		{kingGoodThisTurn=true; kingsChoice=0; Wait();}
+		else{kingGoodThisTurn=true; kingsChoice=0; Wait();}
 	}
-	//4. Move the pieces we can, prioritizing attacking.
+	//5. Move the pieces we can, prioritizing attacking.
 	moveablePieces = FindMoveablePieces();
 	if(kingGoodThisTurn && moveablePieces!=undefined)
 	{
+		show_debug_message("[5]");
+		
 		//I. Can we attack the player's pieces?
 		for(var i=0;i<array_length(moveablePieces);i++)
 		{
@@ -384,16 +468,41 @@ function TurnManager()
 			alarm[0] = waitTime;
 		}
 	}
-	else if(kingGoodThisTurn)
-	{field.ChangeTurns();}
-	//5. Should we play more pieces on the board?
-	/*if(array_length(field.blackPieces)<10)
+	
+	//6. Should we play more pieces on the board?
+		//aim to have at least 5 pieces on the board.
+	var pieceGoal = 5;
+		//if the player has more than 5 try to match that.
+	if(array_length(field.whitePieces)>pieceGoal)
+	{pieceGoal=array_length(field.whitePieces);}
+	
+	if(kingGoodThisTurn && moveablePieces==undefined
+		&& array_length(field.blackPieces)<pieceGoal)
 	{
-		//I. does our current piece count meet expectation? (if not iterate until yes)
-		//We'll set this to 10 to give us max 10 turns in our first game
-			//i. if we only have pawns combine them
-			//ii. play the highest ranked piece around the king
-	}*/
+		show_debug_message("[6]");
+		
+		//I. if we have cards
+		if(array_length(global.opHand.cardsHeld)>0)
+		{
+			//i. If we have a selection of only pawns combine them
+			if(FindHighestRankCard().pips<5 && array_length(global.opHand.cardsHeld)>1
+				&& CheckValidComboPairs(10)!=undefined)
+			{CombineCardPair();}
+			//ii. Otherwise play the highest ranked card (even if it's a pawn)
+			else
+			{
+				SelectCard(FindHighestRankCard());
+				Wait(OptimalSupportPlacement);
+				return;
+			}
+		}
+		//II. Otherwise draw cards
+		else{DrawCardFromDeck([11]);}
+	}
+	//7. End Turn
+	if(kingGoodThisTurn && moveablePieces==undefined
+		&& array_length(field.blackPieces)>=pieceGoal)
+	{field.ChangeTurns();}
 	//6. Miscellaneous actions
 	/********************************************************
 	* We should weigh VI higher, but this can be random.
@@ -674,6 +783,7 @@ function OptimalQueenPlacement()
 	if(played)
 	{
 		queen = field.blackPieces[array_length(field.blackPieces)-1];
+		queenPlayed = true;
 		
 		var tb = instance_create_layer(x,y,"Text",oMatchTextBox);
 		tb.text = "The Queen has arrived!";
@@ -689,6 +799,7 @@ function OptimalQueenPlacement()
 
 function OptimalSupportPlacement()
 {
+	#region Textboxes
 	var tb=undefined;
 	
 	if(ourCard.hearts>1)
@@ -705,7 +816,6 @@ function OptimalSupportPlacement()
 		tb.bg = sprSavannahVoidTextBox;
 		tb.color = #8c52ff;
 	}
-	
 	if(ourCard.spades>0)
 	{
 		var moveMe = irandom(1);
@@ -723,7 +833,6 @@ function OptimalSupportPlacement()
 		
 		if(tb!=undefined && moveMe){tb.x += irandom(100);}
 	}
-	
 	if(ourCard.diamonds>0)
 	{
 		var moveMe = irandom(1);
@@ -741,6 +850,7 @@ function OptimalSupportPlacement()
 		
 		if(tb!=undefined && moveMe){tb.x += irandom(100);}
 	}
+	#endregion
 	
 	var grid = field.grid;
 	
@@ -754,7 +864,7 @@ function OptimalSupportPlacement()
 		
 		//hierarchy for pawn placement
 		if(ourCard.pips<5)
-		{
+		{			
 			//start with sides
 			if(myTile.column>0 && grid[myTile.row][myTile.column-1].myPiece==undefined)
 			{grid[myTile.row][myTile.column-1].PlayPiece(false);}
@@ -1360,6 +1470,8 @@ function PieceDeathResponse(obj)
 		tb.y=200;
 		tb.bg = sprSavannahVoidTextBox;
 		tb.color = #8c52ff;
+		
+		queen = undefined;
 	break;
 	case oPawnW:
 		var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);

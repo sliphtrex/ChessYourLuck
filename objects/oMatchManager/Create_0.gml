@@ -199,7 +199,6 @@ function SelectCard(c=undefined)
 	global.opHand.cardSelected = ourCard;
 	ourCard.selected=true;
 	field.CardSelected();
-		+" of "+string(ourCard.suit));
 }
 
 function CheckValidComboPairs(maxRank=14)
