@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"SprExitButton",
-    "path":"sprites/SprExitButton/SprExitButton.yy",
+    "name":"sprExitButton",
+    "path":"sprites/sprExitButton/sprExitButton.yy",
   },
   "spriteMaskId":null,
   "visible":true,

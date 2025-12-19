@@ -8,8 +8,8 @@ if(hoverText!="" && hovering)
 	else
 	{
 		draw_set_halign(fa_right);
-		draw_sprite(sprAbDescriptionBox,0,800,y-75);
-		draw_text_ext(1400,y-69,hoverText,45,590);
+		draw_sprite(sprAbDescriptionBox,0,room_width-sprite_get_width(sprAbDescriptionBox),y-75);
+		draw_text_ext(room_width-200,y-69,hoverText,45,590);
 		draw_set_halign(fa_left);
 	}
 }

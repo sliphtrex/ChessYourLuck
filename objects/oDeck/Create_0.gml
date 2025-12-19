@@ -31,8 +31,8 @@ function DeckSetup2()
 	
 	deckSize = array_length((pDeck) ? usableDeck : global.opCards);
 	
-	if(pDeck) {x=292; y=800; sprite_index = sprBlueDeck;}
-	else {x=1307; y=100; sprite_index = sprRedDeck;}
+	if(pDeck) {x=300; y=room_height-100; sprite_index = sprBlueDeck;}
+	else {x=room_width-300; y=100; sprite_index = sprRedDeck;}
 	
 	//check if the match manager has a set card order for us to use
 	if(instance_exists(oMatchManager) &&

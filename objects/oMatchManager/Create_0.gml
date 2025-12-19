@@ -67,68 +67,68 @@ function Setup()
 {
 	#region player setup
 	//setup player Hand
-	global.pHand = instance_create_layer(room_width/2,800,"CardObjects",oHand);
+	global.pHand = instance_create_layer(room_width/2,room_height-100,"CardObjects",oHand);
 	global.pHand.pHand=true;
 	//setup player Deck
-	global.pDeck = instance_create_layer(292,800,"CardObjects",oDeck);
+	global.pDeck = instance_create_layer(300,room_height-100,"CardObjects",oDeck);
 	global.pDeck.pDeck=true;
 	global.pDeck.DeckSetup2();
 	//setup player discard pile
-	global.pDiscard = instance_create_layer(1307,805,"CardObjects",oDiscardPile);
+	global.pDiscard = instance_create_layer(room_width-300,room_height-100,"CardObjects",oDiscardPile);
 	global.pDiscard.pDiscardPile = true;
 	//setup player side border
 	pBorderDepth = instance_create_layer(0,0,"UILayer",oVoidBorder).depth;
 	//setup player diamond counter
-	global.pDiamondCounter = instance_create_layer(0,635,"UILayer",oDiamondCounter);
+	global.pDiamondCounter = instance_create_layer(0,room_height-265,"UILayer",oDiamondCounter);
 	global.pDiamondCounter.depth = pBorderDepth-1;
 	//setup player spade counter
-	global.pSpade = instance_create_layer(100,100,"UILayer",oSpadeCounter);
+	global.pSpade = instance_create_layer(100,room_height-817,"UILayer",oSpadeCounter);
 	global.pSpade.pSpades=true;
 	global.pSpade.depth = pBorderDepth-1;
 	
 	//NOTE: we can set the player's abilities here because we are using a constant
 	//global variable as opposed to what's essentially a lookup table for the enemy
 	//setup Player SpAbs
-	PSA1 = instance_create_layer(100, 550, "UILayer", oSpecialAbility);
+	PSA1 = instance_create_layer(100,room_height-350, "UILayer", oSpecialAbility);
 	PSA1.depth = pBorderDepth-2;
 	PSA1.specialAbility = global.PlayerSpecialAbility1;
 	PSA1.playerAb = true;
 	PSA1.Setup();
-	PSA2 = instance_create_layer(100, 400, "UILayer", oSpecialAbility);
+	PSA2 = instance_create_layer(100,room_height-500, "UILayer", oSpecialAbility);
 	PSA2.depth = pBorderDepth-2;
 	PSA2.specialAbility = global.PlayerSpecialAbility2;
 	PSA2.playerAb = true;
 	PSA2.Setup();
-	PSA3 = instance_create_layer(100, 250, "UILayer", oSpecialAbility);
+	PSA3 = instance_create_layer(100,room_height-650, "UILayer", oSpecialAbility);
 	PSA3.depth = pBorderDepth-2;
 	PSA3.specialAbility = global.PlayerSpecialAbility3;
 	PSA3.playerAb = true;
 	PSA3.Setup();
 	//setup player end turn button
-	var pet = instance_create_layer(0,760,"UILayer",oEndTurn);
+	var pet = instance_create_layer(0,room_height-140,"UILayer",oEndTurn);
 	pet.pTurn=true;
 	pet.depth = pBorderDepth-1;
 	#endregion
 	
 	#region opponent setup
 	//setup opponent's hand
-	global.opHand = instance_create_layer(800,20,"CardObjects",oHand);
+	global.opHand = instance_create_layer(room_width/2,20,"CardObjects",oHand);
 	//setup opponent's deck
-	global.opDeck = instance_create_layer(1307,100,"CardObjects",oDeck);
+	global.opDeck = instance_create_layer(room_width-300,100,"CardObjects",oDeck);
 	
 	
 	
 	global.opDeck.DeckSetup2();
 	//setup opponent's discard pile
-	global.opDiscard = instance_create_layer(292,95,"CardObjects",oDiscardPile); 
+	global.opDiscard = instance_create_layer(300,100,"CardObjects",oDiscardPile); 
 	//setup opponent's side border
 	opBorderDepth = instance_create_layer(room_width-sprite_get_width(sprVoidBorders),0,"UILayer",oVoidBorder).depth;
 	//setup opponent's diamond counter
-	global.opDiamondCounter = instance_create_layer(1400,185,"UILayer",oDiamondCounter);
+	global.opDiamondCounter = instance_create_layer(room_width-200,185,"UILayer",oDiamondCounter);
 	global.opDiamondCounter.pCounter=false;
 	global.opDiamondCounter.depth = opBorderDepth-1;
 	//setup opponent spade counter
-	global.opSpade = instance_create_layer(1500,800,"UILayer",oSpadeCounter);
+	global.opSpade = instance_create_layer(room_width-100,817,"UILayer",oSpadeCounter);
 	global.opSpade.depth = opBorderDepth-1;
 	
 	//NOTE: We don't set up the opponents SpAbs yet because they will be different
@@ -136,12 +136,12 @@ function Setup()
 	//manager that inherits from this.
 	
 	//setup opponent's end turn button
-	var opet = instance_create_layer(1400,60,"UILayer",oEndTurn);
+	var opet = instance_create_layer(room_width-200,60,"UILayer",oEndTurn);
 	opet.depth = opBorderDepth-1;
 	#endregion
 	
 	//setup chess board
-	field = instance_create_layer(800,450,"BoardLayer",oField);
+	field = instance_create_layer(room_width/2,room_height/2,"BoardLayer",oField);
 	field.SetupBoard();
 }
 

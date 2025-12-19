@@ -1,1 +1,2 @@
 filesLoaded=false;
+menuButton=undefined;

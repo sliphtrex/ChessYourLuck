@@ -19,15 +19,15 @@ global.opCards=global.SavannahsDecks[0];
 Setup();
 
 //This will always be done after calling setup since these will always be diferent
-OSA1 = instance_create_layer(1500, 650, "UILayer", oSpecialAbility);
+OSA1 = instance_create_layer(room_width-100, 650, "UILayer", oSpecialAbility);
 OSA1.depth = opBorderDepth-2;
 OSA1.specialAbility = 34;
 OSA1.Setup();
-OSA2 = instance_create_layer(1500, 500, "UILayer", oSpecialAbility);
+OSA2 = instance_create_layer(room_width-100, 500, "UILayer", oSpecialAbility);
 OSA2.depth = opBorderDepth-2;
 OSA2.specialAbility = 18;
 OSA2.Setup();
-OSA3 = instance_create_layer(1500, 350, "UILayer", oSpecialAbility);
+OSA3 = instance_create_layer(room_width-100, 350, "UILayer", oSpecialAbility);
 OSA3.depth = opBorderDepth-2;
 OSA3.specialAbility = 2;
 OSA3.Setup();

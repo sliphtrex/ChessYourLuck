@@ -34,8 +34,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"SprLoadSaveButton",
-    "path":"sprites/SprLoadSaveButton/SprLoadSaveButton.yy",
+    "name":"sprLoadSaveButton",
+    "path":"sprites/sprLoadSaveButton/sprLoadSaveButton.yy",
   },
   "spriteMaskId":null,
   "visible":true,
