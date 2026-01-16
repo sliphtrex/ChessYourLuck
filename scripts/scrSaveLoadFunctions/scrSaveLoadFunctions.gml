@@ -38,17 +38,17 @@ function SaveGame(saveName)
 	_saveData[SDMatchNumber][0] = global.AnuMatchNum;
 	_saveData[SDMatchNumber][1] = global.TitusMatchNum;
 	_saveData[SDMatchNumber][2] = global.AmandaMatchNum;
-	_saveData[SDMatchNumber][3] = global.MarthaMatchNum;
+	_saveData[SDMatchNumber][3] = global.MarjorieMatchNum;
 	_saveData[SDMatchNumber][4] = global.SavannahMatchNum;
-	_saveData[SDMatchNumber][5] = global.CelinaMatchNum;
+	_saveData[SDMatchNumber][5] = global.CedricMatchNum;
 	_saveData[SDMatchNumber][6] = global.AdamMatchNum;
 	
 	_saveData[SDConvos][0] = global.AnuConvos;
 	_saveData[SDConvos][1] = global.TitusConvos;
 	_saveData[SDConvos][2] = global.AmandaConvos;
-	_saveData[SDConvos][3] = global.MarthaConvos;
+	_saveData[SDConvos][3] = global.MarjorieConvos;
 	_saveData[SDConvos][4] = global.SavannahConvos;
-	_saveData[SDConvos][5] = global.CelinaConvos;
+	_saveData[SDConvos][5] = global.CedricConvos;
 	_saveData[SDConvos][6] = global.AdamConvos;
 	#endregion
 	#region Cafe Section
@@ -91,17 +91,17 @@ function LoadGame(fileName)
 		global.AnuMatchNum = _loadData[SDMatchNumber][0];
 		global.TitusMatchNum = _loadData[SDMatchNumber][1];
 		global.AmandaMatchNum = _loadData[SDMatchNumber][2];
-		global.MarthaMatchNum = _loadData[SDMatchNumber][3];
+		global.MarjorieMatchNum = _loadData[SDMatchNumber][3];
 		global.SavannahMatchNum = _loadData[SDMatchNumber][4];
-		global.CelinaMatchNum = _loadData[SDMatchNumber][5];
+		global.CedricMatchNum = _loadData[SDMatchNumber][5];
 		global.AdamMatchNum = _loadData[SDMatchNumber][6];
 		
 		global.AnuConvos = _loadData[SDConvos][0];
 		global.TitusConvos = _loadData[SDConvos][1];
 		global.AmandaConvos = _loadData[SDConvos][2];
-		global.MarthaConvos = _loadData[SDConvos][3];
+		global.MarjorieConvos = _loadData[SDConvos][3];
 		global.SavannahConvos = _loadData[SDConvos][4];
-		global.CelinaConvos = _loadData[SDConvos][5];
+		global.CedricConvos = _loadData[SDConvos][5];
 		global.AdamConvos = _loadData[SDConvos][6];
 		
 		global.pDiamonds = _loadData[SDDiamonds];

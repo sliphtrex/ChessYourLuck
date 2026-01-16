@@ -1,7 +1,8 @@
 with(instance_create_layer(x,y,"Text",oVoidTextBox))
 {
+	var tl = string_width("Before you can proceed, we must define your form.");
 	Add_Text("Alright. Next order of business.",1);
-	Add_Text("Before you can proceed, we must define your form.",1,undefined,350,375);
+	Add_Text("Before you can proceed, we must define your form.",1,undefined,(room_width/2)-((tl+border*2)/2),375);
 	NextMove = CharacterSelect;
 }
 

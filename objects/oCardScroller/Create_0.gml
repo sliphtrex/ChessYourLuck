@@ -1,27 +1,30 @@
+//This object displays a deck of cards; either the players or an opponents.
+
 button_x=0;
 scrollAmount=5;
 scrollPercent=0;
 curX=camera_get_view_x(view_camera[0]);
-//bottomBar width(1200) - ((border(40) + padding(5)*2(both sides of the buttons))*2(both sides) + scroll one button(200))
-// -6 because our sprite is middle cenetered and 5 pixels wide
-scrollDist=1000;
+scrollDist=room_width-600;
 
 //which deck are we displaying
 previewDeck = global.PlayerCards;
 //holds the oCardShopPlayerCard objects
 cardProfs=undefined;
+editable=false;
 
 //display our deck of cards
-function Setup()
+function Setup(_editable=false)
 {
+	editable = _editable;
 	curX=camera_get_view_x(view_camera[0]);
+	show_debug_message("("+string(curX)+","+string(curX+room_width)+")");
 	
 	for(var i=0;i<array_length(previewDeck);i++)
 	{
-		cardProfs[i] = instance_create_layer((curX+150+(105*i)),930,"CardShop",oCardShopPreviewCard);
+		cardProfs[i] = instance_create_layer((curX+150+(105*i)),room_height-150,"CardShop",(editable) ? oCSPreviewCard : oMatchPreviewCard);
 		cardProfs[i].card = previewDeck[i];
 		cardProfs[i].deckPos=i;
-		cardProfs[i].SetupCard();
+		cardProfs[i].SetupCard(editable);
 	}
 }
 

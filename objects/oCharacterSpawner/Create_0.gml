@@ -7,19 +7,19 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -28,18 +28,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2780,450,"Instances",oSue);
-			instance_create_layer(2980,450,"Instances",oConnie);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.SusanAffinity>0){instance_create_layer(2780,450,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(2980,450,"Instances",oConnie);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -48,18 +48,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2780,450,"Instances",oLindsay);
-			instance_create_layer(2980,450,"Instances",oMartha);
-			instance_create_layer(4800,450,"Instances",oDrew);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.LindsayAffinity>0){instance_create_layer(2780,450,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(2980,450,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -68,18 +68,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2780,450,"Instances",oSue);
-			instance_create_layer(2980,450,"Instances",oConnie);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.SusanAffinity>0){instance_create_layer(2780,450,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(2980,450,"Instances",oConnie);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -88,17 +88,17 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2780,450,"Instances",oLindsay);
-			instance_create_layer(2980,450,"Instances",oMartha);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.LindsayAffinity>0){instance_create_layer(2780,450,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(2980,450,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 	}
 	break;
@@ -107,20 +107,20 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
-			instance_create_layer(4400,500,"Instances",oSue);
-			instance_create_layer(4600,400,"Instances",oConnie);
-			instance_create_layer(5000,400,"Instances",oLindsay);
-			instance_create_layer(5200,500,"Instances",oMartha);
-			instance_create_layer(6720,450,"Instances",oDrew);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
+			if(global.SusanAffinity>0){instance_create_layer(4400,500,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(4600,400,"Instances",oConnie);}
+			if(global.LindsayAffinity>0){instance_create_layer(5000,400,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(5200,500,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(6720,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 	}
 	break;
@@ -129,14 +129,14 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 2:
-			instance_create_layer(4800,450,"Instances",oCelina);
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
 		break;
 	}
 	break;
@@ -145,18 +145,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -165,18 +165,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2780,450,"Instances",oSue);
-			instance_create_layer(2980,450,"Instances",oConnie);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.SusanAffinity>0){instance_create_layer(2780,450,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(2980,450,"Instances",oConnie);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -185,20 +185,20 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2780,450,"Instances",oLindsay);
-			instance_create_layer(2980,450,"Instances",oMartha);
-			instance_create_layer(4800,450,"Instances",oDrew);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.LindsayAffinity>0){instance_create_layer(2780,450,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(2980,450,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -207,18 +207,18 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2780,450,"Instances",oSue);
-			instance_create_layer(2980,450,"Instances",oConnie);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.SusanAffinity>0){instance_create_layer(2780,450,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(2980,450,"Instances",oConnie);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oSavannah);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.SavannahAffinity>0){instance_create_layer(6720,450,"Instances",oSavannah);}
 		break;
 	}
 	break;
@@ -227,19 +227,19 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(2880,450,"Instances",oTitus);
-			instance_create_layer(4800,450,"Instances",oCelina);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.TitusAffinity>0){instance_create_layer(2880,450,"Instances",oTitus);}
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(4800,450,"Instances",oAmanda);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.AmandaAffinity>0){instance_create_layer(4800,450,"Instances",oAmanda);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 		case 2:
-			instance_create_layer(2780,450,"Instances",oLindsay);
-			instance_create_layer(2980,450,"Instances",oMartha);
-			instance_create_layer(4800,450,"Instances",oDrew);
+			if(global.LindsayAffinity>0){instance_create_layer(2780,450,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(2980,450,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(4800,450,"Instances",oDrew);}
 		break;
 	}
 	break;
@@ -248,19 +248,19 @@ switch(global.DayNum)
 	switch(global.DayPart)
 	{
 		case 0:
-			instance_create_layer(4400,450,"Instances",oSue);
-			instance_create_layer(4700,400,"Instances",oConnie);
-			instance_create_layer(4900,400,"Instances",oLindsay);
-			instance_create_layer(5200,450,"Instances",oMartha);
-			instance_create_layer(6720,450,"Instances",oDrew);
+			if(global.SusanAffinity>0){instance_create_layer(4400,450,"Instances",oSusan);}
+			if(global.ConnieAffinity>0){instance_create_layer(4700,400,"Instances",oConnie);}
+			if(global.LindsayAffinity>0){instance_create_layer(4900,400,"Instances",oLindsay);}
+			if(global.MarthaAffinity>0){instance_create_layer(5200,450,"Instances",oMartha);}
+			if(global.DrewAffinity>0){instance_create_layer(6720,450,"Instances",oDrew);}
 		break;
 		case 1:
-			instance_create_layer(4800,450,"Instances",oDante);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.DanteAffinity>0){instance_create_layer(4800,450,"Instances",oDante);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 2:
-			instance_create_layer(2880,450,"Instances",oAdam);
-			instance_create_layer(6720,450,"Instances",oRebecca);
+			if(global.AdamAffinity>0){instance_create_layer(2880,450,"Instances",oAdam);}
+			if(global.RebeccaAffinity>0){instance_create_layer(6720,450,"Instances",oRebecca);}
 		break;
 	}
 	break;
@@ -271,11 +271,11 @@ switch(global.DayNum)
 		case 0:
 		break;
 		case 1:
-			instance_create_layer(2880,450,"Instances",oJarod);
-			instance_create_layer(6720,450,"Instances",oMarjorie);
+			if(global.JarodAffinity>0){instance_create_layer(2880,450,"Instances",oJarod);}
+			if(global.MarjorieAffinity>0){instance_create_layer(6720,450,"Instances",oMarjorie);}
 		break;
 		case 2:
-			instance_create_layer(4800,450,"Instances",oCelina);
+			if(global.CedricAffinity>0){instance_create_layer(4800,450,"Instances",oCedric);}
 		break;
 	}
 	break;

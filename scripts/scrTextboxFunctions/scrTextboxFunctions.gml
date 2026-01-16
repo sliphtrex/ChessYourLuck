@@ -33,10 +33,35 @@ function DefaultVoidTextBox()
 //and it will take care of the rest.
 function StartConvo()
 {
-	with(instance_create_layer(1920*global.curTable,960,"Text",oRKCTextBox))
+	global.ConvoString = string_copy(global.ConvoChar,0,3);
+	
+	switch(global.ConvoChar)
 	{
-		CharacterText();
+	case "Titus": global.ConvoString = "Tus" + string(global.TitusConvos); break;
+	case "Amanda": global.ConvoString += string(global.AmandaConvos); break;
+	case "Marjorie": global.ConvoString += string(global.MarjorieConvos); break;
+	case "Jarod": global.ConvoString += string(global.JarodConvos); break;
+	case "Dante": global.ConvoString += string(global.DanteConvos); break;
+	case "Rebecca": global.ConvoString += string(global.RebeccaConvos); break;
+	case "Adam": global.ConvoString += string(global.AdamConvos); break;
+	case "Cedric": global.ConvoString += string(global.CedricConvos); break;
+	case "Savannah": global.ConvoString += string(global.SavannahConvos); break;
+	case "Susan": global.ConvoString += string(global.SusanConvos); break;
+	case "Connie": global.ConvoString += string(global.ConnieConvos); break;
+	case "Drew": global.ConvoString += string(global.DrewConvos); break;
+	case "Lindsay": global.ConvoString += string(global.LindsayConvos); break;
+	case "Martha": global.ConvoString = "Mat" + string(global.MarthaConvos); break;
+	
+	case "Anu":
+		if(global.DayPart==3){global.ConvoString += string(global.AnuConvos);}
+		else{global.ConvoString += string("_1");}
+	break;
 	}
+	
+	if(global.postMatch)
+	{global.ConvoString += (global.playerDefeated)? "W":"L";}
+	
+	CharacterText();
 }
 
 //1st param(string): the text we want to display

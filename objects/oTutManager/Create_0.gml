@@ -491,3 +491,9 @@ function DefineForm()
 	var trans = instance_create_layer(0,0,"Text",oFadeTransition);
 	trans.nextRoom = rPlayerProfileSetup;
 }
+
+function PieceDeathResponse(obj)
+{
+	var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+	tb.text = "Well done!";
+}

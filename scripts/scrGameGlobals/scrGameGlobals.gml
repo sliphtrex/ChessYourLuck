@@ -18,18 +18,22 @@
 *
 ***********************************************************************************/
 #endregion
-/*
-global.PlayerCards = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,
-	25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
-*/
-//global.PlayerCards = [14,15,16,17,18,14,15,16,17,18,14,15,16,17,18,14,15,16,17,18];//Hearts
-global.PlayerCards = [40,41,42,43,44,40,41,42,43,44,40,41,42,43,44,40,41,42,43,44];//Diamonds
+
+global.PlayerCards = [14,14,14,14,15,15,15,15,16,16,16,16,17,17,17,17,18,18,18,18];//Hearts
+//global.PlayerCards = [40,40,40,40,41,41,41,41,42,42,42,42,43,43,43,43,44,44,44,44];//Diamonds
+//global.PlayerCards = [27,27,27,27,28,28,28,28,29,29,29,29,30,30,30,30,31,31,31,31];//Spades
+//global.PlayerCards = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5];//Clubs
+/*global.PlayerCards = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+					  1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,];//Huge deck, lol*/
 	
 //this lists cards that the player owns but that aren't currently in their deck
 global.PlayerSpareCards = undefined;
 
 //shows the special cards which can be generated at the shop
-global.UnlockableCards = [54,55,56,57,58,59];
+global.UnlockableCards = [52,53,54,55,56,57];
 
 #region list of Abilities
 /***********************************************************************************
@@ -84,6 +88,7 @@ global.UnlockableCards = [54,55,56,57,58,59];
 * 35 - 
 ***********************************************************************************/
 #endregion
+
 global.SpecialsUnlocked = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0];
 
 //the player's 3 special abilities that will be available in a match
@@ -107,9 +112,6 @@ global.Playthrough = 0;
 //will be set true upon completion of a playthrough where the PlayerIcon==2
 global.DogPlaythroughComplete=false;
 
-//who are we speaking to currently; should be set whenever we start a dialogue
-global.ConvoChar = undefined; //"Savannah";
-
 //will mark our current table for when we come back to the cafe from the void
 // 0 = bar (for Anu only), 1-3 = tables 1-3
 global.curTable = undefined;
@@ -118,25 +120,229 @@ global.playerDefeated = false;
 //triggered when we finish a match, reset when we change day parts
 global.postMatch=false;
 
-//how many matches have we played against Anu
+#region Character Dialogue Tags
+
+//who are we speaking to currently; should be set whenever we start a dialogue
+global.ConvoChar = undefined; //"Savannah";
+//how far into the specific conversation are we
+global.ConvoString="";
+
+// [char]MatchNum = how many matches have we played against Anu
+// [char]Convos = What conversation are we at in the story
+// [char]Checkpoint = we can assign a ConvoString to this to restart from there
+// [char]Affinity = if it gets too low the character's route may be closed off.
+
 global.AnuMatchNum=0;
-//What line are we at in the story
 global.AnuConvos=0;
 
 global.TitusMatchNum=0;
 global.TitusConvos=0;
+global.TitusCheckpoint="";
+global.TitusAffinity=5;
 
 global.AmandaMatchNum=0;
 global.AmandaConvos=0;
+global.AmandaCheckpoint="";
+global.AmandaAffinity=3;
 
-global.MarthaMatchNum=0;
-global.MarthaConvos=0;
+global.MarjorieMatchNum=0;
+global.MarjorieConvos=0;
+global.MarjorieCheckpoint="";
+global.MarjorieAffinity=5;
 
-global.SavannahMatchNum=0;
-global.SavannahConvos=0;
+global.JarodMatchNum=0;
+global.JarodConvos=0;
+global.JarodCheckpoint="";
+global.JarodAffinity=5;
 
-global.CelinaMatchNum=0;
-global.CelinaConvos=0;
+global.DanteMatchNum=0;
+global.DanteConvos=0;
+global.DanteCheckpoint="";
+global.DanteAffinity=5;
+
+global.RebeccaMatchNum=0;
+global.RebeccaConvos=0;
+global.RebeccaCheckpoint="";
+global.RebeccaAffinity=5;
 
 global.AdamMatchNum=0;
 global.AdamConvos=0;
+global.AdamCheckpoint="";
+global.AdamAffinity=5;
+
+global.CedricMatchNum=0;
+global.CedricConvos=0;
+global.CedricCheckpoint="";
+global.CedricAffinity=5;
+
+global.SavannahMatchNum=0;
+global.SavannahConvos=0;
+global.SavannahCheckpoint="";
+global.SavannahAffinity=5;
+
+global.SusanMatchNum=0;
+global.SusanConvos=0;
+global.SusanCheckpoint="";
+global.SusanAffinity=5;
+
+global.ConnieMatchNum=0;
+global.ConnieConvos=0;
+global.ConnieCheckpoint="";
+global.ConnieAffinity=5;
+
+global.DrewMatchNum=0;
+global.DrewConvos=0;
+global.DrewCheckpoint="";
+global.DrewAffinity=5;
+
+global.LindsayMatchNum=0;
+global.LindsayConvos=0;
+global.LindsayCheckpoint="";
+global.LindsayAffinity=5;
+
+global.MarthaMatchNum=0;
+global.MarthaConvos=0;
+global.MarthaCheckpoint="";
+global.MarthaAffinity=5;
+
+#endregion
+
+function ResetCheckpoints()
+{
+global.TitusCheckpoint="";
+global.AmandaCheckpoint="";
+global.MarjorieCheckpoint="";
+global.JarodCheckpoint="";
+global.DanteCheckpoint="";
+global.RebeccaCheckpoint="";
+global.AdamCheckpoint="";
+global.CedricCheckpoint="";
+global.SavannahCheckpoint="";
+global.SusanCheckpoint="";
+global.ConnieCheckpoint="";
+global.DrewCheckpoint="";
+global.LindsayCheckpoint="";
+global.MarthaCheckpoint="";
+}
+
+function ResetGlobals()
+{
+	global.PlayerCards = [14,14,14,14,15,15,15,15,16,16,16,16,17,17,17,17,18,18,18,18];//Hearts
+	global.PlayerSpareCards = undefined;
+	global.UnlockableCards = [52,53,54,55,56,57];global.SpecialsUnlocked = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0];
+	global.PlayerSpecialAbility1 = 34;
+	global.PlayerSpecialAbility2 = -1;
+	global.PlayerSpecialAbility3 = -1;
+	global.UnlockableSpAbs = [0,2,14,18];
+	global.pDiamonds=0; 
+	global.PlayerIcon=undefined;
+	global.DayNum = 0;
+	global.DayPart = 0;
+	global.Playthrough = 0;
+	global.DogPlaythroughComplete=false;
+	global.ConvoChar = undefined;
+	global.curTable = undefined;
+	global.playerDefeated = false;
+	global.postMatch=false;
+
+	global.AnuMatchNum=0;
+	global.AnuConvos=0;
+
+	global.TitusMatchNum=0;
+	global.TitusConvos=0;
+	global.TitusAffinity=5;
+
+	global.AmandaMatchNum=0;
+	global.AmandaConvos=0;
+	global.AmandaAffinity=3;
+
+	global.MarjorieMatchNum=0;
+	global.MarjorieConvos=0;
+	global.MarjorieAffinity=5;
+
+	global.JarodMatchNum=0;
+	global.JarodConvos=0;
+	global.JarodAffinity=5;
+
+	global.DanteMatchNum=0;
+	global.DanteConvos=0;
+	global.DanteAffinity=5;
+
+	global.RebeccaMatchNum=0;
+	global.RebeccaConvos=0;
+	global.RebeccaAffinity=5;
+
+	global.AdamMatchNum=0;
+	global.AdamConvos=0;
+	global.AdamAffinity=5;
+
+	global.CedricMatchNum=0;
+	global.CedricConvos=0;
+	global.CedricAffinity=5;
+
+	global.SavannahMatchNum=0;
+	global.SavannahConvos=0;
+	global.SavannahAffinity=5;
+
+	global.SusanMatchNum=0;
+	global.SusanConvos=0;
+	global.SusanAffinity=5;
+
+	global.ConnieMatchNum=0;
+	global.ConnieConvos=0;
+	global.ConnieAffinity=5;
+
+	global.DrewMatchNum=0;
+	global.DrewConvos=0;
+	global.DrewAffinity=5;
+
+	global.LindsayMatchNum=0;
+	global.LindsayConvos=0;
+	global.LindsayAffinity=5;
+
+	global.MarthaMatchNum=0;
+	global.MarthaConvos=0;
+	global.MarthaAffinity=5;
+	
+	ResetCheckpoints();
+}
+
+function SortPlayerCards()//13,26,39
+{
+	show_debug_message(global.PlayerCards);
+	for(var i=0;i<array_length(global.PlayerCards)-1;i++)
+	{
+		//this accounts for special cards in the sort algorithm
+		var ourVal = 0;
+		if(global.PlayerCards[i]>51)
+		{
+			if(global.PlayerCards[i]==52){ourVal=.5;}
+			else if(global.PlayerCards[i]==53){ourVal=13.5;}
+			else if(global.PlayerCards[i]==54){ourVal=26.5;}
+			else if(global.PlayerCards[i]==55){ourVal=39.5;}
+			else if(global.PlayerCards[i]==56){ourVal=38.5;}
+			else if(global.PlayerCards[i]==57){ourVal=52;}
+		}else{ourVal=global.PlayerCards[i];}
+		
+		var theirVal = 0;
+		if(global.PlayerCards[i+1]>51)
+		{
+			if(global.PlayerCards[i+1]==52){theirVal=.5;}
+			else if(global.PlayerCards[i+1]==53){theirVal=13.5;}
+			else if(global.PlayerCards[i+1]==54){theirVal=26.5;}
+			else if(global.PlayerCards[i+1]==55){theirVal=39.5;}
+			else if(global.PlayerCards[i+1]==56){theirVal=38.5;}
+			else if(global.PlayerCards[i+1]==57){theirVal=52;}
+		}else{theirVal=global.PlayerCards[i+1];}
+		
+		if(ourVal>theirVal)
+		{
+			var card = global.PlayerCards[i+1];
+			global.PlayerCards[i+1] = global.PlayerCards[i];
+			global.PlayerCards[i] = card;
+		}
+	}
+	show_debug_message(global.PlayerCards);
+	
+	instance_find(oShopGenerator,0).RefreshPlayerCards();
+}

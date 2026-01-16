@@ -1,25 +1,28 @@
-#region Drawing the scrollbar and arrows
+curX=camera_get_view_x(view_camera[0]);
 
-//draws the arrows as either black or yellow depending on whether the mouse is hovering over
+// draws the arrow as either black or yellow
+// depending on whether the mouse is hovering over it
 draw_sprite_ext(sprCardShopLeftArrow,
-	(mouse_x>1380 && mouse_x<1420 && mouse_y>45 && mouse_y<85),
-	1400,65,1,1,-90,c_white,1);
+	(mouse_x>room_width-220 && mouse_x<room_width-180
+	&& mouse_y>45 && mouse_y<85),
+	room_width-200,65,1,1,-90,c_white,1);
 draw_sprite_ext(sprCardShopLeftArrow,
-	(mouse_x>1380 && mouse_x<1420 && mouse_y>815 && mouse_y<855),
-	1400,835,1,1,90,c_white,1);
+	(mouse_x>room_width-220 && mouse_x<room_width-180
+	&& mouse_y>room_height-85 && mouse_y<room_height-45),
+	room_width-200,room_height-65,1,1,90,c_white,1);
 
+//update scroll if clicking arrow
 if(mouse_check_button(mb_left))
 {
-	if(mouse_x>1380 && mouse_x<1420 && mouse_y>815 && mouse_y<855)
+	if(mouse_x>room_width-220 && mouse_x<room_width-180
+	&& mouse_y>room_height-85 && mouse_y<room_height-45)
 	{button_y+=scrollAmount;}
-	else if(mouse_x>1380 && mouse_x<1420 && mouse_y>45 && mouse_y<85)
+	else if(mouse_x>room_width-220 && mouse_x<room_width-180
+	&& mouse_y>45 && mouse_y<85)
 	{button_y-=scrollAmount;}
 }
 
+//deck position indicator (green scroll dot)
 button_y = clamp(button_y,0,scrollDist);
-
 scrollPercent = button_y/scrollDist;
-
-draw_sprite(sprScrollLine,0,1580,100+button_y);
-
-#endregion
+draw_sprite(sprScrollLine,0,room_width-20,100+button_y);

@@ -3,7 +3,8 @@ if(global.curTable!=undefined && !moving){camera_set_view_pos(view_camera[0],192
 curX = camera_get_view_x(view_camera[0]);
 curY = camera_get_view_y(view_camera[0]);
 
-if(!moving && !instance_exists(oRKCTextBox) && !instance_exists(oMatchPreviewer))
+if(!moving && !instance_exists(oRKCTextBox) && !instance_exists(oMatchPreviewer)
+	&& !instance_find(oShopGenerator,0).menusActive)
 {
 	draw_sprite_ext(sprCardShopLeftArrow,
 		(mouse_x>curX+1760&&mouse_x<curX+1840&&mouse_y>curY+920&&mouse_y<curY+1000),

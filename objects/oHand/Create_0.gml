@@ -2,8 +2,8 @@ pHand=false;
 
 cardsHeld = [];
 maxHandSize = 5;
-handX = 525;
-handY=740;
+handX = (room_width/2)-210;
+handY= room_height-100;
 c1 = undefined;
 c2 = undefined;
 cardSelected = undefined;
@@ -15,6 +15,7 @@ function AddToHand(obj)
 	else{handX=(room_width/2)+210;handY=100;}
 	
 	array_push(cardsHeld,obj);
+	
 	cardsHeld[array_length(cardsHeld)-1].y=handY;
 	if(array_length(cardsHeld)>maxHandSize)
 	{DiscardCard(0);}

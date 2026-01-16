@@ -1,1 +1,1 @@
-instance_find(oShopGenerator,0).CloseShop();
+if(array_length(global.PlayerCards)>=20){instance_find(oShopGenerator,0).CloseShop();}

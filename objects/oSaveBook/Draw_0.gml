@@ -52,4 +52,4 @@ else
 	}
 }
 
-draw_self();
+if(!instance_find(oShopGenerator,0).menusActive){draw_self();}

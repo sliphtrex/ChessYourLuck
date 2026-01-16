@@ -126,7 +126,7 @@ function SetupMenus(_SpAb,_itemNum)
 	itemNumber = _itemNum;
 	
 	if(!instance_exists(oBackButton))
-	{instance_create_layer(0,520,"UILayer",oBackButton);}
+	{instance_create_layer(0,room_height-300-sprite_get_height(sprBackButton),"UILayer",oBackButton);}
 	
 	if(!_SpAb)
 	{
@@ -136,7 +136,6 @@ function SetupMenus(_SpAb,_itemNum)
 			instance_destroy(previewSpAb);
 			previewSpAb=undefined;
 		}
-		
 		//get rid of any SpAb scrollers that may exist 
 		if(instance_exists(oSpAbScroller))
 		{
@@ -160,9 +159,7 @@ function SetupMenus(_SpAb,_itemNum)
 		{instance_create_layer(0,0,"CardShop",oSpAbScroller);}
 		
 		if(previewSpAb==undefined)
-		{
-			previewSpAb=instance_create_layer(1050,750,"CardShop",oPreviewSpAb);
-		}
+		{previewSpAb=instance_create_layer(1370,room_height-150,"CardShop",oPreviewSpAb);}
 		previewSpAb.specialAbility = _itemNum;
 		previewSpAb.playerAb = true;
 		previewSpAb.shop = true;
@@ -228,7 +225,7 @@ function BuySpAb()
 	global.pDiamonds-=previewSpAb.cost;
 	global.SpecialsUnlocked[previewSpAb.specialAbility]=true;
 	
-	//once we buy a special ability we own it for the game
+	//once we buy a special ability we own it for that save file
 	for(var i=0; i<array_length(global.UnlockableSpAbs);i++)
 	{
 		if(previewSpAb.specialAbility==global.UnlockableSpAbs[i])
@@ -290,7 +287,7 @@ function SetupDeckEditor()
 	editor=true;
 	
 	if(!instance_exists(oBackButton))
-	{instance_create_layer(0,520,"UILayer",oBackButton);}
+	{instance_create_layer(0,room_height-380,"UILayer",oBackButton);}
 	
 	//setup a spare card scroller if we don't have one
 	if(!instance_exists(oSpareCardScroller))
@@ -298,7 +295,7 @@ function SetupDeckEditor()
 	
 	//setup a card scroller if we don't have one
 	if(!instance_exists(oCardScroller))
-	{cards = instance_create_layer(0,0,"CardShop",oCardScroller); cards.Setup();}
+	{cards = instance_create_layer(0,0,"CardShop",oCardScroller); cards.Setup(true);}
 }
 
 function SetupSpAbEditor()
@@ -307,30 +304,43 @@ function SetupSpAbEditor()
 	editor=true;
 	
 	if(!instance_exists(oBackButton))
-	{instance_create_layer(0,520,"UILayer",oBackButton);}
+	{instance_create_layer(0,room_height-380,"UILayer",oBackButton);}
 	
 	//setup a SpAb scroller if we don't have one 
 	if(!instance_exists(oSpAbScroller))
 	{instance_create_layer(0,0,"CardShop",oSpAbScroller);}
 	
-	pSpAb1 = instance_create_layer(200,750,"CardShop",oPreviewSpAb);
+	pSpAb1 = instance_create_layer(200,room_height-150,"CardShop",oPreviewSpAb);
 	pSpAb1.specialAbility = global.PlayerSpecialAbility1;
 	pSpAb1.playerAb=true;
 	pSpAb1.shop=true;
 	pSpAb1.descSide = false;
 	pSpAb1.Setup();
 		
-	pSpAb2 = instance_create_layer(500,750,"CardShop",oPreviewSpAb);
+	pSpAb2 = instance_create_layer(500,room_height-150,"CardShop",oPreviewSpAb);
 	pSpAb2.specialAbility = global.PlayerSpecialAbility2;
 	pSpAb2.playerAb=true;
 	pSpAb2.shop=true;
 	pSpAb2.descSide = false;
 	pSpAb2.Setup();
 		
-	pSpAb3 = instance_create_layer(800,750,"CardShop",oPreviewSpAb);
+	pSpAb3 = instance_create_layer(800,room_height-150,"CardShop",oPreviewSpAb);
 	pSpAb3.specialAbility = global.PlayerSpecialAbility3;
 	pSpAb3.playerAb=true;
 	pSpAb3.shop=true;
 	pSpAb3.Setup();
 }
 #endregion
+
+function RefreshPlayerCards()
+{
+	instance_find(oCardScroller,0).Close();
+	cards = instance_create_layer(0,0,"CardShop",oCardScroller);
+	cards.Setup(true);
+}
+
+function RefreshSpareCards()
+{
+	instance_find(oSpareCardScroller,0).Close();
+	instance_create_layer(0,0,"CardShop",oSpareCardScroller);
+}

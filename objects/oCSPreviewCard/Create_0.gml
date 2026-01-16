@@ -1,111 +1,16 @@
-event_inherited();
+card = -1;
+deckPos=-1;
+editable=false;
 
-function Setup()
+start_x = x;
+curX=camera_get_view_x(view_camera[0]);
+hidden=false;
+
+maskSurface=undefined;
+
+function SetupCard(_editable)
 {
-	if(card<52) //standard playing cards
-	{
-		//0=Clubs,1=Hearts,2=Spades,3=Diamonds
-		suit = floor(card/13);
-	
-		//set cards starting suit values;
-		//attack(clubs) and health(hearts) must be at least 1 for chess pieces
-	
-		//clubs
-		if(suit==0)
-		{
-			switch(card%13)
-			{
-				case 0: pips = 14; clubs = pips; break;
-			
-				case 1: case 2: case 3: case 4: case 5: case 6:
-				case 7: case 8: case 9: case 10: case 11: case 12:
-
-					pips = (card%13)+1 ; clubs = pips; break;
-			}
-			hearts = 1;
-		}
-		//hearts
-		else if(suit==1)
-		{
-			switch(card%13)
-			{
-				case 0: pips = 14; hearts = pips; break;
-			
-				case 1: case 2: case 3: case 4: case 5: case 6:
-				case 7: case 8: case 9: case 10: case 11: case 12:
-			
-					pips = (card%13)+1; hearts = pips; break;
-			}
-			clubs = 1;
-		}
-		//spades
-		else if(suit==2)
-		{
-			switch(card%13)
-			{
-				case 0: pips = 14; spades = pips; break;
-			
-				case 1: case 2: case 3: case 4: case 5: case 6:
-				case 7: case 8: case 9: case 10: case 11: case 12:
-			
-					pips = (card%13)+1; spades = pips; break;
-			}
-			clubs = 1;
-			hearts = 1;
-		}
-		//diamonds
-		else if(suit==3)
-		{
-			switch(card%13)
-			{
-				case 0: pips = 14; diamonds = pips; break;
-			
-				case 1: case 2: case 3: case 4: case 5: case 6:
-				case 7: case 8: case 9: case 10: case 11: case 12:
-			
-					pips = (card%13)+1; diamonds = pips; break;
-			}
-			clubs = 1;
-			hearts = 1;
-		}
-	}
-	else //special cards
-	{
-		switch(card)
-		{
-		case 52: case 53: //52 = 1oC, 53 = 1oH 
-			pips=1;
-			clubs=1;
-			hearts=1;
-		break;
-		case 54: //1oS
-			pips=1;
-			clubs=1;
-			hearts=1;
-			spades=1;
-		break;
-		case 55: //1oD
-			pips=1;
-			clubs=1;
-			hearts=1;
-			diamonds=1;
-		break;
-		case 56: //15oS
-			pips=14;
-			clubs=1;
-			hearts=1;
-			spades=15;
-		break;
-		case 57: //15oD
-			pips=14;
-			clubs=1;
-			hearts=1;
-			diamonds=15;
-		break;
-		}
-	}
-	
-	//set the sprite
+	editable = _editable;
 	switch(card)
 	{
 		case 0: sprite_index=spr_AoC; break;
@@ -166,10 +71,6 @@ function Setup()
 		case 55: sprite_index=spr_1oD; break;
 		case 56: sprite_index=spr_15oS; break;
 		case 57: sprite_index=spr_15oD; break;
-		default:
-			instance_destroy();
-		break;
+		default: instance_destroy(); break;
 	}
-	
-	AddCardToHand();
 }

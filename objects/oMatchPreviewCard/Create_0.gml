@@ -1,14 +1,18 @@
 card = -1;
 deckPos=-1;
+editable=false;
 
 start_x = x;
 curX=camera_get_view_x(view_camera[0]);
 hidden=false;
+switchedState = false;
 
 maskSurface=undefined;
 
-function SetupCard()
+function SetupCard(_editable)
 {
+	show_debug_message("("+string(x)+","+string(y)+")");
+	editable = _editable;
 	switch(card)
 	{
 		case 0: sprite_index=spr_AoC; break;
@@ -63,6 +67,8 @@ function SetupCard()
 		case 49: sprite_index=spr_JoD; break;
 		case 50: sprite_index=spr_QoD; break;
 		case 51: sprite_index=spr_KoD; break;
+		case 52: sprite_index=spr_1oC; break;
+		case 53: sprite_index=spr_1oH; break;
 		case 54: sprite_index=spr_1oS; break;
 		case 55: sprite_index=spr_1oD; break;
 		case 56: sprite_index=spr_15oS; break;
