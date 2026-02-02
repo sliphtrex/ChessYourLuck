@@ -134,76 +134,91 @@ global.ConvoString="";
 
 global.AnuMatchNum=0;
 global.AnuConvos=0;
+global.AnuComplete=false;
 
 global.TitusMatchNum=0;
 global.TitusConvos=0;
 global.TitusCheckpoint="";
 global.TitusAffinity=5;
+global.TitusComplete=false;
 
 global.AmandaMatchNum=0;
 global.AmandaConvos=0;
 global.AmandaCheckpoint="";
 global.AmandaAffinity=3;
+global.AmandaComplete=false;
 
 global.MarjorieMatchNum=0;
 global.MarjorieConvos=0;
 global.MarjorieCheckpoint="";
 global.MarjorieAffinity=5;
+global.MarjorieComplete=false;
 
 global.JarodMatchNum=0;
 global.JarodConvos=0;
 global.JarodCheckpoint="";
 global.JarodAffinity=5;
+global.JarodComplete=false;
 
 global.DanteMatchNum=0;
 global.DanteConvos=0;
 global.DanteCheckpoint="";
 global.DanteAffinity=5;
+global.DanteComplete=false;
 
 global.RebeccaMatchNum=0;
 global.RebeccaConvos=0;
 global.RebeccaCheckpoint="";
 global.RebeccaAffinity=5;
+global.RebeccaComplete=false;
 
 global.AdamMatchNum=0;
 global.AdamConvos=0;
 global.AdamCheckpoint="";
 global.AdamAffinity=5;
+global.AddamComplete=false;
 
 global.CedricMatchNum=0;
 global.CedricConvos=0;
 global.CedricCheckpoint="";
 global.CedricAffinity=5;
+global.CedricComplete=false;
 
 global.SavannahMatchNum=0;
 global.SavannahConvos=0;
 global.SavannahCheckpoint="";
 global.SavannahAffinity=5;
+global.SavannahComplete=false;
 
 global.SusanMatchNum=0;
 global.SusanConvos=0;
 global.SusanCheckpoint="";
 global.SusanAffinity=5;
+global.SusanComplete=false;
 
 global.ConnieMatchNum=0;
 global.ConnieConvos=0;
 global.ConnieCheckpoint="";
 global.ConnieAffinity=5;
+global.ConnieComplete=false;
 
 global.DrewMatchNum=0;
 global.DrewConvos=0;
 global.DrewCheckpoint="";
 global.DrewAffinity=5;
+global.DrewComplete=false;
 
 global.LindsayMatchNum=0;
 global.LindsayConvos=0;
 global.LindsayCheckpoint="";
 global.LindsayAffinity=5;
+global.LindsayComplete=false;
 
 global.MarthaMatchNum=0;
 global.MarthaConvos=0;
 global.MarthaCheckpoint="";
 global.MarthaAffinity=5;
+global.MarthaComplete=false;
 
 #endregion
 
@@ -247,62 +262,77 @@ function ResetGlobals()
 
 	global.AnuMatchNum=0;
 	global.AnuConvos=0;
+	global.AnuComplete=false;
 
 	global.TitusMatchNum=0;
 	global.TitusConvos=0;
 	global.TitusAffinity=5;
+	global.TitusComplete=false;
 
 	global.AmandaMatchNum=0;
 	global.AmandaConvos=0;
 	global.AmandaAffinity=3;
+	global.AmandaComplete=false;
 
 	global.MarjorieMatchNum=0;
 	global.MarjorieConvos=0;
 	global.MarjorieAffinity=5;
+	global.MarjorieComplete=false;
 
 	global.JarodMatchNum=0;
 	global.JarodConvos=0;
 	global.JarodAffinity=5;
+	global.JarodComplete=false;
 
 	global.DanteMatchNum=0;
 	global.DanteConvos=0;
 	global.DanteAffinity=5;
+	global.DanteComplete=false;
 
 	global.RebeccaMatchNum=0;
 	global.RebeccaConvos=0;
 	global.RebeccaAffinity=5;
+	global.RebeccaComplete=false;
 
 	global.AdamMatchNum=0;
 	global.AdamConvos=0;
 	global.AdamAffinity=5;
+	global.AddamComplete=false;
 
 	global.CedricMatchNum=0;
 	global.CedricConvos=0;
 	global.CedricAffinity=5;
+	global.CedricComplete=false;
 
 	global.SavannahMatchNum=0;
 	global.SavannahConvos=0;
 	global.SavannahAffinity=5;
+	global.SavannahComplete=false;
 
 	global.SusanMatchNum=0;
 	global.SusanConvos=0;
 	global.SusanAffinity=5;
+	global.SusanComplete=false;
 
 	global.ConnieMatchNum=0;
 	global.ConnieConvos=0;
 	global.ConnieAffinity=5;
+	global.ConnieComplete=false;
 
 	global.DrewMatchNum=0;
 	global.DrewConvos=0;
 	global.DrewAffinity=5;
+	global.DrewComplete=false;
 
 	global.LindsayMatchNum=0;
 	global.LindsayConvos=0;
 	global.LindsayAffinity=5;
+	global.LindsayComplete=false;
 
 	global.MarthaMatchNum=0;
 	global.MarthaConvos=0;
 	global.MarthaAffinity=5;
+	global.MarthaComplete=false;
 	
 	ResetCheckpoints();
 }

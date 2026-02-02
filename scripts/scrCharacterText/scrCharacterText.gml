@@ -30,6 +30,7 @@ function CharacterText()
 function Add_A() {global.ConvoString += "A"; CharacterText();}
 function Add_B() {global.ConvoString += "B"; CharacterText();}
 function Add_C() {global.ConvoString += "C"; CharacterText();}
+function Add_D() {global.ConvoString += "D"; CharacterText();}
 
 #region Anu Convos / Card Shop
 //This determines if Anu has available dialogue and generates it if it exists
@@ -235,6 +236,7 @@ function SavannahText()
 			}
 	break;
 	case "Sav1A":
+		global.SavannahAffinity--;
 		Add_Text("I should've known you'd take his side.\nYou seem like two peas in a pod.\nAll buddy buddy type.");
 		NextMove = Add_A;
 	break;
@@ -243,6 +245,7 @@ function SavannahText()
 	case "Sav1AA":
 		global.SavannahCheckpoint = "Sav1AA";
 		Add_Text("Okay, you can go now. I don't have time for the likes of you.");
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
 	break;
 	
 	case "Sav1B":
@@ -250,7 +253,7 @@ function SavannahText()
 		if(global.PlayerIcon==0){pronoun = ", man";}
 		else if(global.PlayerIcon==1){pronoun = ", gurl";}
 		else if(global.PlayerIcon==2){pronoun = ", doggo";}
-		else if(global.PlayerIcon==2){pronoun = ", pretty girl";}
+		else if(global.PlayerIcon==2){pronoun = ", pretty kitty";}
 		Add_Text("Right!?! That's what I'm saying"+pronoun+"! You can't trust him either, can you?\n\nI knew you'd be the type to agree with me. We homies now.");
 		Add_Text("I'm telling you though, it's always the quiet ones who you can't trust. You think everything is fine until they stab you in the back.\n\nNo warnings!\nCold blooded.");
 		if(global.PlayerIcon==0||global.PlayerIcon==1)
@@ -300,12 +303,16 @@ function SavannahText()
 	
 	//Savannah loses the match
 	case "Sav1L":
+		global.SavannahConvos++;
+		global.SavannahMatchNum++;
 		var pronoun = "";
 		if(global.PlayerIcon==0){pronoun = "man";}
 		if(global.PlayerIcon==1){pronoun = "dude";}
 		if(global.PlayerIcon==2){pronoun = "little buddy";}
 		if(global.PlayerIcon==3){pronoun = "you sweet thing, you";}
-		Add_Text("Hey "+pronoun+", I'm sorry for being such a bitch." + (global.PlayerIcon==2) ? "... Oh, sorry, buddy. Is that species-ist?":"");
+		var firstText = "Hey "+pronoun+", I'm sorry for being such a bitch.";
+		if(global.PlayerIcon==2){firstText+="... Oh, sorry, buddy. Is that species-ist?";}
+		Add_Text(firstText);
 		Add_Text("I'm just... I always get like this after a big night out. I turn all paranoid and like... aggressive.");
 		Add_Text("I just keep thinking about my ex. You know? He used to be so open with me about what was on his mind.");
 		Add_Text("When I finally agreed that we could both see other people, he always made it a point to check in with me and make sure I was \"really okay\" before asking anyone out.");
@@ -410,12 +417,12 @@ function SavannahText()
 		var intro = "";
 		if(global.PlayerIcon==0||global.PlayerIcon==1)
 		{
-			intro = "I am!";
+			intro = "I am! ";
 			global.SavannahAffinity--;
 		}
-		else if(global.PlayerIcon==2){intro = "You don't like it when I do drugs do you?";}
-		else if(global.PlayerIcon==3){intro = "You think I should be taking better care of myself, huh?";}
-		Add_Text(intro+" I realize I have to be part of the solution, not part of the problem.");
+		else if(global.PlayerIcon==2){intro = "You don't like it when I do drugs do you? ";}
+		else if(global.PlayerIcon==3){intro = "You think I should be taking better care of myself, huh? ";}
+		Add_Text(intro+"I realize I have to be part of the solution, not part of the problem.");
 		Add_Text("I also realize that it's not entirely my fault since the system is rigged against me.");
 		global.SavannahCheckpoint="Sav2BA";
 	case "Sav2BA":
@@ -452,12 +459,14 @@ function SavannahText()
 			var pronoun = (global.PlayerIcon==1) ? ", right?":"";
 			Add_Text("Yeah, that would be the best option. Though that would require me to find more friends like you that don't live at the club.");
 			Add_Text("Hey, we're friends"+pronoun+"! That's a good start!");
+			global.SavannahCheckpoint = "Preview";
 			NextMove = PreviewPlayer;
 		}
 		else if(global.PlayerIcon==2||global.PlayerIcon==3)
 		{
 			Add_Text("I guess, I just need to find more friends like you who don't live at the club.");
 			Add_Text("...And preferably some who are human... no offense.");
+			global.SavannahCheckpoint = "Preview";
 			NextMove = PreviewPlayer;
 		}
 	break;
@@ -481,6 +490,8 @@ function SavannahText()
 	
 	//Savannah loses the match
 	case "Sav2L":
+		global.SavannahConvos++;
+		global.SavannahMatchNum++;
 		if(global.PlayerIcon==0||global.PlayerIcon==1)
 		{
 		Add_Text("So, I just got back from this underground rave, right? I was all gassed up for it, you know? Whipped it real good, if you know what I mean.");
@@ -552,6 +563,359 @@ function SavannahText()
 	
 	#region convo 3
 	
+	case "Sav3":
+		var pronoun = "";
+		if(global.PlayerIcon==0){pronoun = "duderino";}
+		else if(global.PlayerIcon==1){pronoun = "girlie mc-girl face";}
+		else if(global.PlayerIcon==2){pronoun = "doggy doggo";}
+		else if(global.PlayerIcon==2){pronoun = "cool cat";}
+		Add_Text("Hey "+pronoun+"!");
+		Add_Text("Can you keep a secret?");
+		if(global.PlayerIcon==0)
+		{
+			Add_Option("Are you okay?",Add_B);
+			Add_Option("What's up, friend?",Add_A);
+		}
+		else if(global.PlayerIcon==1)
+		{
+			Add_Option("Oh no! what happened?",Add_B);
+			Add_Option("What is it?",Add_A);
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Option("sniff and cover nose",Add_B);
+			Add_Option("nod head",Add_A);
+		}
+		else if(global.PlayerIcon==3)
+		{
+			Add_Option("meow loudly",Add_B);
+			Add_Option("do nothing",Add_A);
+		}
+	break;
+	
+	case "Sav3B":
+		if(global.PlayerIcon==0)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("I'm fine! I'm just a little drunk... and maybe a little high.");
+			if(global.SavannahAffinity<=0){ Add_Text("Why does always something needs to always happen with you for me to get like this?");}
+		}
+		else if(global.PlayerIcon==1)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Shut uu-uup. You're so mean to me!");
+			if(global.SavannahAffinity<=0){ Add_Text("Why does something always need to HAPPEN with you?");}
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Text("Ohhhh! It's okay baby! Don't leave, please.");
+		}
+		else if(global.PlayerIcon==3)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Shhh! Not so loud! I'm trying not to make a scene!");
+		}
+		NextMove=Add_A;
+	break;
+	
+	case "Sav3BA":
+		global.SavannahCheckpoint = "Sav3BA";
+		if(global.PlayerIcon==0)
+		{
+			Add_Text("Can't a girl just get lit and have fun?");
+			if(global.SavannahAffinity<=0) {Add_Text("FORGET IT!! You're no fun! I'm leaving!");}
+		}
+		else if(global.PlayerIcon==1)
+		{
+			Add_Text((global.SavannahAffinity<=0) ? "I'm so tired of you judging me all the time. You're no fun! I'm leaving!"
+			: "You're no fun. Quit harshing my vibe.");
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Text("Awe, you're no fun, pup.");
+		}
+		else if(global.PlayerIcon==3)
+		{
+			Add_Text((global.SavannahAffinity<=0) ? "Go on, get out of here! Why don't you just leave me like everyone else?!"
+			: "I'm sorry, the vibes just aren't there today.");
+		}
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
+	break;
+	
+	case "Sav3A":
+		if(global.PlayerIcon==0)
+		{
+			Add_Text("You're so supportive. Why can't all men be like you, haha! To tell you the truth, I'm kinda drunk right now... and maybe a little high.");
+			global.SavannahAffinity++;
+		}
+		else if(global.PlayerIcon==1){Add_Text("I'm just going through it right now. A little drunk, a little high.");}
+		else if(global.PlayerIcon==2){Add_Text("Awe baby, you're such a good listener.");}
+		else if(global.PlayerIcon==3){Add_Text("I'll take that as a yee-aaassss.");}
+		
+		Add_Text("It's Becca! Can you believe she's been sleeping on the streets!");
+		Add_Text("That dumb bitch! Why wouldn't she even tell me? I thought we were friends!");
+		Add_Text("I mean... it's not like I could really do much... but like... I'm her friend. I could've done something.");
+		Add_Text("I wouldn't have been mad if she had just told me. Whatever! I can't with her.");
+		
+		global.SavannahCheckpoint = "Preview";
+		NextMove = PreviewPlayer;
+	break;
+	
+	//Savannah wins the match
+	case "Sav3W":
+		Add_Text("Hey, even at my worst, I'm still good at this game. I guess that's something.");
+		Add_Text("Play again sometime?");
+		NextMove = ChangeDayPart;
+	break;
+	
+	//Savannah loses the match
+	case "Sav3L":
+		global.SavannahConvos++;
+		global.SavannahMatchNum++;
+		var pronoun = "";
+		if(global.PlayerIcon==0){pronoun = "dude... bro.";}
+		else if(global.PlayerIcon==1){pronoun = "girlie-friend.";}
+		else if(global.PlayerIcon==2){pronoun = "doggo, puppy friend.";}
+		else if(global.PlayerIcon==2){pronoun = "kitty mc-kitty face... fat... kate... huh?";}
+		
+		Add_Text("Hey "+pronoun+" Can I ask you something? Why is it that everyone leaves me?");
+		if(global.PlayerIcon==0)
+		{
+			Add_Option("I don't know.", Add_A);
+			Add_Option("You're kinda self-absorbed", Add_B);
+		}
+		else if(global.PlayerIcon==1)
+		{
+			Add_Option("I don't know.", Add_A);
+			Add_Option("You're a conceited jerk", Add_B);
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Option("shake head", Add_A);
+			Add_Option("bark", Add_B);
+		}
+		else if(global.PlayerIcon==3)
+		{
+			Add_Option("blink slowly", Add_A);
+			Add_Option("walk away", Add_B);
+		}
+	break;
+	
+	case "Sav3LA":
+		if(global.PlayerIcon==0)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Sure you don't. Man, no one ever thinks I can handle criticism.");
+			if(global.SavannahAffinity<=0){Add_Text("It's okay, I'll get out of your hair.");}
+		}
+		else if(global.PlayerIcon==1)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Sure you don't. You really are just another bitch, huh?");
+			if(global.SavannahAffinity<=0){Add_Text("I thought you would be different. Turns out I was wrong.");}
+		}
+		else if(global.PlayerIcon==2)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Sorry little buddy. I'm probably overloading your tiny mind right now, huh?");
+			if(global.SavannahAffinity<=0){Add_Text("I guess I'll just get out of your fur and stop trying to have conversations with aminals.");}
+		}
+		else if(global.PlayerIcon==3)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("Yeah, I don't really know what I was expecting honestly. That was a hard one for a cat. Man, I'm in deep.");
+			if(global.SavannahAffinity<=0){Add_Text("I guess I'll just get out of your fur and stop trying to have conversations with aminals.");}
+		}
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
+		NextMove = ChangeDayPart;
+	break;
+	
+	case "Sav3LB":
+		if(global.PlayerIcon==0)
+		{
+			global.SavannahAffinity-=10;
+			Add_Text("What the heck! Come on man! That's totally bull and you know it! You barely freaking know me! Geez, who asked you anyway?");
+			if(global.SavannahAffinity<=0){Add_Text("It's okay, I'll get out of your hair. Since CLEARLY I'm the problem here!");}
+		}
+		else if(global.PlayerIcon==1)
+		{
+			global.SavannahAffinity+=3;
+			Add_Text("Damn! Well aren't YOU a bitch today.");
+			Add_Text("That's okay. I really respect that. Tell me like it is. Everyone else just seems to walk on eggshells because they think I can't handle criticism.");
+			Add_Text("Reality is, most people can't take the same kinds of criticism they dish out.");
+			Add_Text("Honestly, I had a feeling I might come across that way to outsiders. Guess I just needed to hear it from another bitch like me.");
+			Add_Text("Thanks bestie! I'll see you soon.");
+		}
+		else if(global.PlayerIcon==2)
+		{
+			global.SavannahAffinity-=2;
+			Add_Text("Hey! You scared me there, buddy!");
+			if(global.SavannahAffinity<=0)
+			{
+			Add_Text("Wait, you're seriously afraid of me right now? Oh my god!");
+			Add_Text("I'm so sorry little one. I didn't realize I was this bad.");
+			Add_Text("I should go.");
+			}else{
+			Add_Text("Sorry, that really threw off the vibe. I'm a mess aren't I? I should probably go.");
+			}
+		}
+		else if(global.PlayerIcon==3)
+		{
+			global.SavannahAffinity-=3;
+			Add_Text("NOT YOU TOO!!");
+			if(global.SavannahAffinity<=0)
+			{
+			Add_Text("Fine then!");
+			Add_Text("Go on, get out! Leave me just like everyone else does!");
+			}
+		}
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
+		NextMove = ChangeDayPart;
+	break;
+	
+	#endregion
+	
+	#region convo 4
+	
+	case "Sav4":
+		var pronoun = "";
+		if(global.PlayerIcon==0){pronoun = "buddy";}
+		else if(global.PlayerIcon==1){pronoun = "bestie";}
+		else if(global.PlayerIcon==2){pronoun = "friendo";}
+		else if(global.PlayerIcon==3){pronoun = "kitty";}
+		Add_Text("Hey "+pronoun+", can I tell you something?");
+		if(global.PlayerIcon==0)
+		{
+			Add_Option("Kinda busy right now",Add_A);
+			Add_Option("What is it now?", Add_D);
+			Add_Option("Yeah! what's up?",Add_B);
+		}
+		else if(global.PlayerIcon==1)
+		{
+			Add_Option("I don't want to hear it.", Add_A);
+			Add_Option("What is it now?", Add_C);
+			Add_Option("What's on your mind?",Add_B);
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Option("bark aggressively", Add_A);
+			Add_Option("bark playfully", Add_C);
+		}
+		else if(global.PlayerIcon==3) 
+		{
+			Add_Option("Hiss", Add_A);
+			Add_Option("Look away impassively", Add_B);
+		}
+	break;
+
+	case "Sav4A":
+		global.SavannahAffinity--;
+		NextMove=Add_A;
+    
+	case "Sav4AA":
+		global.SavannahCheckpoint = "Sav4AA";
+		Add_Text("That's cold... but I get it.");
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
+	break;
+
+	case "Sav4B": case "Sav4C":
+		if(global.ConvoString=="Sav4B")
+		{
+			if(global.PlayerIcon==0)
+			{
+			Add_Text("Man, you need to grow a pair! I've been walking all over you. You're too nice. Why do you let me do that?");
+			Add_Text("Though really, I guess I should be thanking you for thaaa...");
+			}
+			else if(global.PlayerIcon==1) {Add_Text("Girl, stand up to me more! Where's that bitchy energy from last time?");}
+			else if(global.PlayerIcon==3) {Add_Text("Whatever. I'll just tell you since you're still here.");}
+		}
+		else if(global.ConvoString=="Sav4C")
+		{
+			if(global.PlayerIcon==1){Add_Text("Damn bestie! I see you being a bitch! You're getting really good at thaaa...");}
+			if(global.PlayerIcon==2){Add_Text("Someone's feeling playful today. Unfortunately, I'm kinda glued to the chair at the moment.");}
+		}
+	  
+		Add_Text("...Sorry, the brownies chose the worst time to kick in...");
+		Add_Text("I've been thinking though. I've gotta get better when it comes to love. Both self-love, and compassion for others.");
+		Add_Text("Self-love means not tripping balls all the time.");
+		Add_Text("But enough about me, I've been acting like a total "+((global.PlayerIcon==2) ? "jerk":"bitch")+" lately. That's not fair to others.");
+		Add_Text("I'm not gonna be like all those hypocrites that judge people for stupid stuff. I really am trying to change.");
+		Add_Text("Do you think I'm being a hypocrite?");
+		
+		if(global.PlayerIcon==0)
+		{
+			Add_Option("No way!",Add_A);
+			Add_Option("Yeah, totally.",Add_B);
+		}
+		else if(global.PlayerIcon==1)
+		{
+			Add_Option("You want honesty?",Add_A);
+			Add_Option("No doubt about it!",Add_B);
+		}
+		else if(global.PlayerIcon==2)
+		{
+			Add_Option("shake head",Add_A);
+			Add_Option("Nod in confirmation", Add_B);
+		}
+		else if(global.PlayerIcon==3)
+		{
+			Add_Option("Yawn.",Add_A);
+			Add_Option("Nod deliberately",Add_B);
+		}
+	break;
+	
+	case "Sav4BA": case "Sav4BB": case "Sav4CA": case "Sav4CB":
+		if(global.ConvoString=="Sav4BA" || global.ConvoString=="Sav4CA")
+		{
+			if(global.PlayerIcon==0){Add_Text("You don't have to lie to protect me.");}
+			else if(global.PlayerIcon==1){Add_Text("Gurl, give me the truth! I can handle it!");}
+			else if(global.PlayerIcon==2){Add_Text("You know, at least I've got your undying loyalty.");}
+			else if(global.PlayerIcon==3){Add_Text("Am I boring you now?");}
+		}
+		else if(global.ConvoString=="Sav4BB" || global.ConvoString=="Sav4CB")
+		{
+			if(global.PlayerIcon==0){Add_Text("He finally said it!");}
+			else if(global.PlayerIcon==1){Add_Text("Damn straight, bitch!");}
+			else if(global.PlayerIcon==2){Add_Text("Even this dog knows my ways.");}
+			else if(global.PlayerIcon==3){Add_Text("Hey now. I'm starting to think you did that on purpose.");}
+		}
+		
+		Add_Text("It's okay. I know I'm a bit judgy sometimes. I'm gonna make a serious effort to not do that so much anymore.");
+		Add_Text("I hope you'll support me on this journey.");
+		NextMove=PreviewPlayer;
+	break;
+	
+	case "Sav4D":
+		global.SavannahAffinity--;
+		Add_Text("Hey man, watch your tone.");
+	case "Sav4DA":
+		global.SavannahCheckpoint="Sav4DA";
+		Add_Text("It's okay. It wasn't that important anyway.");
+		if(global.SavannahAffinity<=0){NextMove=EndSavannahRoute;}
+	break;
+	
+	//Savannah wins the match
+	case "Sav4W":
+		Add_Text("Hey, that was fun. I really like playing against you.");
+		Add_Text("Play again next time?");
+		NextMove=ChangeDayPart;
+	break;
+	
+	case "Sav4L":
+		global.SavannahConvos++;
+		global.SavannahMatchNum++;
+		Add_Text("Wait... no. Something feels wrong... am I...");
+		Add_Text("...dead?");
+		Add_Text("How did this...?");
+		Add_Text("That's right. It must've been that concert... The Molly Darkly Moon Arena.");
+		Add_Text("I invited Becca to see her fave band, on me. We did some party stuff, and then my heart just started racing...");
+		Add_Text("I didn't want things to end like this. I was gonna change. I swear I was on the verge of a breakthrough.");
+		Add_Text("Promise me you'll pass on my message of meeting people where they're at. And always be true to yourself. Even if it means you're a "+((global.PlayerIcon==2) ? "jerk":"bitch")+".");
+		Add_Text("P.L.U.R. vibes all day.");
+		global.SavannahComplete=true;
+		NextMove=EndSavannahRoute;
+	break;
+	
 	#endregion
 	
 	}
@@ -579,7 +943,7 @@ function AdamText()
 //that player's Match number to determine what their deck and abilities will look like.
 function PreviewPlayer()
 {
-	instance_create_layer(0,0,"Instances",oMatchPreviewer);
+	instance_create_layer(0,0,"CardShop",oMatchPreviewer);
 }
 
 function ChangeDayPart()

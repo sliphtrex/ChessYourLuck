@@ -96,6 +96,7 @@
     {"id":{"name":"oDante","path":"objects/oDante/oDante.yy",},},
     {"id":{"name":"oDaypartIcon","path":"objects/oDaypartIcon/oDaypartIcon.yy",},},
     {"id":{"name":"oDeck","path":"objects/oDeck/oDeck.yy",},},
+    {"id":{"name":"oDefaultWinManager","path":"objects/oDefaultWinManager/oDefaultWinManager.yy",},},
     {"id":{"name":"oDiamondCounter","path":"objects/oDiamondCounter/oDiamondCounter.yy",},},
     {"id":{"name":"oDiamondPipParticle","path":"objects/oDiamondPipParticle/oDiamondPipParticle.yy",},},
     {"id":{"name":"oDiscardPile","path":"objects/oDiscardPile/oDiscardPile.yy",},},

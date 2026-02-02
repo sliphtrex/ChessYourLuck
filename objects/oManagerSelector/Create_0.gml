@@ -11,6 +11,7 @@ else if(global.ConvoChar=="Savannah")
 	switch(global.SavannahMatchNum)
 	{
 		case 0: instance_create_layer(0,0,"Text",oSavannahManager0); break;
+		default: instance_create_layer(0,0,"Text",oDefaultWinManager); break;
 	}
 	instance_destroy();
 }

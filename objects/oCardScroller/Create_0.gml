@@ -21,7 +21,9 @@ function Setup(_editable=false)
 	
 	for(var i=0;i<array_length(previewDeck);i++)
 	{
-		cardProfs[i] = instance_create_layer((curX+150+(105*i)),room_height-150,"CardShop",(editable) ? oCSPreviewCard : oMatchPreviewCard);
+		cardProfs[i] = instance_create_layer((curX+150+(105*i)),room_height-150,
+			(editable) ? "CardShop" : "Text",
+			(editable) ? oCSPreviewCard : oMatchPreviewCard);
 		cardProfs[i].card = previewDeck[i];
 		cardProfs[i].deckPos=i;
 		cardProfs[i].SetupCard(editable);
