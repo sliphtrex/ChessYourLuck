@@ -17,7 +17,6 @@ function Setup(_editable=false)
 {
 	editable = _editable;
 	curX=camera_get_view_x(view_camera[0]);
-	show_debug_message("("+string(curX)+","+string(curX+room_width)+")");
 	
 	for(var i=0;i<array_length(previewDeck);i++)
 	{

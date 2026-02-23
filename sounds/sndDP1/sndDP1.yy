@@ -9,7 +9,7 @@
   "bitRate":128,
   "compression":0,
   "conversionMode":0,
-  "duration":0.0,
+  "duration":0.15795918,
   "name":"sndDP1",
   "parent":{
     "name":"Particle Foley",

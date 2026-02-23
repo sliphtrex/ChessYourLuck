@@ -1,5 +1,6 @@
 specialAbility = -1;
 playerAb = false;
+slot = 0; //slot 0, 1, or 2
 //which side is our description on; true = left, false = right;
 descSide=true;
 shop=false;
@@ -7,6 +8,9 @@ hoverText = "";
 cost = -1;
 hovering = false;
 image_speed=0;
+
+start_x=x;
+curX=camera_get_view_x(view_camera[0]);
 
 function Setup()
 {

@@ -339,7 +339,6 @@ function ResetGlobals()
 
 function SortPlayerCards()//13,26,39
 {
-	show_debug_message(global.PlayerCards);
 	for(var i=0;i<array_length(global.PlayerCards)-1;i++)
 	{
 		//this accounts for special cards in the sort algorithm
@@ -372,7 +371,6 @@ function SortPlayerCards()//13,26,39
 			global.PlayerCards[i] = card;
 		}
 	}
-	show_debug_message(global.PlayerCards);
 	
 	instance_find(oShopGenerator,0).RefreshPlayerCards();
 }

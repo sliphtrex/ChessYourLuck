@@ -123,6 +123,7 @@ function UseAbility(obj=undefined)
 				
 				if(adjacentPiece) {BorWPieces[i].Health+=3; used=true;}
 			}
+			instance_find(oMatchManager,0).Wait();
 		break;
 		#endregion
 		#region pragma
@@ -145,19 +146,29 @@ function UseAbility(obj=undefined)
 		#endregion
 		#region philautia
 		case 18:
-			var BorW = playerAb;
+			var BorW = (instance_find(oMatchManager,0).pStart) ? !(playerAb) : (playerAb);
 			var BorWPieces = (BorW) ? instance_find(oField,0).blackPieces
 				: instance_find(oField,0).whitePieces;
 			for(var i=0;i<array_length(BorWPieces);i++)
-			{BorWPieces[i].Health++;}
+			{
+				var hc = instance_create_layer(BorWPieces[i].x,BorWPieces[i].y,"UILayer",oHeartCounter);
+				hc.hearts=1;
+				BorWPieces[i].Health++;
+			}
 			used=true;
+			instance_find(oMatchManager,0).Wait();
 		break;
 		#endregion
 		#region pain
 		case 34:
 			//here we need the specific chess piece
 			if(obj==undefined){instance_find(oField,0).SpecialAbilityInProgress(id);}
-			else{obj.Health-=1; used = true;}
+			else
+			{
+				instance_create_layer(obj.x,obj.y,"CardObjects",oPainBolt);
+				obj.Health-=1;
+				used = true;
+			}
 		break;
 		#endregion
 		default:

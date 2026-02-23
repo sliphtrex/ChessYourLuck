@@ -137,6 +137,8 @@ function TurnManager()
 			tb.bg = sprSavannahVoidTextBox;
 			tb.color = #8c52ff;
 			queenGoodThisTurn=true;
+			//we only return here because the oSpAbAnim should take care of Waiting
+			return;
 		}
 		//II. Otherwise, use hearts.
 		else if(queen.Health<10 && (cardsDrawn<1||SuitInHand(1)!=undefined))
@@ -175,8 +177,21 @@ function TurnManager()
 	else if(!kingGoodThisTurn)
 	{
 		show_debug_message("[4]");
+		//I. Try to use Society if we can
+		if(OSA2.CheckIfUsable())
+		{
+			OSA2.UseAbility();
+				
+			var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
+			tb.text = "Ride or die bitches!";
+			tb.bg = sprSavannahVoidTextBox;
+			tb.color = #8c52ff;
+			queenGoodThisTurn=true;
+			//we only return here because the oSpAbAnim should take care of Waiting
+			return;
+		}
 		
-		//I. does the king have enough pieces surrounding it?
+		//II. does the king have enough pieces surrounding it?
 		if(!CheckKingSurrounded())
 		{
 			//i. start by playing the Queen of Clubs if we have it
@@ -204,7 +219,7 @@ function TurnManager()
 			}
 		}
 		
-		//II. is there any piece of the player's that could attack the king?
+		//III. is there any piece of the player's that could attack the king?
 		if(!threatAssessmentDone)
 		{
 			threatToKing=undefined
@@ -230,11 +245,12 @@ function TurnManager()
 			if(kingsChoice==0)
 			{
 				//attack the first piece on the list (then move onto ii)
-				if(OSA1.CheckIfUsable())
+				if(OSA1.CheckIfUsable() && OSA1use==0)
 				{
 					var popAfter=false;
-					if(threatToKing[0].Health==1&&pragma==false){popAfter=true;}
+					if(threatToKing[0].Health==1&&threatToKing[0].pragma==false){popAfter=true;}
 					OSA1.UseAbility(threatToKing[0]);
+					OSA1use++;
 					
 					var tb = instance_create_layer(x,y,"ParallaxLayer",oMatchTextBox);
 					tb.text = "How do YOU like it?";
@@ -242,6 +258,10 @@ function TurnManager()
 					tb.color = #8c52ff;
 					
 					if(popAfter){array_delete(threatToKing,0,1);}
+					kingsChoice++;
+					
+					//we only return here because the oSpAbAnim should take care of Waiting
+					return;
 				}
 				kingsChoice++;
 				Wait();

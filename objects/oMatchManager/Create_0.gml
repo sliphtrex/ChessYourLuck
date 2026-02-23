@@ -37,9 +37,10 @@ pBorderDepth=undefined;
 opBorderDepth=undefined;
 
 //the oSpecialAbility objects for both players
-PSA1=undefined;		OSA1=undefined;
-PSA2=undefined;		OSA2=undefined;
-PSA3=undefined;		OSA3=undefined;
+PSA1=undefined;		OSA1=undefined;		OSA1use=0;
+PSA2=undefined;		OSA2=undefined;		OSA2use=0;
+PSA3=undefined;		OSA3=undefined;		OSA3use=0;
+//OSAuse = # of times opponent used a SpAb ^
 
 //the field object which handles setting up grid tiles
 field=undefined;

@@ -1,0 +1,1 @@
+instance_find(oShopGenerator,0).heldSpAb=id;

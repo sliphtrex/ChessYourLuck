@@ -5,13 +5,11 @@ editable=false;
 start_x = x;
 curX=camera_get_view_x(view_camera[0]);
 hidden=false;
-switchedState = false;
 
 maskSurface=undefined;
 
 function SetupCard(_editable)
 {
-	show_debug_message("("+string(x)+","+string(y)+")");
 	editable = _editable;
 	switch(card)
 	{
