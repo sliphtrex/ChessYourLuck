@@ -3,11 +3,12 @@ depth = -999;
 
 //are we buying or editing
 shop=true;
+inUse = false;
 cost = -1;
 hovering = false;
 hoverText = "";
 
-start_x = x;
+start_x = room_width-200;
 start_y = y;
 hidden = false;
 
@@ -48,4 +49,8 @@ function SetupSpAb()
 			sprite_index = sprEmptyAb;
 		break;
 	}
+	
+	if(spAb==global.PlayerSpecialAbility1){inUse=true;}
+	else if(spAb==global.PlayerSpecialAbility2){inUse=true;}
+	else if(spAb==global.PlayerSpecialAbility3){inUse=true;}
 }

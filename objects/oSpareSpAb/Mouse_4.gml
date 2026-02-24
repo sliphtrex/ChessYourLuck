@@ -1,0 +1,1 @@
+if(global.SpecialsUnlocked[spAb] && !inUse){instance_find(oShopGenerator,0).heldSpAb=id;}

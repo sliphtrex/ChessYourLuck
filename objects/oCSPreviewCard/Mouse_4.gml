@@ -1,1 +1,0 @@
-if(editable){instance_find(oShopGenerator,0).heldCard=id;}

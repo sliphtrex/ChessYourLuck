@@ -1,54 +1,59 @@
-/*if(instance_find(oShopGenerator,0).heldSpAb==id && x>=room_width)
-{
-	curX=camera_get_view_x(view_camera[0]);
-	if(x>curX+room_width-400)
-	{
-		array_push(global.PlayerSpareCards,card);
-		instance_find(oShopGenerator,0).RefreshSpareCards();
-	
-		for(var i=0;i<array_length(global.PlayerCards);i++)
-		{
-			if(global.PlayerCards[i]==card)
-			{
-				//remove from deck
-				array_delete(global.PlayerCards,i,1);
-				SortPlayerCards();
-				break;
-			}
-		}
-	}
-
-	if(instance_find(oShopGenerator,0).heldCard!=undefined
-		&&instance_find(oShopGenerator,0).heldCard==id)
-	{instance_find(oShopGenerator,0).heldCard=undefined;}
-}*/
-
-if(shop && instance_find(oShopGenerator,0).heldSpAb!=undefined)
+if(editable && instance_find(oShopGenerator,0).heldSpAb!=undefined)
 {
 	var hSpAb = instance_find(oShopGenerator,0).heldSpAb.spAb;
+	show_debug_message(instance_find(oShopGenerator,0).heldSpAb);
 	
-	//update our global player SpAbs barring duplication
-	if(instance_find(oShopGenerator,0).pSpAb1==id
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb2.specialAbility
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb3.specialAbility)
+	if(instance_find(oShopGenerator,0).heldSpAb==id)
 	{
-		specialAbility = hSpAb;
-		global.PlayerSpecialAbility1 = specialAbility;
+		//if we drop it with the spare SpAbs
+		//we need to clear it from the globals and clear the icon
+		if(x>room_width-400)
+		{
+			if(slot==0){global.PlayerSpecialAbility1 = -1;}
+			else if(slot==1){global.PlayerSpecialAbility2 = -1;}
+			else if(slot==2){global.PlayerSpecialAbility3 = -1;}
+			spAb = -1;
+			instance_find(oSpAbScroller,0).SpecialProfs[hSpAb].inUse=false;
+		}
+		//in either event we need to reset position
+		x = start_x; y=start_y;
 	}
-	if(instance_find(oShopGenerator,0).pSpAb2==id
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb1.specialAbility
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb3.specialAbility)
+	
+	else if(instance_find(oShopGenerator,0).heldSpAb.object_index==oSpareSpAb)
 	{
-		specialAbility = hSpAb;
-		global.PlayerSpecialAbility2 = specialAbility;
+		//update our global player SpAbs barring duplication
+		if(instance_find(oShopGenerator,0).pSpAb1==id
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb2.spAb
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb3.spAb)
+		{
+			if(spAb != -1)
+			{instance_find(oSpAbScroller,0).SpecialProfs[spAb].inUse=false;}
+			spAb = hSpAb;
+			global.PlayerSpecialAbility1 = spAb;
+		}
+		if(instance_find(oShopGenerator,0).pSpAb2==id
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb1.spAb
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb3.spAb)
+		{
+			if(spAb != -1)
+			{instance_find(oSpAbScroller,0).SpecialProfs[spAb].inUse=false;}
+			spAb = hSpAb;
+			global.PlayerSpecialAbility2 = spAb;
+		}
+		if(instance_find(oShopGenerator,0).pSpAb3==id
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb1.spAb
+			&& hSpAb != instance_find(oShopGenerator,0).pSpAb2.spAb)
+		{
+			if(spAb != -1)
+			{instance_find(oSpAbScroller,0).SpecialProfs[spAb].inUse=false;}
+			spAb = hSpAb;
+			global.PlayerSpecialAbility3 = spAb;
+		}
+		
+		instance_find(oSpAbScroller,0).SpecialProfs[hSpAb].inUse=true;
 	}
-	if(instance_find(oShopGenerator,0).pSpAb3==id
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb1.specialAbility
-		&& hSpAb != instance_find(oShopGenerator,0).pSpAb2.specialAbility)
-	{
-		specialAbility = hSpAb;
-		global.PlayerSpecialAbility3 = specialAbility;
-	}
+	else if(instance_find(oShopGenerator,0).heldSpAb.object_index==oPreviewSpAb)
+	{instance_find(oShopGenerator,0).heldSpAb = undefined;}
 	
 	//reset our sprite
 	Setup();

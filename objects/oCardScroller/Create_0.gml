@@ -8,7 +8,7 @@ scrollDist=room_width-600;
 
 //which deck are we displaying
 previewDeck = global.PlayerCards;
-//holds the oCardShopPlayerCard objects
+//holds the oPreviewCard objects
 cardProfs=undefined;
 editable=false;
 
@@ -22,7 +22,7 @@ function Setup(_editable=false)
 	{
 		cardProfs[i] = instance_create_layer((curX+150+(105*i)),room_height-150,
 			(editable) ? "CardShop" : "Text",
-			(editable) ? oCSPreviewCard : oMatchPreviewCard);
+			(editable) ? oPreviewCard : oMatchPreviewCard);
 		cardProfs[i].card = previewDeck[i];
 		cardProfs[i].deckPos=i;
 		cardProfs[i].SetupCard(editable);

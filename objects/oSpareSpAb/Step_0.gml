@@ -4,7 +4,7 @@ if(instance_exists(oSpAbScroller))
 
 x=start_x;	
 
-if(y<0||y>800){hidden=true;}else{hidden=false;}
+if(y<50||y>room_height-50){hidden=true;}else{hidden=false;}
 image_index = (global.SpecialsUnlocked[spAb]) ? 0 : 1;
 
 if(instance_find(oShopGenerator,0).heldSpAb!=undefined

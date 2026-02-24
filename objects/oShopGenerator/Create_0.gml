@@ -144,7 +144,10 @@ function SetupMenus(_SpAb,_itemNum)
 		}
 		//setup a card scroller if we don't have one
 		if(!instance_exists(oCardScroller))
-		{instance_create_layer(0,0,"CardShop",oCardScroller);}
+		{
+			var cs = instance_create_layer(0,0,"CardShop",oCardScroller);
+			cs.Setup();
+		}
 	}
 	else if(_SpAb)
 	{
@@ -160,7 +163,7 @@ function SetupMenus(_SpAb,_itemNum)
 		
 		if(previewSpAb==undefined)
 		{previewSpAb=instance_create_layer(1370,room_height-150,"CardShop",oPreviewSpAb);}
-		previewSpAb.specialAbility = _itemNum;
+		previewSpAb.spAb = _itemNum;
 		previewSpAb.playerAb = true;
 		previewSpAb.shop = true;
 		previewSpAb.Setup();
@@ -223,26 +226,26 @@ function CloseShop()
 function BuySpAb()
 {
 	global.pDiamonds-=previewSpAb.cost;
-	global.SpecialsUnlocked[previewSpAb.specialAbility]=true;
+	global.SpecialsUnlocked[previewSpAb.spAb]=true;
 	
 	//once we buy a special ability we own it for that save file
 	for(var i=0; i<array_length(global.UnlockableSpAbs);i++)
 	{
-		if(previewSpAb.specialAbility==global.UnlockableSpAbs[i])
+		if(previewSpAb.spAb==global.UnlockableSpAbs[i])
 		{array_delete(global.UnlockableSpAbs,i,1); break;}
 	}
 	
 	if(instance_exists(item1) && item1.itemType==1
-		&&item1.item==previewSpAb.specialAbility)
+		&&item1.item==previewSpAb.spAb)
 	{instance_destroy(item1);item1=undefined;}
 	else if(instance_exists(item2) && item2.itemType==1
-		&&item2.item==previewSpAb.specialAbility)
+		&&item2.item==previewSpAb.spAb)
 	{instance_destroy(item2);item2=undefined;}
 	else if(instance_exists(item3) && item3.itemType==1
-		&&item3.item==previewSpAb.specialAbility)
+		&&item3.item==previewSpAb.spAb)
 	{instance_destroy(item3);item3=undefined;}
 	else if(instance_exists(item4) && item4.itemType==1
-		&&item4.item==previewSpAb.specialAbility)
+		&&item4.item==previewSpAb.spAb)
 	{instance_destroy(item4);item4=undefined;}
 	
 	instance_destroy(previewSpAb);
@@ -308,26 +311,27 @@ function SetupSpAbEditor()
 	
 	//setup a SpAb scroller if we don't have one 
 	if(!instance_exists(oSpAbScroller))
-	{instance_create_layer(0,0,"CardShop",oSpAbScroller);}
+	{var ss = instance_create_layer(0,0,"CardShop",oSpAbScroller); ss.shop=false;}
 	
 	pSpAb1 = instance_create_layer(200,room_height-150,"CardShop",oPreviewSpAb);
-	pSpAb1.specialAbility = global.PlayerSpecialAbility1;
+	pSpAb1.spAb = global.PlayerSpecialAbility1;
 	pSpAb1.playerAb=true;
-	pSpAb1.shop=true;
+	pSpAb1.editable=true;
 	pSpAb1.descSide = false;
 	pSpAb1.Setup();
 		
 	pSpAb2 = instance_create_layer(500,room_height-150,"CardShop",oPreviewSpAb);
-	pSpAb2.specialAbility = global.PlayerSpecialAbility2;
+	pSpAb2.spAb = global.PlayerSpecialAbility2;
 	pSpAb2.playerAb=true;
-	pSpAb2.shop=true;
+	pSpAb2.editable=true;
 	pSpAb2.descSide = false;
 	pSpAb2.Setup();
 		
 	pSpAb3 = instance_create_layer(800,room_height-150,"CardShop",oPreviewSpAb);
-	pSpAb3.specialAbility = global.PlayerSpecialAbility3;
+	pSpAb3.spAb = global.PlayerSpecialAbility3;
 	pSpAb3.playerAb=true;
-	pSpAb3.shop=true;
+	pSpAb3.editable=true;
+	pSpAb3.descSide = false;
 	pSpAb3.Setup();
 }
 #endregion

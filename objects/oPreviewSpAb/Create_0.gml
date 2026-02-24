@@ -1,4 +1,4 @@
-specialAbility = -1;
+spAb = -1;
 playerAb = false;
 slot = 0; //slot 0, 1, or 2
 //which side is our description on; true = left, false = right;
@@ -9,12 +9,13 @@ cost = -1;
 hovering = false;
 image_speed=0;
 
-start_x=x;
+editable = false;
+start_x=x; start_y=y;
 curX=camera_get_view_x(view_camera[0]);
 
 function Setup()
 {
-	switch(specialAbility)
+	switch(spAb)
 	{
 		case 0:
 			sprite_index = sprAbSurvival;

@@ -12,8 +12,8 @@
   "name":"oSpareCard",
   "overriddenProperties":[],
   "parent":{
-    "name":"Shop Objects",
-    "path":"folders/Objects/RKCobjects/Shop Objects.yy",
+    "name":"Card Objects",
+    "path":"folders/Objects/Card Objects/Card Objects.yy",
   },
   "parentObjectId":null,
   "persistent":false,

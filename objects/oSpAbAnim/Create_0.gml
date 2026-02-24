@@ -1,5 +1,6 @@
 function EndSpAb()
 {
-	instance_find(oMatchManager,0).Wait();
+	if(!instance_find(oMatchManager,0).pTurn)
+	{instance_find(oMatchManager,0).Wait();}
 	instance_destroy();
 }

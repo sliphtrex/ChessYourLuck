@@ -1,1 +1,1 @@
-instance_find(oShopGenerator,0).heldSpAb=id;
+if(editable){instance_find(oShopGenerator,0).heldSpAb=id;}

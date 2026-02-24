@@ -121,9 +121,16 @@ function UseAbility(obj=undefined)
 					}
 				}
 				
-				if(adjacentPiece) {BorWPieces[i].Health+=3; used=true;}
+				if(adjacentPiece)
+				{
+					var hc = instance_create_layer(BorWPieces[i].x,BorWPieces[i].y,"UILayer",oHeartCounter);
+					hc.hearts=3;
+					BorWPieces[i].Health+=3;
+					used=true;
+				}
 			}
-			instance_find(oMatchManager,0).Wait();
+			if(!instance_find(oMatchManager,0).pTurn)
+			{instance_find(oMatchManager,0).Wait();}
 		break;
 		#endregion
 		#region pragma
@@ -156,7 +163,8 @@ function UseAbility(obj=undefined)
 				BorWPieces[i].Health++;
 			}
 			used=true;
-			instance_find(oMatchManager,0).Wait();
+			if(!instance_find(oMatchManager,0).pTurn)
+			{instance_find(oMatchManager,0).Wait();}
 		break;
 		#endregion
 		#region pain
