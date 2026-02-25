@@ -1,36 +1,42 @@
 event_inherited();
 
+pStart=false;
+
 function TurnManager()
 {
-	//1. Have we drawn a card this turn?
-		//I. if our hand is full, we need to play cards first.
-			//i. if we have the Queen in hand, play it.
-			//ii. if we have hearts and queen is played, heal the queen.
-			//iii. if we have clubs, upgrade lower rank pieces.
-			//iV. Otherwise, combine two cards. (max rank: bishop)
-		//II. Draw a card.
-	//2. Has the king moved this turn?
-		//I. Can it move?
-			//i. if yes, move to least harmful spot.
-		//II. if not, set it's hasMoved = true 
-	//3. Is the King protected from the player's pieces?
-		//I. What pieces do we have that can surround the king?
-			//i. move them there.
-		//II. Do we need more pieces to surround the king? (goal 5)
-			//i. Do we already have 10 pieces on the board? (blackPieces[]<10)
-				//A. can we combine cards and play optimal pieces? (max rank: bishop)
-				//B. otherwise, just play pawns as stand-ins
-			//ii. Otherwise, move on.
-		//III. can we attack threats with any piece?
-	//4. Move the Queen.
-		//I. Prioritize, putting the player's king(s) in check
-	//5. Move any other unmoved pieces.
-		//I.Prioritze attacking.
-		//II. Try to get closer to king if nothing to attack.
-		//III. Set up an attack if king is surrounded (goal 5)
-		//IV. Choose to move randomly or stay put based on least harmful placement.
-	//6. If Queen is defeated use Esteem first then Anger when possible
-		//I. Have we used Esteem this match? (if not, use it)
-		//II. Can we use Anger with our current SP? (Do so)
-	//7. End Turn.
+	//1. Can we promote a pawn?
+		//I. if(no Queen) {promote to Queen}
+		//II. if(Queen) {promote to bishop (bestie)}
+	//2. if(Queen==undefined && turn!=1)
+		//I. {if(angerCheck){UseAngerAbility();}
+	//3. Have we a Queen?
+		//I. if(yes) {check Sub-optimal Health}
+		//II. if(QC in hand) {play it}
+		//III. if(QC ! in hand) {try to force the draw}
+	//4. Has King moved this turn? (excluding 1st turn)
+		//I. if(no) {look for spot to left or right and move there}
+	//5. Has Queen moved this turn? (excluding 1st turn)
+	
+		/**********************************************************************
+		/* NOTE: don't target Kings unless there's more than 1.
+		/  We could avoid this entirely by just skipping the first
+		/  whitePiece in the array, since that'll always be the initial king.
+		**********************************************************************/
+		
+		//I. if(possible) {Attack}
+		//II. if(can we move into atk position?) {do that}
+		//III. Let's move as far as we can.
+	//6. Is King Protected?
+		//I. if(available pieces can surround King) {do that}
+		//II. if(we have cards (besides clubs) in hand) {
+			//i. play them in front of the King.
+			//ii. set hasMoved=true for that piece.}
+		//III. if(PainCheck) {use Pain}
+	//7. if(clubs in hand && we have a piece (!king, !Queen, !guarding the king))
+		//I. {use the club to boost their atk}
+	//8. if(other pieces hasMoved=false)
+		//I. if(can they atk && (if pawn(is our atk > opponent hp)) {atk}
+		//II. else if(can we get in atk range of a king) {do that}
+		//II. else if(pawns can advance) {advance them}
+	//9. if(pieces>=5 && sp>=Esteem.cost) {use Esteem}
 }
